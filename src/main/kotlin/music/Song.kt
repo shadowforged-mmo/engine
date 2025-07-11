@@ -1,5 +1,6 @@
 package com.shadowforgedmmo.engine.music
 
+import com.shadowforgedmmo.engine.pack.Namespaces
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound
 import com.shadowforgedmmo.engine.resource.parseId
@@ -38,4 +39,4 @@ private fun computeDurationMillis(file: File): Long {
     }
 }
 
-private fun songKey(id: String) = Key.key("music", id)
+private fun songKey(id: String) = Key.key(Namespaces.MUSIC, id)
