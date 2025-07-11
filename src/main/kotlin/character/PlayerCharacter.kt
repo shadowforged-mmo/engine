@@ -22,6 +22,7 @@ import net.kyori.adventure.title.Title
 import net.minestom.server.entity.attribute.Attribute
 import net.minestom.server.entity.Player
 import net.minestom.server.entity.PlayerHand
+import net.minestom.server.event.player.PlayerChangeHeldSlotEvent
 import net.minestom.server.event.player.PlayerEntityInteractEvent
 import net.minestom.server.network.packet.server.play.HitAnimationPacket
 import net.minestom.server.potion.Potion
@@ -259,6 +260,16 @@ class PlayerCharacter(
 
     fun enableMovement() {
         entity.getAttribute(Attribute.MOVEMENT_SPEED).baseValue = 0.1
+    }
+
+    fun handleChangeHeldSlot(event: PlayerChangeHeldSlotEvent) {
+        val slot = event.newSlot.toInt()
+        event.isCancelled = true
+        if (slot < 6) {
+            skillTracker.tryUseSkill(slot)
+        } else if (slot < 8) {
+            inventory.tryUseConsumable(slot)
+        }
     }
 
     fun handleEntityInteract(event: PlayerEntityInteractEvent) {
