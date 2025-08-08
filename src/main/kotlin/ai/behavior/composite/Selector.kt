@@ -12,27 +12,14 @@ class Selector(children: List<Behavior>) : Composite(children) {
     }
 
     override fun update(character: NonPlayerCharacter): BehaviorStatus {
-        val prevChild = currentChild
-        currentChild = 0
-
-        var status = BehaviorStatus.FAILURE
-
         while (currentChild < children.size) {
-            val childStatus = children[currentChild].tick(character)
-
-            if (childStatus != BehaviorStatus.FAILURE) {
-                status = childStatus
-                break
+            val status = children[currentChild].tick(character)
+            if (status != BehaviorStatus.FAILURE) {
+                return status
             }
-
             currentChild++
         }
-
-        if (prevChild != children.size && currentChild != prevChild) {
-            children[prevChild].abort(character)
-        }
-
-        return status
+        return BehaviorStatus.FAILURE
     }
 }
 
