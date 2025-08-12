@@ -43,4 +43,4 @@ class PrioritySelectorBlueprint(
 }
 
 fun deserializePrioritySelectorBlueprint(data: JsonNode) =
-    SelectorBlueprint(data["children"].map(::deserializeBehaviorBlueprint))
+    PrioritySelectorBlueprint(data["children"].map(::deserializeBehaviorBlueprint))
