@@ -8,6 +8,7 @@ abstract class GameObjectSpawner(val position: Position) {
     var gameObject: GameObject? = null
     val isSpawned: Boolean
         get() = gameObject != null
+    var spawnAfterMillis = 0L
 
     open fun start(instance: Instance) = Unit
 

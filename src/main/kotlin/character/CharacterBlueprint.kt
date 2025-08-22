@@ -1,7 +1,6 @@
 package com.shadowforgedmmo.engine.character
 
 import com.fasterxml.jackson.databind.JsonNode
-import net.kyori.adventure.sound.Sound
 import com.shadowforgedmmo.engine.ai.behavior.BehaviorBlueprint
 import com.shadowforgedmmo.engine.ai.behavior.deserializeBehaviorBlueprint
 import com.shadowforgedmmo.engine.loot.LootTable
@@ -14,8 +13,8 @@ import com.shadowforgedmmo.engine.quest.Quest
 import com.shadowforgedmmo.engine.resource.parseId
 import com.shadowforgedmmo.engine.script.parseScriptId
 import com.shadowforgedmmo.engine.sound.deserializeSound
-import com.shadowforgedmmo.engine.time.secondsToDuration
-import java.time.Duration
+import com.shadowforgedmmo.engine.time.secondsToMillis
+import net.kyori.adventure.sound.Sound
 
 class CharacterBlueprint(
     val id: String,
@@ -35,7 +34,8 @@ class CharacterBlueprint(
     val interactions: List<Interaction>,
     val lootTable: LootTable?,
     val scriptId: String?,
-    val removalDelay: Duration
+    val removalDelayMillis: Long,
+    val respawnTimeMillis: Long
 )
 
 fun deserializeCharacterBlueprint(
@@ -61,18 +61,21 @@ fun deserializeCharacterBlueprint(
     ),
     data["boss_fight"]?.let { deserializeBossFightBlueprint(it, musicById) },
     data["behavior"]?.let { deserializeBehaviorBlueprint(it) },
-    data["stance"]?.let { deserializeStances(it) }
-        ?: Stances(Stance.FRIENDLY, emptyList(), emptyList(), emptyList()),
+    data["stance"]?.let { deserializeStances(it) } ?: Stances(
+        Stance.FRIENDLY,
+        emptyList(),
+        emptyList(),
+        emptyList()
+    ),
     data["step_sound"]?.let(::deserializeSound),
     data["speak_sound"]?.let(::deserializeSound),
     data["hurt_sound"]?.let(::deserializeSound),
     data["death_sound"]?.let(::deserializeSound),
-    data["interactions"]?.map { deserializeInteraction(it, questsById) }
-        ?: emptyList(),
+    data["interactions"]?.map { deserializeInteraction(it, questsById) } ?: emptyList(),
     data["loot"]?.let(::deserializeLootTable),
     data["script"]?.let { parseScriptId(it.asText()) },
-    data["removal_delay"]?.let { secondsToDuration(it.asDouble()) }
-        ?: Duration.ofMillis(1000)
+    data["removal_delay"]?.let(JsonNode::asDouble)?.let(::secondsToMillis) ?: 1000L,
+    data["respawn_time"]?.let(JsonNode::asDouble)?.let(::secondsToMillis) ?: 300000L
 )
 
 fun parseCharacterBlueprintId(id: String) = parseId(id, "characters")

@@ -165,16 +165,17 @@ class Instance(
 
     private fun manageSpawners(runtime: Runtime) {
         val pcs = objects.values.filterIsInstance<PlayerCharacter>()
-        val toSpawn = getSpawnersToSpawn(pcs)
+        val toSpawn = getSpawnersToSpawn(pcs, runtime.timeMillis)
         val toNotRemove = getObjectsToNotRemove(pcs)
         val toRemove = objects.values - toNotRemove
         toRemove.forEach(GameObject::remove)
         toSpawn.forEach { spawn(it, runtime) }
     }
 
-    private fun getSpawnersToSpawn(pcs: Collection<PlayerCharacter>) = pcs.flatMap {
+    private fun getSpawnersToSpawn(pcs: Collection<PlayerCharacter>, timeMillis: Long) = pcs.flatMap {
         getNearbySpawners(it.position.toVector3(), SPAWN_RADIUS)
             .filterNot(GameObjectSpawner::isSpawned)
+            .filter { spawner -> timeMillis >= spawner.spawnAfterMillis }
     }.toSet()
 
     private fun getObjectsToNotRemove(pcs: Collection<PlayerCharacter>) = pcs.flatMap {

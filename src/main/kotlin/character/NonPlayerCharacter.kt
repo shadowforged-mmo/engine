@@ -3,6 +3,7 @@ package com.shadowforgedmmo.engine.character
 import com.shadowforgedmmo.engine.ai.navigation.Navigator
 import com.shadowforgedmmo.engine.combat.Damage
 import com.shadowforgedmmo.engine.instance.Instance
+import com.shadowforgedmmo.engine.math.Position
 import com.shadowforgedmmo.engine.math.Vector3
 import com.shadowforgedmmo.engine.runtime.Runtime
 import com.shadowforgedmmo.engine.script.idToPythonClassName
@@ -10,6 +11,8 @@ import com.shadowforgedmmo.engine.util.schedulerManager
 import net.kyori.adventure.text.Component
 import net.minestom.server.particle.Particle
 import org.python.core.Py
+import java.time.Duration
+import kotlin.math.pow
 import com.shadowforgedmmo.engine.script.NonPlayerCharacter as ScriptNonPlayerCharacter
 
 class NonPlayerCharacter(
@@ -60,6 +63,7 @@ class NonPlayerCharacter(
 
     override fun tick() {
         super.tick()
+        updateTarget()
         if (isAlive and interactionIndices.isEmpty()) {
             navigator.tick()
             behavior?.tick(this)
@@ -67,6 +71,23 @@ class NonPlayerCharacter(
         bossFight?.tick()
         handle.tick()
     }
+
+    private fun updateTarget() {
+        // TODO: implement threat
+        val aggroRadius = 25.0 // TODO
+        val prevTarget = target
+        if (prevTarget == null || Position.sqrDistance(position, prevTarget.position) > aggroRadius.pow(2)) {
+            target = instance.getNearbyObjects<Character>(
+                position.toVector3(),
+                aggroRadius
+            ).filter(::shouldTarget).minByOrNull { Position.sqrDistance(position, it.position) }
+        }
+    }
+
+    private fun shouldTarget(character: Character) = character !== this &&
+            character.isAlive &&
+            getStance(character) === Stance.HOSTILE &&
+            !character.isInvisible
 
     override fun interact(pc: PlayerCharacter) {
         if (getStance(pc) == Stance.HOSTILE) return
@@ -110,7 +131,9 @@ class NonPlayerCharacter(
         playAnimation(ANIMATION_DEATH)
         blueprint.deathSound?.let(::emitSound)
         attackers.forEach { runtime.questObjectiveManager.handleCharacterDeath(it, this) }
-        schedulerManager.buildTask(::finalizeDeath).delay(blueprint.removalDelay).schedule()
+        schedulerManager.buildTask(::finalizeDeath)
+            .delay(Duration.ofMillis(blueprint.removalDelayMillis))
+            .schedule()
     }
 
     private fun distributeExperiencePoints() {
@@ -124,6 +147,7 @@ class NonPlayerCharacter(
     private fun finalizeDeath() {
         // TODO: loot
         distributeExperiencePoints()
+        spawner.spawnAfterMillis = runtime.timeMillis + blueprint.respawnTimeMillis
         remove()
         spawnDeathParticles()
     }
