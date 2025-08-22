@@ -2,6 +2,9 @@ package com.shadowforgedmmo.engine.skill
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.shadowforgedmmo.engine.resource.parseId
+import net.minestom.server.tag.Tag
+
+val SKILL_TAG = Tag.String("skill")
 
 abstract class Skill(
     val id: String,

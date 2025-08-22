@@ -5,9 +5,6 @@ import com.shadowforgedmmo.engine.time.Cooldown
 import net.kyori.adventure.text.Component
 import net.minestom.server.item.ItemStack
 import net.minestom.server.item.Material
-import net.minestom.server.tag.Tag
-
-private val SKILL_TAG = Tag.Transient<Skill>("skill")
 
 class SkillTracker(private val pc: PlayerCharacter) {
     private val cooldowns = mutableMapOf<ActiveSkill, Cooldown>()
@@ -18,8 +15,9 @@ class SkillTracker(private val pc: PlayerCharacter) {
         tryUseSkill(skill)
     }
 
-    private fun hotbarSkill(slot: Int): ActiveSkill? =
-        pc.entity.inventory.getItemStack(slot).getTag(SKILL_TAG) as? ActiveSkill
+    private fun hotbarSkill(slot: Int) = pc.entity.inventory.getItemStack(slot).getTag(SKILL_TAG)?.let {
+        pc.runtime.skillsById.getValue(it) as? ActiveSkill
+    }
 
     private fun tryUseSkill(skill: ActiveSkill) {
         val cooldown = cooldown(skill)
@@ -52,6 +50,7 @@ class SkillTracker(private val pc: PlayerCharacter) {
     private fun updateHotbar() = (0..5).forEach(::updateHotbarSlot)
 
     private fun updateHotbarSlot(slot: Int) {
+        pc.entity.inventory.setItemStack(0, (pc.playerClass.skills[0] as ActiveSkill).hotbarItemStack(pc))
         val skill = hotbarSkill(slot)
         if (skill == null) {
             pc.entity.inventory.setItemStack(slot, ItemStack.of(Material.BARRIER))

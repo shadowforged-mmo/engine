@@ -10,6 +10,7 @@ import com.shadowforgedmmo.engine.quest.Quest
 import com.shadowforgedmmo.engine.quest.QuestObjectiveManager
 import com.shadowforgedmmo.engine.resource.Resources
 import com.shadowforgedmmo.engine.script.loadScriptLibrary
+import com.shadowforgedmmo.engine.skill.Skill
 import com.shadowforgedmmo.engine.util.schedulerManager
 import com.shadowforgedmmo.engine.zone.Zone
 import net.minestom.server.MinecraftServer
@@ -21,6 +22,7 @@ class Runtime(resources: Resources) {
     val interpreter = PythonInterpreter()
     val config = resources.config
     val playerClassesById = resources.playerClasses.associateBy(PlayerClass::id)
+    val skillsById = resources.skills.associateBy(Skill::id)
     val instancesById = resources.instances.associateBy(Instance::id)
     val questsById = resources.quests.associateBy(Quest::id)
     val musicById = resources.music.associateBy(Song::id)

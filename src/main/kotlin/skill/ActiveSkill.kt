@@ -18,6 +18,7 @@ class ActiveSkill(
     scriptId: String
 ) : Skill(id, name, description, scriptId) {
     fun hotbarItemStack(pc: PlayerCharacter) = ItemStack.builder(Material.DIAMOND)
+        .set(SKILL_TAG, id)
         .customName(Component.text(name, NamedTextColor.GREEN))
         .build()
 }

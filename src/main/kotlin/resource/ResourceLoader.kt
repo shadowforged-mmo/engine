@@ -66,6 +66,7 @@ class ResourceLoader(private val root: File) {
             server,
             config,
             playerClassesById.values,
+            skillsById.values,
             instancesById.values,
             questsById.values,
             musicById.values,
