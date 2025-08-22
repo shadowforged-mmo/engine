@@ -1,16 +1,14 @@
 package com.shadowforgedmmo.engine.skill
 
-import net.kyori.adventure.text.Component
 import com.shadowforgedmmo.engine.character.PlayerCharacter
 import com.shadowforgedmmo.engine.time.Cooldown
-import net.minestom.server.item.ItemStack
-import net.minestom.server.item.Material
+import net.kyori.adventure.text.Component
 import net.minestom.server.tag.Tag
 
 private val SKILL_TAG = Tag.Transient<Skill>("skill")
 
 class SkillTracker(private val pc: PlayerCharacter) {
-    private val cooldowns = mutableMapOf<Skill, Cooldown>()
+    private val cooldowns = mutableMapOf<ActiveSkill, Cooldown>()
     private val skillExecutors = mutableListOf<SkillExecutor>()
 
     fun tryUseSkill(slot: Int) {
@@ -18,10 +16,10 @@ class SkillTracker(private val pc: PlayerCharacter) {
         tryUseSkill(skill)
     }
 
-    private fun hotbarSkill(slot: Int): Skill? =
-        pc.entity.inventory.getItemStack(slot).getTag(SKILL_TAG)
+    private fun hotbarSkill(slot: Int): ActiveSkill? =
+        pc.entity.inventory.getItemStack(slot).getTag(SKILL_TAG) as? ActiveSkill
 
-    private fun tryUseSkill(skill: Skill) {
+    private fun tryUseSkill(skill: ActiveSkill) {
         val cooldown = cooldown(skill)
         if (cooldown != null)
             return failUseSkill(Component.text("On cooldown")) // TODO
@@ -37,7 +35,7 @@ class SkillTracker(private val pc: PlayerCharacter) {
         // TODO: play sound
     }
 
-    private fun useSkill(skill: Skill) {
+    private fun useSkill(skill: ActiveSkill) {
         val skillExecutor = SkillExecutor(pc, skill, pc.runtime.timeMillis)
         skillExecutor.init()
         skillExecutors.add(skillExecutor)
@@ -52,8 +50,8 @@ class SkillTracker(private val pc: PlayerCharacter) {
     private fun updateHotbar() = (0..5).forEach(::updateHotbarSlot)
 
     private fun updateHotbarSlot(slot: Int) {
-        // val skill = hotbarSkill(slot) ?: return
-        pc.entity.inventory.setItemStack(slot, ItemStack.of(Material.BARRIER))
+        val skill = hotbarSkill(slot) ?: return
+        pc.entity.inventory.setItemStack(slot, skill.hotbarItemStack())
     }
 
     private fun cooldown(skill: Skill) = cooldowns[skill]

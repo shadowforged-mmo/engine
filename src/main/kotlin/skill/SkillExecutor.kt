@@ -7,7 +7,7 @@ import org.python.core.Py
 
 class SkillExecutor(
     val user: PlayerCharacter,
-    private val skill: Skill,
+    private val skill: ActiveSkill,
     private val startTimeMillis: Long
 ) {
     private val handle = getScriptClass(
