@@ -2,8 +2,8 @@ package com.shadowforgedmmo.engine.skill
 
 import com.shadowforgedmmo.engine.character.PlayerCharacter
 import com.shadowforgedmmo.engine.script.getScriptClass
-import com.shadowforgedmmo.engine.script.SkillExecutor as ScriptSkillExecutor
 import org.python.core.Py
+import com.shadowforgedmmo.engine.script.SkillExecutor as ScriptSkillExecutor
 
 class SkillExecutor(
     val user: PlayerCharacter,

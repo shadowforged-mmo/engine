@@ -143,14 +143,19 @@ data class Sound(val name: String, val volume: Float, val pitch: Float) {
 open class Character(
     private val handle: EngineCharacter
 ) {
-    val is_on_ground
-        get() = handle.isOnGround
+    fun getIs_on_ground() = handle.isOnGround
 
     val instance
         get() = handle.instance.handle
 
     val position
         get() = EngineToScript.position(handle.position)
+
+    var velocity
+        get() = EngineToScript.vector3(handle.velocity)
+        set(value) {
+            handle.velocity = ScriptToEngine.vector3(value)
+        }
 
     fun damage(damage: Damage, source: Character) = handle.damage(
         ScriptToEngine.damage(damage),

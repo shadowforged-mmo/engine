@@ -38,7 +38,10 @@ class SkillTracker(private val pc: PlayerCharacter) {
     private fun useSkill(skill: ActiveSkill) {
         val skillExecutor = SkillExecutor(pc, skill, pc.runtime.timeMillis)
         skillExecutor.init()
-        skillExecutors.add(skillExecutor)
+        skillExecutor.tick()
+        if (!skillExecutor.completed) {
+            skillExecutors.add(skillExecutor)
+        }
     }
 
     fun tick() {
@@ -51,6 +54,7 @@ class SkillTracker(private val pc: PlayerCharacter) {
 
     private fun updateHotbarSlot(slot: Int) {
         pc.entity.inventory.setItemStack(0, (pc.playerClass.skills[0] as ActiveSkill).hotbarItemStack(pc))
+        pc.entity.inventory.setItemStack(1, (pc.playerClass.skills[1] as ActiveSkill).hotbarItemStack(pc))
         val skill = hotbarSkill(slot)
         if (skill == null) {
             pc.entity.inventory.setItemStack(slot, ItemStack.of(Material.BARRIER))
