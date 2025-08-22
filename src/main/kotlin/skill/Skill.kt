@@ -1,6 +1,7 @@
 package com.shadowforgedmmo.engine.skill
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.shadowforgedmmo.engine.resource.parseId
 
 abstract class Skill(
     val id: String,
@@ -17,3 +18,5 @@ fun deserializeSkill(
     "passive" -> deserializePassiveSkill(id, data)
     else -> throw IllegalArgumentException()
 }
+
+fun parseSkillId(id: String) = parseId(id, "skills")
