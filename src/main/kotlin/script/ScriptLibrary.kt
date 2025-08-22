@@ -3,11 +3,13 @@
 package com.shadowforgedmmo.engine.script
 
 import com.shadowforgedmmo.engine.combat.DamageType
+import com.shadowforgedmmo.engine.math.BoundingBox3
 import com.shadowforgedmmo.engine.runtime.Runtime
 import com.shadowforgedmmo.engine.skill.SkillStatus
 import com.shadowforgedmmo.engine.time.millisToSeconds
 import com.shadowforgedmmo.engine.time.secondsToDuration
 import com.shadowforgedmmo.engine.util.schedulerManager
+import net.minestom.server.particle.Particle
 import org.python.core.*
 import org.python.util.PythonInterpreter
 import com.shadowforgedmmo.engine.character.Character as EngineCharacter
@@ -28,7 +30,9 @@ fun loadScriptLibrary(interpreter: PythonInterpreter, runtime: Runtime) {
         "NonPlayerCharacter" to NonPlayerCharacter::class,
         "SkillExecutor" to SkillExecutor::class,
         "SkillStatus" to SkillStatus::class,
-        "DamageType" to DamageType::class
+        "Damage" to Damage::class,
+        "DamageType" to DamageType::class,
+        "Sound" to Sound::class
     ).mapValues { Py.java2py(it.value.java) }
     val functions = mapOf(
         "get_time" to GetTime(runtime),
@@ -50,13 +54,28 @@ data class Vector(
     override val z: Double
 ) : Point {
     companion object {
+        @JvmField
         val ZERO = Vector(0.0, 0.0, 0.0)
+
+        @JvmField
         val ONE = Vector(1.0, 1.0, 1.0)
+
+        @JvmField
         val LEFT = Vector(1.0, 0.0, 0.0)
+
+        @JvmField
         val RIGHT = Vector(-1.0, 0.0, 0.0)
+
+        @JvmField
         val UP = Vector(0.0, 1.0, 0.0)
+
+        @JvmField
         val DOWN = Vector(0.0, -1.0, 0.0)
+
+        @JvmField
         val FORWARD = Vector(0.0, 0.0, 1.0)
+
+        @JvmField
         val BACK = Vector(0.0, 0.0, -1.0)
     }
 
@@ -74,6 +93,9 @@ data class Position(
     val yaw: Double,
     val pitch: Double
 ) : Point {
+    val direction: Vector
+        get() = EngineToScript.vector3(ScriptToEngine.position(this).direction)
+
     fun __add__(v: Vector) = Position(x + v.x, y + v.y, z + v.z, yaw, pitch)
 
     fun __sub__(v: Vector) = Position(x - v.x, y - v.y, z - v.z, yaw, pitch)
@@ -83,19 +105,40 @@ class Instance(val handle: EngineInstance) {
     val id: String
         get() = handle.id
 
+    fun spawn_character(position: Point, character: String) = Unit
+
+    fun get_characters_in_box(center: Point, half_extents: Vector, filter: PyObject) =
+        handle.getObjectsInBox<EngineCharacter>(
+            BoundingBox3.from(
+                ScriptToEngine.vector3(center),
+                ScriptToEngine.vector3(half_extents)
+            )
+        )
+            .filter { (filter.__call__(Py.java2py(it.handle)) as PyBoolean).booleanValue }
+            .map(EngineCharacter::handle)
+
     fun play_sound(position: Point, sound: Sound) = handle.playSound(
         ScriptToEngine.vector3(position),
         ScriptToEngine.sound(sound)
     )
 
-    fun spawn_character(position: Point, character: String) = Unit
+    fun spawn_particle(position: Point, particle: String) = handle.spawnParticle(
+        ScriptToEngine.vector3(position),
+        Particle.fromKey(particle) ?: throw IllegalArgumentException()
+    )
 }
 
 class Task(private val handle: EngineTask) {
     fun cancel() = handle.cancel()
 }
 
-data class Sound(val name: String, val volume: Float, val pitch: Float)
+data class Damage(val damage: Map<DamageType, Double>) {
+    constructor(amount: Double) : this(mapOf(DamageType.PHYSICAL to amount))
+}
+
+data class Sound(val name: String, val volume: Float, val pitch: Float) {
+    constructor(name: String) : this(name, 1.0F, 1.0F)
+}
 
 open class Character(
     private val handle: EngineCharacter
@@ -108,6 +151,11 @@ open class Character(
 
     val position
         get() = EngineToScript.position(handle.position)
+
+    fun damage(damage: Damage, source: Character) = handle.damage(
+        ScriptToEngine.damage(damage),
+        source.handle
+    )
 }
 
 class PlayerCharacter(
@@ -126,10 +174,10 @@ open class NonPlayerCharacter(
 }
 
 open class SkillExecutor(private val handle: EngineSkillExecutor) {
-    private val user
+    val user
         get() = handle.user.handle
 
-    private val lifetime
+    val lifetime
         get() = millisToSeconds(handle.lifetimeMillis)
 
     fun complete() = handle.complete()

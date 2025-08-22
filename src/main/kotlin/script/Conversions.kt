@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound as EngineSound
 import com.shadowforgedmmo.engine.math.Position as EnginePosition
 import com.shadowforgedmmo.engine.math.Vector3 as EngineVector3
+import com.shadowforgedmmo.engine.combat.Damage as EngineDamage
 
 object ScriptToEngine {
     fun vector3(v: Point) = EngineVector3(v.x, v.y, v.z)
@@ -18,6 +19,8 @@ object ScriptToEngine {
         sound.volume,
         sound.pitch
     )
+
+    fun damage(damage: Damage) = EngineDamage(damage.damage)
 }
 
 object EngineToScript {

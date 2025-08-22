@@ -23,12 +23,7 @@ class SkillExecutor(
 
     fun init() = handle.init()
 
-    fun tick() {
-        handle.tick()
-        if (completed) {
-            TODO()
-        }
-    }
+    fun tick() = handle.tick()
 
     fun complete() {
         completed = true
