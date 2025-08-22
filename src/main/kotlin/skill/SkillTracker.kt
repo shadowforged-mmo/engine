@@ -3,6 +3,8 @@ package com.shadowforgedmmo.engine.skill
 import com.shadowforgedmmo.engine.character.PlayerCharacter
 import com.shadowforgedmmo.engine.time.Cooldown
 import net.kyori.adventure.text.Component
+import net.minestom.server.item.ItemStack
+import net.minestom.server.item.Material
 import net.minestom.server.tag.Tag
 
 private val SKILL_TAG = Tag.Transient<Skill>("skill")
@@ -50,8 +52,12 @@ class SkillTracker(private val pc: PlayerCharacter) {
     private fun updateHotbar() = (0..5).forEach(::updateHotbarSlot)
 
     private fun updateHotbarSlot(slot: Int) {
-        val skill = hotbarSkill(slot) ?: return
-        pc.entity.inventory.setItemStack(slot, skill.hotbarItemStack())
+        val skill = hotbarSkill(slot)
+        if (skill == null) {
+            pc.entity.inventory.setItemStack(slot, ItemStack.of(Material.BARRIER))
+            return
+        }
+        pc.entity.inventory.setItemStack(slot, skill.hotbarItemStack(pc))
     }
 
     private fun cooldown(skill: Skill) = cooldowns[skill]

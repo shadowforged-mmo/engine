@@ -80,6 +80,7 @@ class PlayerCharacter(
     var maxMana = 1.0
     var mana = 1.0
     override val handle = ScriptPlayerCharacter(this)
+    val playerClass = runtime.playerClassesById.getValue(data.playerClassId)
     val skillTracker = SkillTracker(this)
     val questTracker = QuestTracker(this, data.questTrackerData)
     val inventory = Inventory(this)

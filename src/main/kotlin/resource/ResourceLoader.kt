@@ -17,6 +17,7 @@ import com.shadowforgedmmo.engine.model.*
 import com.shadowforgedmmo.engine.music.Song
 import com.shadowforgedmmo.engine.music.deserializeSong
 import com.shadowforgedmmo.engine.music.deserializeSongAsset
+import com.shadowforgedmmo.engine.playerclass.deserializePlayerClass
 import com.shadowforgedmmo.engine.quest.Quest
 import com.shadowforgedmmo.engine.quest.deserializeQuest
 import com.shadowforgedmmo.engine.skill.Skill
@@ -64,6 +65,7 @@ class ResourceLoader(private val root: File) {
         return Resources(
             server,
             config,
+            playerClassesById.values,
             instancesById.values,
             questsById.values,
             musicById.values,
@@ -139,7 +141,7 @@ class ResourceLoader(private val root: File) {
 
     fun loadPlayerClasses(skillsById: Map<String, Skill>) =
         loadIdentifiedYamlResources("classes") { id, data ->
-
+            deserializePlayerClass(id, data, skillsById)
         }
 
     fun loadMapTextures() = loadIdentifiedResources(

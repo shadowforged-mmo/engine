@@ -52,6 +52,7 @@ class LoginManager(val runtime: Runtime) {
             Position(2864.0, 73.0, 3598.0),
             5.0,
             5.0,
+            "fighter",
             QuestTrackerData(),
             "ashen_tangle"
         )

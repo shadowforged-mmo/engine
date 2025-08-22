@@ -7,6 +7,7 @@ class PlayerCharacterData(
     val position: Position,
     val maxHealth: Double,
     val health: Double,
+    val playerClassId: String,
     val questTrackerData: QuestTrackerData,
     val zoneId: String
 )

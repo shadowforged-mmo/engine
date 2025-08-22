@@ -1,6 +1,7 @@
 package com.shadowforgedmmo.engine.skill
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.shadowforgedmmo.engine.character.PlayerCharacter
 import com.shadowforgedmmo.engine.script.parseScriptId
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
@@ -14,7 +15,7 @@ class ActiveSkill(
     val manaCost: Double,
     scriptId: String
 ) : Skill(id, name, description, scriptId) {
-    fun hotbarItemStack() = ItemStack.builder(Material.DIAMOND)
+    fun hotbarItemStack(pc: PlayerCharacter) = ItemStack.builder(Material.DIAMOND)
         .customName(Component.text(name, NamedTextColor.GREEN))
         .build()
 }

@@ -5,6 +5,7 @@ import com.shadowforgedmmo.engine.character.CharacterEvents
 import com.shadowforgedmmo.engine.instance.Instance
 import com.shadowforgedmmo.engine.login.LoginManager
 import com.shadowforgedmmo.engine.music.Song
+import com.shadowforgedmmo.engine.playerclass.PlayerClass
 import com.shadowforgedmmo.engine.quest.Quest
 import com.shadowforgedmmo.engine.quest.QuestObjectiveManager
 import com.shadowforgedmmo.engine.resource.Resources
@@ -19,6 +20,7 @@ class Runtime(resources: Resources) {
     private val server = resources.server
     val interpreter = PythonInterpreter()
     val config = resources.config
+    val playerClassesById = resources.playerClasses.associateBy(PlayerClass::id)
     val instancesById = resources.instances.associateBy(Instance::id)
     val questsById = resources.quests.associateBy(Quest::id)
     val musicById = resources.music.associateBy(Song::id)
