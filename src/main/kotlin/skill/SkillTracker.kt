@@ -21,7 +21,7 @@ class SkillTracker(private val pc: PlayerCharacter) {
 
     private fun tryUseSkill(skill: ActiveSkill) {
         val cooldown = cooldown(skill)
-        if (cooldown != null)
+        if (cooldown.hasCooldown(pc.runtime.timeMillis))
             return failUseSkill(Component.text("On cooldown")) // TODO
 
         if (pc.mana < skill.manaCost)
@@ -42,9 +42,14 @@ class SkillTracker(private val pc: PlayerCharacter) {
         if (!skillExecutor.completed) {
             skillExecutors.add(skillExecutor)
         }
+        val cooldown = Cooldown(skill.cooldownMillis)
+        cooldown.set(pc.runtime.timeMillis)
+        cooldowns[skill] = cooldown
+        pc.mana -= skill.manaCost
     }
 
     fun tick() {
+        cooldowns.values.removeIf { !it.hasCooldown(pc.runtime.timeMillis) }
         skillExecutors.forEach(SkillExecutor::tick)
         skillExecutors.removeIf(SkillExecutor::completed)
         updateHotbar();
@@ -63,5 +68,5 @@ class SkillTracker(private val pc: PlayerCharacter) {
         pc.entity.inventory.setItemStack(slot, skill.hotbarItemStack(pc))
     }
 
-    private fun cooldown(skill: Skill) = cooldowns[skill]
+    private fun cooldown(skill: ActiveSkill) = cooldowns[skill] ?: Cooldown(skill.cooldownMillis)
 }
