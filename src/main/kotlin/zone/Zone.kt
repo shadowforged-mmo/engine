@@ -41,7 +41,6 @@ class Zone(
 
     val playerCharacters: Set<PlayerCharacter> = setOf()
 
-    @Suppress("UnstableApiUsage")
     var weather =
         if (weatherCycle.weatherEntries.isEmpty()) Weather.CLEAR
         else weatherCycle.weatherEntries[0].weather
