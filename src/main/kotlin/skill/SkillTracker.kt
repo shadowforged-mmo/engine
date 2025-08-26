@@ -68,5 +68,5 @@ class SkillTracker(private val pc: PlayerCharacter) {
         pc.entity.inventory.setItemStack(slot, skill.hotbarItemStack(pc))
     }
 
-    private fun cooldown(skill: ActiveSkill) = cooldowns[skill] ?: Cooldown(skill.cooldownMillis)
+    fun cooldown(skill: ActiveSkill) = cooldowns[skill] ?: Cooldown(skill.cooldownMillis)
 }
