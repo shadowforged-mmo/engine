@@ -1,8 +1,6 @@
 package com.shadowforgedmmo.engine.skill
 
 import com.shadowforgedmmo.engine.character.PlayerCharacter
-import com.shadowforgedmmo.engine.script.getScriptClass
-import org.python.core.Py
 import com.shadowforgedmmo.engine.script.SkillExecutor as ScriptSkillExecutor
 
 class SkillExecutor(
@@ -10,10 +8,7 @@ class SkillExecutor(
     private val skill: ActiveSkill,
     private val startTimeMillis: Long
 ) {
-    private val handle = getScriptClass(
-        skill.scriptId,
-        user.runtime.interpreter
-    ).__call__(Py.java2py(this)).__tojava__(ScriptSkillExecutor::class.java) as ScriptSkillExecutor
+    private val handle = user.runtime.interpreter.instantiate<ScriptSkillExecutor>(skill.scriptId, this)
 
     var completed = false
         private set

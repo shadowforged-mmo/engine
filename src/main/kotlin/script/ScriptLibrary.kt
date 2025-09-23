@@ -10,8 +10,11 @@ import com.shadowforgedmmo.engine.time.millisToSeconds
 import com.shadowforgedmmo.engine.time.secondsToDuration
 import com.shadowforgedmmo.engine.util.schedulerManager
 import net.minestom.server.particle.Particle
-import org.python.core.*
-import org.python.util.PythonInterpreter
+import org.python.core.Py
+import org.python.core.PyBoolean
+import org.python.core.PyModule
+import org.python.core.PyObject
+import org.python.core.PyStringMap
 import com.shadowforgedmmo.engine.character.Character as EngineCharacter
 import com.shadowforgedmmo.engine.character.NonPlayerCharacter as EngineNonPlayerCharacter
 import com.shadowforgedmmo.engine.character.PlayerCharacter as EnginePlayerCharacter
@@ -19,27 +22,28 @@ import com.shadowforgedmmo.engine.instance.Instance as EngineInstance
 import com.shadowforgedmmo.engine.skill.SkillExecutor as EngineSkillExecutor
 import net.minestom.server.timer.Task as EngineTask
 
-const val moduleName = "shadowforged_engine"
+const val SCRIPT_LIBRARY_MODULE_NAME = "shadowforged_engine"
 
-fun loadScriptLibrary(interpreter: PythonInterpreter, runtime: Runtime) {
-    val classes = mapOf(
-        "Point" to Point::class,
-        "Vector" to Vector::class,
-        "Position" to Position::class,
-        "Instance" to Instance::class,
-        "NonPlayerCharacter" to NonPlayerCharacter::class,
-        "SkillExecutor" to SkillExecutor::class,
-        "SkillStatus" to SkillStatus::class,
-        "Damage" to Damage::class,
-        "DamageType" to DamageType::class,
-        "Sound" to Sound::class
-    ).mapValues { Py.java2py(it.value.java) }
+fun scriptLibraryModule(runtime: Runtime): PyModule {
+    val classes = listOf(
+        Point::class,
+        Vector::class,
+        Position::class,
+        Instance::class,
+        NonPlayerCharacter::class,
+        SkillExecutor::class,
+        SkillStatus::class,
+        Damage::class,
+        DamageType::class,
+        Sound::class
+    ).associate { it.simpleName to Py.java2py(it.java) }
+
     val functions = mapOf(
         "get_time" to GetTime(runtime),
         "run_delayed" to RunDelayed(runtime)
     )
-    val module = PyModule(moduleName, PyStringMap(classes + functions))
-    interpreter.systemState.modules.__setitem__(moduleName, module)
+
+    return PyModule(SCRIPT_LIBRARY_MODULE_NAME, PyStringMap(classes + functions))
 }
 
 interface Point {

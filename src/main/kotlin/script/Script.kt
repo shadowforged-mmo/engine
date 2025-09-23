@@ -2,6 +2,7 @@ package com.shadowforgedmmo.engine.script
 
 import com.google.common.base.CaseFormat
 import com.shadowforgedmmo.engine.resource.parseId
+import org.python.core.Py
 import org.python.core.PyObject
 import org.python.util.PythonInterpreter
 
@@ -17,3 +18,12 @@ fun getScriptClass(scriptId: String, interpreter: PythonInterpreter): PyObject {
     val className = idToPythonClassName(scriptId)
     return interpreter.eval("${scriptId}.${className}")
 }
+
+inline fun <reified T> instantiateScriptClass(
+    scriptId: String,
+    interpreter: PythonInterpreter,
+    vararg args: Any
+) = getScriptClass(
+    scriptId,
+    interpreter
+).__call__(args.map { Py.java2py(it) }.toTypedArray()).__tojava__(T::class.java) as T

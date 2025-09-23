@@ -1,5 +1,6 @@
 package com.shadowforgedmmo.engine.time
 
+import kotlin.math.max
 import kotlin.math.min
 
 class Cooldown(private val durationMillis: Long) {
@@ -10,6 +11,8 @@ class Cooldown(private val durationMillis: Long) {
     fun set(timeMillis: Long) {
         lastSetMillis = timeMillis
     }
+
+    fun remainingMillis(timeMillis: Long) = max(0L, durationMillis - (timeMillis - lastSetMillis))
 
     fun progress(timeMillis: Long) = min(
         1F - (timeMillis - lastSetMillis).toFloat() / durationMillis.toFloat(),
