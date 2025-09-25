@@ -32,6 +32,6 @@ fun buildPack(root: File) {
 }
 
 fun usage() {
-    System.err.println("Usage: <runtime|pack|editor> <path/to/project>")
+    System.err.println("Usage: <runtime|pack> <path/to/project>")
     exitProcess(1)
 }
