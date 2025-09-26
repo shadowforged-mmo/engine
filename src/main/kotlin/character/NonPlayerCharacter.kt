@@ -69,7 +69,11 @@ class NonPlayerCharacter(
         // TODO: implement threat
         val aggroRadius = 25.0 // TODO
         val prevTarget = target
-        if (prevTarget == null || Position.sqrDistance(position, prevTarget.position) > aggroRadius.pow(2)) {
+        if (prevTarget == null || !prevTarget.isAlive || Position.sqrDistance(
+                position,
+                prevTarget.position
+            ) > aggroRadius.pow(2)
+        ) {
             target = instance.getNearbyObjects<Character>(
                 position.toVector3(),
                 aggroRadius

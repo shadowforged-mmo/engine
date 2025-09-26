@@ -35,9 +35,9 @@ abstract class Character(
         get() = health > 0
 
     var isInvisible
-        get() = entity.isInvisible
+        get() = false
         set(value) {
-            entity.isInvisible = value
+            TODO("don't just set the entity invisible, doesn't work for model entities")
         }
 
     val isOnGround

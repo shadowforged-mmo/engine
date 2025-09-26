@@ -11,15 +11,11 @@ class Stances(
     private val hostileIds: Collection<String>
 ) {
     fun stance(toward: Character): Stance {
-        val id = if (toward is NonPlayerCharacter) {
-            "characters:${toward.blueprint.id}"
-        } else {
-            "player"
-        }
-        return when {
-            friendlyIds.contains(id) -> Stance.FRIENDLY
-            neutralIds.contains(id) -> Stance.NEUTRAL
-            hostileIds.contains(id) -> Stance.HOSTILE
+        val id = if (toward is NonPlayerCharacter) "characters:${toward.blueprint.id}" else "player"
+        return when (id) {
+            in friendlyIds -> Stance.FRIENDLY
+            in neutralIds -> Stance.NEUTRAL
+            in hostileIds -> Stance.HOSTILE
             else -> {
                 val rootSummoner = toward.rootSummoner
                 if (rootSummoner is PlayerCharacter) stance(rootSummoner) else default
@@ -35,8 +31,7 @@ enum class Stance(val color: TextColor) {
 }
 
 fun deserializeStances(data: JsonNode) = Stances(
-    data["default"]?.let { Stance.valueOf(it.asText().uppercase()) }
-        ?: Stance.FRIENDLY,
+    data["default"]?.let { Stance.valueOf(it.asText().uppercase()) } ?: Stance.FRIENDLY,
     data["friendly"]?.map(JsonNode::asText) ?: emptyList(),
     data["neutral"]?.map(JsonNode::asText) ?: emptyList(),
     data["hostile"]?.map(JsonNode::asText) ?: emptyList()
