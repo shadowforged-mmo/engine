@@ -8,7 +8,6 @@ import com.shadowforgedmmo.engine.util.loadJsonResource
 import net.minestom.server.entity.Entity
 import net.minestom.server.entity.EntityCreature
 import net.minestom.server.entity.EntityType
-import net.minestom.server.entity.metadata.other.ArmorStandMeta
 import team.unnamed.hephaestus.minestom.ModelEntity
 
 val hitboxEntityTypes = loadJsonResource(
