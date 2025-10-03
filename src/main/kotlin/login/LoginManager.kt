@@ -5,6 +5,7 @@ import net.kyori.adventure.resource.ResourcePackRequest
 import com.shadowforgedmmo.engine.character.PlayerCharacter
 import com.shadowforgedmmo.engine.character.PlayerCharacterSpawner
 import com.shadowforgedmmo.engine.math.Position
+import com.shadowforgedmmo.engine.persistence.InventoryData
 import com.shadowforgedmmo.engine.persistence.PlayerCharacterData
 import com.shadowforgedmmo.engine.persistence.QuestTrackerData
 import com.shadowforgedmmo.engine.runtime.Runtime
@@ -54,6 +55,7 @@ class LoginManager(val runtime: Runtime) {
             5.0,
             "fighter",
             QuestTrackerData(),
+            InventoryData("adventurers_sword"),
             "ashen_tangle"
         )
         event.player.respawnPoint = data.position.toMinestom()

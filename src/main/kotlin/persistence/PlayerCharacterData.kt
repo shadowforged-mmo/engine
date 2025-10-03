@@ -9,5 +9,6 @@ class PlayerCharacterData(
     val health: Double,
     val playerClassId: String,
     val questTrackerData: QuestTrackerData,
+    val inventoryData: InventoryData,
     val zoneId: String
 )

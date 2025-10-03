@@ -9,6 +9,7 @@ import com.shadowforgedmmo.engine.character.CharacterBlueprint
 import com.shadowforgedmmo.engine.character.deserializeCharacterBlueprint
 import com.shadowforgedmmo.engine.gameobject.GameObjectSpawner
 import com.shadowforgedmmo.engine.instance.deserializeInstance
+import com.shadowforgedmmo.engine.item.deserializeItem
 import com.shadowforgedmmo.engine.map.AreaMap
 import com.shadowforgedmmo.engine.map.MapTexture
 import com.shadowforgedmmo.engine.map.deserializeMap
@@ -40,6 +41,7 @@ class ResourceLoader(private val root: File) {
         val musicById = loadMusic()
         val blockbenchModelsById = loadModels()
         val blockbenchItemModelsById = loadBlockbenchItemModels()
+        val itemsById = loadItems(blockbenchItemModelsById)
         val skinsById = loadSkins()
         val characterBlueprintsById = loadCharacterBlueprints(
             musicById,
@@ -67,6 +69,7 @@ class ResourceLoader(private val root: File) {
             config,
             playerClassesById.values,
             skillsById.values,
+            itemsById.values,
             instancesById.values,
             questsById.values,
             musicById.values,
@@ -117,6 +120,11 @@ class ResourceLoader(private val root: File) {
         }
         // TODO: I THINK THIS IS TOTALLY WRONG, WE NEED TO WRITE OUR OWN MODEL READER
     }
+
+    fun loadItems(blockbenchItemModelsById: Map<String, BlockbenchItemModel>) =
+        loadIdentifiedYamlResources("items") { id, data ->
+            deserializeItem(id, data, blockbenchItemModelsById)
+        }
 
     fun loadSkins() = loadIdentifiedYamlResources("skins", ::deserializeSkin)
 
@@ -223,6 +231,8 @@ class ResourceLoader(private val root: File) {
 
     private fun readJsonData(file: File) = file.reader().use(JsonParser::parseReader)
 }
+
+inline fun <reified T : Enum<T>> deserializeEnum(data: JsonNode) = enumValueOf<T>(data.asText().uppercase())
 
 fun parseId(fullId: String, expectedPrefix: String): String {
     val (prefix, id) = splitId(fullId)

@@ -3,6 +3,7 @@ package com.shadowforgedmmo.engine.runtime
 import com.shadowforgedmmo.engine.character.CharacterBlueprint
 import com.shadowforgedmmo.engine.character.CharacterEvents
 import com.shadowforgedmmo.engine.instance.Instance
+import com.shadowforgedmmo.engine.item.Item
 import com.shadowforgedmmo.engine.login.LoginManager
 import com.shadowforgedmmo.engine.music.Song
 import com.shadowforgedmmo.engine.playerclass.PlayerClass
@@ -22,6 +23,7 @@ class Runtime(resources: Resources) {
     val config = resources.config
     val playerClassesById = resources.playerClasses.associateBy(PlayerClass::id)
     val skillsById = resources.skills.associateBy(Skill::id)
+    val itemsById = resources.items.associateBy(Item::id)
     val instancesById = resources.instances.associateBy(Instance::id)
     val questsById = resources.quests.associateBy(Quest::id)
     val musicById = resources.music.associateBy(Song::id)
@@ -33,7 +35,6 @@ class Runtime(resources: Resources) {
 
     var timeMillis = 0L
         private set
-
 
     fun start() {
         interpreter.loadScriptLibrary(this)

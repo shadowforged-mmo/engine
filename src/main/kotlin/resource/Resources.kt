@@ -2,6 +2,7 @@ package com.shadowforgedmmo.engine.resource
 
 import com.shadowforgedmmo.engine.character.CharacterBlueprint
 import com.shadowforgedmmo.engine.instance.Instance
+import com.shadowforgedmmo.engine.item.Item
 import com.shadowforgedmmo.engine.model.BlockbenchItemModel
 import com.shadowforgedmmo.engine.model.BlockbenchModel
 import com.shadowforgedmmo.engine.music.Song
@@ -17,6 +18,7 @@ class Resources(
     val config: Config,
     val playerClasses: Collection<PlayerClass>,
     val skills: Collection<Skill>,
+    val items: Collection<Item>,
     val instances: Collection<Instance>,
     val quests: Collection<Quest>,
     val music: Collection<Song>,

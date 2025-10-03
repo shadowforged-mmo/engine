@@ -83,7 +83,7 @@ class PlayerCharacter(
     val playerClass = runtime.playerClassesById.getValue(data.playerClassId)
     val skillTracker = SkillTracker(this)
     val questTracker = QuestTracker(this, data.questTrackerData)
-    val inventory = Inventory(this)
+    val inventory = Inventory(this, data.inventoryData)
     val musicPlayer = MusicPlayer(this)
     var bossFights = mutableSetOf<BossFight>()
 
