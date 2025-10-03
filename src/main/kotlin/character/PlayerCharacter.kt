@@ -30,6 +30,7 @@ import net.minestom.server.potion.PotionEffect
 import net.minestom.server.timer.TaskSchedule
 import java.time.Duration
 import kotlin.math.ceil
+import kotlin.math.roundToInt
 import com.shadowforgedmmo.engine.script.PlayerCharacter as ScriptPlayerCharacter
 
 val experiencePointsPerLevel = loadJsonResource(
@@ -78,7 +79,17 @@ class PlayerCharacter(
         get() = 70.0
 
     var maxMana = 1.0
+        set(value) {
+            field = value
+            updateManaBar()
+        }
+
     var mana = 1.0
+        set(value) {
+            field = value
+            updateManaBar()
+        }
+
     override val handle = ScriptPlayerCharacter(this)
     val playerClass = runtime.playerClassesById.getValue(data.playerClassId)
     val skillTracker = SkillTracker(this)
@@ -213,7 +224,11 @@ class PlayerCharacter(
     fun sendMessage(message: Component) = entity.sendMessage(message)
 
     private fun updateHealthBar() {
-        entity.health = (20.0 * (health / maxHealth)).toFloat().coerceAtLeast(1.0F)
+        entity.health = (20.0 * health / maxHealth).toFloat().coerceAtLeast(1.0F)
+    }
+
+    private fun updateManaBar() {
+        entity.food = (20.0 * mana / maxMana).roundToInt()
     }
 
     private fun actionBar() =
