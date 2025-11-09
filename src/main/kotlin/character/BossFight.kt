@@ -6,6 +6,7 @@ import net.kyori.adventure.text.Component
 import com.shadowforgedmmo.engine.math.Position
 import com.shadowforgedmmo.engine.music.Song
 import com.shadowforgedmmo.engine.music.parseSongId
+import kotlin.math.pow
 
 private const val LEAVE_OFFSET = 5.0
 
@@ -33,12 +34,12 @@ class BossFight(
             it.removed || Position.sqrDistance(
                 it.position,
                 character.position
-            ) > (radius + LEAVE_OFFSET) * (radius + LEAVE_OFFSET)
+            ) > (radius + LEAVE_OFFSET).pow(2)
         }.forEach(::removeViewer)
 
         character.instance
             .getNearbyObjects<PlayerCharacter>(character.position.toVector3(), radius)
-            .filterNot(viewers::contains)
+            .minus(viewers)
             .filter { character.getStance(it) == Stance.HOSTILE }
             .forEach(::addViewer)
     }
