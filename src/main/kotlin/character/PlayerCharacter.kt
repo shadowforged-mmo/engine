@@ -91,16 +91,16 @@ class PlayerCharacter(
         }
 
     override val handle = ScriptPlayerCharacter(this)
-    val playerClass = runtime.playerClassesById.getValue(data.playerClassId)
+    val playerClass = data.playerClass
     val skillTracker = SkillTracker(this)
-    val questTracker = QuestTracker(this, data.questTrackerData)
-    val inventory = Inventory(this, data.inventoryData)
+    val questTracker = QuestTracker(this, data.quests)
+    val inventory = Inventory(this, data.inventory)
     val musicPlayer = MusicPlayer(this)
     var bossFights = mutableSetOf<BossFight>()
 
     // val skillTracker = SkillTracker(this, data.skillTrackerData)
 
-    var zone = runtime.zonesById.getValue(data.zoneId)
+    var zone = data.zone
         set(value) {
             field = value
             enterZone()
