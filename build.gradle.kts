@@ -7,20 +7,11 @@ group = "com.shadowforgedmmo"
 version = "1.0-SNAPSHOT"
 
 repositories {
-    mavenLocal()
-
     mavenCentral()
 
     maven("https://jitpack.io")
 
-    maven("https://s01.oss.sonatype.org/content/repositories/snapshots/") {
-        content {
-            // Use only local repositories
-            excludeModule("team.unnamed", "hephaestus-api")
-            excludeModule("team.unnamed", "hephaestus-reader-blockbench")
-            excludeModule("team.unnamed", "hephaestus-runtime-minestom")
-        }
-    }
+    maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
 }
 
 dependencies {
@@ -40,9 +31,8 @@ dependencies {
     implementation("team.unnamed:creative-serializer-minecraft:1.8.2-SNAPSHOT")
 
     implementation("team.unnamed:mocha:3.0.0")
-    implementation("team.unnamed:hephaestus-api:0.11.1-dev-SNAPSHOT")
-    implementation("team.unnamed:hephaestus-reader-blockbench:0.11.1-dev-SNAPSHOT")
-    implementation("team.unnamed:hephaestus-runtime-minestom:0.11.1-dev-SNAPSHOT")
+
+    implementation("com.github.shadowforged-mmo:hephaestus-engine:81f9474b17")
 
     implementation("net.kyori:adventure-text-minimessage:4.16.0")
 
