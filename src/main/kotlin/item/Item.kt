@@ -29,6 +29,7 @@ fun deserializeItem(
     data: JsonNode,
     blockbenchItemModelsById: Map<String, BlockbenchItemModel>
 ) = when (data["type"].asText()) {
+    "accessory" -> deserializeAccessory(id, data)
     "armor" -> deserializeArmorItem(id, data, blockbenchItemModelsById)
     "consumable" -> deserializeConsumableItem(id, data)
     "quest" -> deserializeQuestItem(id, data)

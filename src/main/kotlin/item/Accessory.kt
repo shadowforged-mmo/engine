@@ -1,6 +1,9 @@
 package com.shadowforgedmmo.engine.item
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.shadowforgedmmo.engine.character.PlayerCharacter
+import com.shadowforgedmmo.engine.resource.deserializeEnum
+import com.shadowforgedmmo.engine.runtime.Runtime
 import net.minestom.server.item.ItemStack
 
 class Accessory(
@@ -22,3 +25,14 @@ class AccessoryInstance(item: Accessory, gems: List<Gem>) : EquipmentItemInstanc
     override fun itemStack(pc: PlayerCharacter) = ItemStack.builder(TODO())
         .build()
 }
+
+fun deserializeAccessory(id: String, data: JsonNode) = Accessory(
+    id,
+    data["name"].asText(),
+    deserializeEnum(data["quality"]),
+    deserializeEnum(data["slot"]),
+    data["sockets"]?.asInt() ?: 0
+)
+
+fun deserializeAccessoryInstance(data: JsonNode, runtime: Runtime) =
+    deserializeItemInstance(data, runtime) as AccessoryInstance

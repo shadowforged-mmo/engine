@@ -6,6 +6,7 @@ import com.shadowforgedmmo.engine.model.BlockbenchItemModel
 import com.shadowforgedmmo.engine.model.WeaponModel
 import com.shadowforgedmmo.engine.model.deserializeWeaponModel
 import com.shadowforgedmmo.engine.resource.deserializeEnum
+import com.shadowforgedmmo.engine.runtime.Runtime
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
 import net.minestom.server.item.ItemStack
@@ -47,3 +48,6 @@ fun deserializeWeapon(
     data["sockets"]?.asInt() ?: 0,
     deserializeWeaponModel(data["model"], blockbenchItemModelsById)
 )
+
+fun deserializeWeaponInstance(data: JsonNode, runtime: Runtime) =
+    deserializeItemInstance(data, runtime) as WeaponInstance

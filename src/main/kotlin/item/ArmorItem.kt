@@ -6,6 +6,7 @@ import com.shadowforgedmmo.engine.model.ArmorModel
 import com.shadowforgedmmo.engine.model.BlockbenchItemModel
 import com.shadowforgedmmo.engine.model.deserializeArmorModel
 import com.shadowforgedmmo.engine.resource.deserializeEnum
+import com.shadowforgedmmo.engine.runtime.Runtime
 import net.minestom.server.item.ItemStack
 
 class ArmorItem(
@@ -41,3 +42,6 @@ fun deserializeArmorItem(
     data["sockets"]?.asInt() ?: 0,
     deserializeArmorModel(data["model"], blockbenchItemModelsById)
 )
+
+fun deserializeArmorItemInstance(data: JsonNode, runtime: Runtime) =
+    deserializeItemInstance(data, runtime) as ArmorItemInstance
