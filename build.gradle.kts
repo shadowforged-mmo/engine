@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.shadowforgedmmo"
-version = "1.0-SNAPSHOT"
+version = System.getenv("VERSION") ?: "dev"
 
 repositories {
     mavenCentral()
