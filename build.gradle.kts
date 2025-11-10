@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "1.9.22"
     application
+    id("com.gradleup.shadow") version "9.2.0"
 }
 
 group = "com.shadowforgedmmo"
