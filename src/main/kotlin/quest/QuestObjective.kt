@@ -3,6 +3,8 @@ package com.shadowforgedmmo.engine.quest
 import com.fasterxml.jackson.databind.JsonNode
 import com.shadowforgedmmo.engine.character.CharacterBlueprint
 import com.shadowforgedmmo.engine.character.parseCharacterBlueprintId
+import com.shadowforgedmmo.engine.item.Item
+import com.shadowforgedmmo.engine.item.parseItemId
 import com.shadowforgedmmo.engine.runtime.Runtime
 
 abstract class QuestObjective(val goal: Int, val markers: Collection<QuestObjectiveMarker>) {
@@ -18,6 +20,7 @@ class SlayCharacterObjective(
 ) : QuestObjective(goal, markers) {
     override val description
         get() = "Slay ${characterBlueprint?.name}"
+
     private var characterBlueprint: CharacterBlueprint? = null
 
     override fun start(runtime: Runtime, quest: Quest, objectiveIndex: Int) {
@@ -25,7 +28,6 @@ class SlayCharacterObjective(
             System.err.println("No such resource: characters:$characterBlueprintId")
             return
         }
-
         characterBlueprint = runtime.characterBlueprintsById.getValue(characterBlueprintId)
         runtime.questObjectiveManager.registerSlayObjective(quest, objectiveIndex, characterBlueprintId)
     }
@@ -34,13 +36,20 @@ class SlayCharacterObjective(
 class CollectItemObjective(
     goal: Int,
     markers: Collection<QuestObjectiveMarker>,
-    val itemBlueprintId: String
+    val itemId: String
 ) : QuestObjective(goal, markers) {
     override val description: String
-        get() = itemBlueprintId // TODO
+        get() = "${item?.name}"
+
+    private var item: Item? = null
 
     override fun start(runtime: Runtime, quest: Quest, objectiveIndex: Int) {
-        runtime.questObjectiveManager.registerItemCollectObjective(quest, objectiveIndex, itemBlueprintId)
+        if (itemId !in runtime.itemsById) {
+            System.err.println("No such resource: items:$itemId")
+            return
+        }
+        item = runtime.itemsById.getValue(itemId)
+        runtime.questObjectiveManager.registerItemCollectObjective(quest, objectiveIndex, itemId)
     }
 }
 
@@ -54,7 +63,7 @@ fun deserializeQuestObjective(data: JsonNode): QuestObjective = when (data["type
     "collect_item" -> CollectItemObjective(
         data["goal"]?.asInt() ?: 1,
         deserializeQuestObjectiveMarkers(data["markers"]),
-        data["item"].asText()
+        parseItemId(data["item"].asText())
     )
 
     else -> throw IllegalArgumentException("Unknown quest objective type: ${data["type"].asText()}")
