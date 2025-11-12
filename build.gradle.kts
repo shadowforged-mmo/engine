@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.9.22"
+    kotlin("jvm") version "2.2.21"
     application
     id("com.gradleup.shadow") version "9.2.0"
 }
@@ -16,6 +16,8 @@ repositories {
 }
 
 dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+
     implementation("net.minestom:minestom-snapshots:1_21_5-468b85eb42")
 
     implementation("com.google.guava:guava:33.0.0-jre")
