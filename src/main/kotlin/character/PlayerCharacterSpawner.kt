@@ -8,10 +8,9 @@ import com.shadowforgedmmo.engine.runtime.Runtime
 import net.minestom.server.entity.Player
 
 class PlayerCharacterSpawner(
-    position: Position,
     val entity: Player,
     val data: PlayerCharacterData
-) : GameObjectSpawner(position) {
+) : GameObjectSpawner(data.position) {
     override fun spawn(instance: Instance, runtime: Runtime) =
         PlayerCharacter(this, instance, runtime, entity, data)
 }

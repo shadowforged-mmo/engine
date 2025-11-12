@@ -78,13 +78,13 @@ class PlayerCharacter(
     override val mass
         get() = 70.0
 
-    var maxMana = 1.0
+    var maxMana = data.maxMana
         set(value) {
             field = value
             updateManaBar()
         }
 
-    var mana = 1.0
+    var mana = data.mana
         set(value) {
             field = value
             updateManaBar()
