@@ -1,8 +1,6 @@
 package com.shadowforgedmmo.engine.resource
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import com.shadowforgedmmo.engine.character.CharacterBlueprint
@@ -24,6 +22,7 @@ import com.shadowforgedmmo.engine.quest.deserializeQuest
 import com.shadowforgedmmo.engine.skill.Skill
 import com.shadowforgedmmo.engine.skill.deserializeSkill
 import com.shadowforgedmmo.engine.sound.deserializeSoundAsset
+import com.shadowforgedmmo.engine.util.readYaml
 import com.shadowforgedmmo.engine.zone.Zone
 import com.shadowforgedmmo.engine.zone.deserializeZone
 import net.minestom.server.MinecraftServer
@@ -32,8 +31,6 @@ import team.unnamed.hephaestus.reader.blockbench.BBModelReader
 import java.io.File
 
 class ResourceLoader(private val root: File) {
-    private val objectMapper = ObjectMapper(YAMLFactory())
-
     fun loadAll(): Resources {
         val server = MinecraftServer.init()
         val config = loadConfig()
@@ -218,8 +215,6 @@ class ResourceLoader(private val root: File) {
         file: File,
         deserialize: (JsonNode) -> T
     ) = deserialize(readYaml(file))
-
-    private fun readYaml(file: File): JsonNode = objectMapper.readTree(file)
 
     private fun <T> loadIdentifiedJsonResources(
         path: String,
