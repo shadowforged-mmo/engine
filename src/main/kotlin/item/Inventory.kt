@@ -7,7 +7,7 @@ import net.minestom.server.utils.inventory.PlayerInventoryUtils
 
 class Inventory(private val pc: PlayerCharacter, data: InventoryData) {
     init {
-        inventory.setItemStack(8, data.weapon.itemStack(pc))
+        data.weapon?.let { inventory.setItemStack(8, it.itemStack(pc)) }
     }
 
     private val inventory: PlayerInventory
