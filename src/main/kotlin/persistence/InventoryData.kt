@@ -36,9 +36,11 @@ fun deserializeInventoryData(data: JsonNode, runtime: Runtime) = InventoryData(
     data["wrist"].takeUnless(JsonNode::isNull)?.let { deserializeAccessoryInstance(it, runtime) },
     data["trinket"].takeUnless(JsonNode::isNull)?.let { deserializeAccessoryInstance(it, runtime) },
     data["action_bar"]
-        .map { if (it.isNull) deserializeItemInstance(it, runtime) else null }
+        .filterNot(JsonNode::isNull)
+        .map { deserializeItemInstance(it, runtime) }
         .toTypedArray(),
     data["bag"]
-        .map { if (it.isNull) deserializeItemInstance(it, runtime) else null }
+        .filterNot(JsonNode::isNull)
+        .map { deserializeItemInstance(it, runtime) }
         .toTypedArray()
 )

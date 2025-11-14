@@ -1,11 +1,13 @@
 package com.shadowforgedmmo.engine.login
 
-import com.shadowforgedmmo.engine.character.PlayerCharacter
 import com.shadowforgedmmo.engine.character.PlayerCharacterSpawner
 import com.shadowforgedmmo.engine.persistence.deserializePlayerCharacterData
 import com.shadowforgedmmo.engine.runtime.Runtime
 import com.shadowforgedmmo.engine.util.globalEventHandler
-import com.shadowforgedmmo.engine.util.toMinestom
+import com.shadowforgedmmo.engine.util.readYaml
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import net.kyori.adventure.resource.ResourcePackInfo
 import net.kyori.adventure.resource.ResourcePackRequest
 import net.minestom.server.MinecraftServer
@@ -48,9 +50,15 @@ class LoginManager(val runtime: Runtime) {
 
     private fun handlePlayerSpawn(event: PlayerSpawnEvent) {
         if (event.instance != instanceContainer) return
-        val data = deserializePlayerCharacterData(TODO(), runtime)
-        event.player.respawnPoint = data.position.toMinestom()
-        val spawner = PlayerCharacterSpawner(data.position, event.player, data)
-        val pc = data.instance.spawn(spawner, runtime) as PlayerCharacter
+
+        GlobalScope.launch(Dispatchers.IO) {
+            val backendUrl = "http://localhost:8001/save.json"
+            val data = readYaml(URI(backendUrl).toURL())
+            MinecraftServer.getSchedulerManager().scheduleNextTick {
+                val playerCharacterData = deserializePlayerCharacterData(data, runtime)
+                val spawner = PlayerCharacterSpawner(event.player, playerCharacterData)
+                playerCharacterData.instance.spawn(spawner, runtime)
+            }
+        }
     }
 }
