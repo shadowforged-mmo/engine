@@ -38,7 +38,7 @@ fun deserializeItem(
 }
 
 fun deserializeItemInstance(data: JsonNode, runtime: Runtime): ItemInstance {
-    val id = parseItemId(data["id"].asText())
+    val id = parseItemId(data["item"].asText())
     return when (val item = runtime.itemsById.getValue(id)) {
         is EquipmentItem -> item.instance(
             data["gems"].map(JsonNode::asText).map(runtime.itemsById::getValue).map { it as Gem }
