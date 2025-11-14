@@ -12,6 +12,7 @@ import net.minestom.server.particle.Particle
 import java.time.Duration
 import kotlin.math.pow
 import com.shadowforgedmmo.engine.script.NonPlayerCharacter as ScriptNonPlayerCharacter
+import net.minestom.server.entity.damage.DamageType as MinecraftDamageType
 
 class NonPlayerCharacter(
     spawner: NonPlayerCharacterSpawner,
@@ -120,6 +121,15 @@ class NonPlayerCharacter(
     override fun damage(damage: Damage, source: Character) {
         if (source is PlayerCharacter) attackers.add(source)
         super.damage(damage, source)
+        takeDamageEffect()
+    }
+
+    private fun takeDamageEffect() {
+        if (entity is BlockbenchCharacterModelEntity) {
+            // TODO
+        } else {
+            entity.damage(MinecraftDamageType.GENERIC, 0.0F)
+        }
     }
 
     override fun die() {
