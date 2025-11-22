@@ -7,6 +7,7 @@ import org.python.util.PythonInterpreter
 import java.io.File
 
 class Interpreter(val scriptDir: File) {
+    // TODO: close resource
     private val interpreter = PythonInterpreter()
 
     init {
@@ -25,6 +26,8 @@ class Interpreter(val scriptDir: File) {
         exec("import $scriptId")
         val className = idToPythonClassName(scriptId)
         val scriptClass = eval("${scriptId}.${className}")
-        return scriptClass.__call__(args.map { Py.java2py(it) }.toTypedArray()).__tojava__(T::class.java) as T
+        return scriptClass
+            .__call__(args.map(Py::java2py).toTypedArray())
+            .__tojava__(T::class.java) as T
     }
 }
