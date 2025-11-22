@@ -76,10 +76,16 @@ abstract class GameObject(
     open fun spawn() {
         val entity = entity
         entity.setTag(OBJECT_TAG, this)
-        entityTeleporting = true
-        entity.setInstance(instance.instanceContainer, spawner.position.toMinestom()).thenRun {
-            entityTeleporting = false
+
+        if (this is PlayerCharacter) {
+            entity.teleport(position.toMinestom())
+        } else {
+            entityTeleporting = true
+            entity.setInstance(instance.instanceContainer, position.toMinestom()).thenRun {
+                entityTeleporting = false
+            }
         }
+
         if (entity is ModelEntity) {
             MinestomModelEngine.minestom().tracker().startGlobalTracking(entity)
         }

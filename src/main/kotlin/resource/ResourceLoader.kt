@@ -19,6 +19,7 @@ import com.shadowforgedmmo.engine.music.deserializeSongAsset
 import com.shadowforgedmmo.engine.playerclass.deserializePlayerClass
 import com.shadowforgedmmo.engine.quest.Quest
 import com.shadowforgedmmo.engine.quest.deserializeQuest
+import com.shadowforgedmmo.engine.runtime.createRuntimeEnvironment
 import com.shadowforgedmmo.engine.skill.Skill
 import com.shadowforgedmmo.engine.skill.deserializeSkill
 import com.shadowforgedmmo.engine.sound.deserializeSoundAsset
@@ -34,6 +35,7 @@ class ResourceLoader(private val root: File) {
     fun loadAll(): Resources {
         val server = MinecraftServer.init()
         val config = loadConfig()
+        val environment = createRuntimeEnvironment()
         val questsById = loadQuests()
         val musicById = loadMusic()
         val blockbenchModelsById = loadModels()
@@ -64,6 +66,7 @@ class ResourceLoader(private val root: File) {
         return Resources(
             server,
             config,
+            environment,
             playerClassesById.values,
             skillsById.values,
             itemsById.values,

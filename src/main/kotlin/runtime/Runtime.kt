@@ -21,6 +21,7 @@ class Runtime(resources: Resources) {
     private val server = resources.server
     val interpreter = Interpreter(resources.scriptDir)
     val config = resources.config
+    val environment = resources.environment
     val playerClassesById = resources.playerClasses.associateBy(PlayerClass::id)
     val skillsById = resources.skills.associateBy(Skill::id)
     val itemsById = resources.items.associateBy(Item::id)

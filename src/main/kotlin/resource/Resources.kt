@@ -8,6 +8,7 @@ import com.shadowforgedmmo.engine.model.BlockbenchModel
 import com.shadowforgedmmo.engine.music.Song
 import com.shadowforgedmmo.engine.playerclass.PlayerClass
 import com.shadowforgedmmo.engine.quest.Quest
+import com.shadowforgedmmo.engine.runtime.RuntimeEnvironment
 import com.shadowforgedmmo.engine.skill.Skill
 import com.shadowforgedmmo.engine.zone.Zone
 import net.minestom.server.MinecraftServer
@@ -16,6 +17,7 @@ import java.io.File
 class Resources(
     val server: MinecraftServer,
     val config: Config,
+    val environment: RuntimeEnvironment,
     val playerClasses: Collection<PlayerClass>,
     val skills: Collection<Skill>,
     val items: Collection<Item>,
