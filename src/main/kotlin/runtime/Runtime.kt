@@ -1,5 +1,6 @@
 package com.shadowforgedmmo.engine.runtime
 
+import com.shadowforgedmmo.engine.api.Api
 import com.shadowforgedmmo.engine.character.CharacterBlueprint
 import com.shadowforgedmmo.engine.character.CharacterEvents
 import com.shadowforgedmmo.engine.instance.Instance
@@ -19,9 +20,10 @@ import net.minestom.server.timer.TaskSchedule
 
 class Runtime(resources: Resources) {
     private val server = resources.server
-    val interpreter = Interpreter(resources.scriptDir)
     val config = resources.config
     val environment = resources.environment
+    val interpreter = Interpreter(resources.scriptDir)
+    val api = Api(this)
     val playerClassesById = resources.playerClasses.associateBy(PlayerClass::id)
     val skillsById = resources.skills.associateBy(Skill::id)
     val itemsById = resources.items.associateBy(Item::id)

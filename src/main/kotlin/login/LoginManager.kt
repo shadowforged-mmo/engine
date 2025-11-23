@@ -25,10 +25,7 @@ class LoginManager(val runtime: Runtime) {
     private fun handlePlayerConfigure(event: AsyncPlayerConfigurationEvent) {
         event.player.gameMode = GameMode.ADVENTURE
         event.player.sendResourcePacks(resourcePackRequest())
-
-        val backendUrl = "http://localhost:8001/save.json"
-        val data = readYaml(URI(backendUrl).toURL())
-        val playerCharacterData = deserializePlayerCharacterData(data, runtime)
+        val playerCharacterData = runtime.api.getCharacterData(event.player.uuid)
         event.spawningInstance = playerCharacterData.instance.instanceContainer
         event.player.eventNode().addListener(
             EventListener.builder(PlayerSpawnEvent::class.java)
