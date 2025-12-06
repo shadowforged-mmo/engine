@@ -246,6 +246,11 @@ class GameObject:
     def velocity(self, value: Vector) -> None:
         ...
 
+    @property
+    def is_on_ground(self) -> bool:
+        """Whether the object is on the ground."""
+        ...
+
     def remove(self) -> None:
         """Removes the object from the instance."""
         ...
@@ -306,16 +311,16 @@ class NonPlayerCharacter(Character):
         """Overridable method that is called when the character's death is finalized."""
         ...
 
+    def set_path_to(self, position: Point) -> None:
+        """TODO"""
+        ...
+
 
 class Projectile(GameObject):
     @property
     def on_hit(self) -> Signal[ProjectileHitEvent]:
         """Signal emitted when the projectile hits something."""
         ...
-
-
-class SkillStatus(Enum):
-    COMPLETE = 3
 
 
 class SkillExecutor:
@@ -329,7 +334,7 @@ class SkillExecutor:
         """The time since the skill began executing in seconds."""
         ...
 
-    def tick(self) -> SkillStatus:
+    def tick(self) -> None:
         """Overridable method that is called every game tick."""
         ...
 

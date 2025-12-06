@@ -1,5 +1,8 @@
 package com.shadowforgedmmo.engine.gameobject
 
+import com.shadowforgedmmo.engine.character.ANIMATION_SWING_MAIN_HAND
+import com.shadowforgedmmo.engine.character.ANIMATION_SWING_OFF_HAND
+import com.shadowforgedmmo.engine.character.Character
 import com.shadowforgedmmo.engine.character.PlayerCharacter
 import com.shadowforgedmmo.engine.instance.Instance
 import com.shadowforgedmmo.engine.math.BoundingBox3
@@ -8,8 +11,10 @@ import com.shadowforgedmmo.engine.math.Vector3
 import com.shadowforgedmmo.engine.runtime.Runtime
 import com.shadowforgedmmo.engine.util.fromMinestom
 import com.shadowforgedmmo.engine.util.toMinestom
+import net.kyori.adventure.sound.Sound
 import net.minestom.server.collision.BoundingBox
 import net.minestom.server.entity.Entity
+import net.minestom.server.entity.LivingEntity
 import net.minestom.server.tag.Tag
 import team.unnamed.hephaestus.minestom.MinestomModelEngine
 import team.unnamed.hephaestus.minestom.ModelEntity
@@ -35,6 +40,15 @@ abstract class GameObject(
 
     var previousPosition = spawner.position
         private set
+
+    var velocity
+        get() = Vector3.fromMinestom(entity.velocity)
+        set(value) {
+            entity.velocity = value.toMinestom()
+        }
+
+    val isOnGround
+        get() = entity.isOnGround
 
     val boundingBox
         get() = BoundingBox3(
@@ -68,6 +82,29 @@ abstract class GameObject(
         } else {
             entity.setInstance(instance.instanceContainer, position.toMinestom()).thenRun(onFinish)
         }
+    }
+
+    // TODO:  should this go in GameObject?
+    fun lookAt(position: Vector3) {
+        entity.lookAt(position.toMinestom())
+    }
+
+    fun lookAt(character: Character) = lookAt(character.eyePosition)
+
+    fun playAnimation(animation: String) {
+        val entity = this.entity
+        if (entity is ModelEntity) {
+            if (animation in entity.model().animations())
+                entity.playAnimation(animation)
+        } else if (entity is LivingEntity) {
+            if (animation == ANIMATION_SWING_MAIN_HAND) entity.swingMainHand()
+            else if (animation == ANIMATION_SWING_OFF_HAND) entity.swingOffHand()
+        }
+    }
+
+    fun emitSound(sound: Sound, localOffset: Vector3 = Vector3.ZERO) {
+        val globalOffset = position.localToGlobalDirection(localOffset)
+        instance.playSound(position.toVector3() + globalOffset, sound)
     }
 
     inline fun <reified T : GameObject> getOverlappingObjects() =

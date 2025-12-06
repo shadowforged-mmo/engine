@@ -3,6 +3,7 @@
 package com.shadowforgedmmo.engine.script
 
 import com.shadowforgedmmo.engine.combat.DamageType
+import com.shadowforgedmmo.engine.gameobject.GameObject as EngineGameObject
 import com.shadowforgedmmo.engine.math.BoundingBox3
 import com.shadowforgedmmo.engine.runtime.Runtime
 import com.shadowforgedmmo.engine.skill.SkillStatus
@@ -144,11 +145,7 @@ data class Sound(val name: String, val volume: Float, val pitch: Float) {
     constructor(name: String) : this(name, 1.0F, 1.0F)
 }
 
-open class Character(
-    private val handle: EngineCharacter
-) {
-    fun getIs_on_ground() = handle.isOnGround
-
+open class GameObject(private val handle: EngineGameObject) {
     val instance
         get() = handle.instance.handle
 
@@ -161,16 +158,17 @@ open class Character(
             handle.velocity = ScriptToEngine.vector3(value)
         }
 
+    fun getIs_on_ground() = handle.isOnGround
+}
+
+open class Character(private val handle: EngineCharacter) : GameObject(handle) {
     fun damage(damage: Damage, source: Character) = handle.damage(
         ScriptToEngine.damage(damage),
         source.handle
     )
 }
 
-class PlayerCharacter(
-    private val handle: EnginePlayerCharacter
-) : Character(handle) {
-}
+class PlayerCharacter(private val handle: EnginePlayerCharacter) : Character(handle)
 
 open class NonPlayerCharacter(
     private val handle: EngineNonPlayerCharacter

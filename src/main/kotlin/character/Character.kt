@@ -1,18 +1,14 @@
 package com.shadowforgedmmo.engine.character
 
-import net.kyori.adventure.sound.Sound
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
 import com.shadowforgedmmo.engine.combat.Damage
 import com.shadowforgedmmo.engine.gameobject.GameObject
 import com.shadowforgedmmo.engine.gameobject.GameObjectSpawner
 import com.shadowforgedmmo.engine.instance.Instance
 import com.shadowforgedmmo.engine.math.Vector3
 import com.shadowforgedmmo.engine.runtime.Runtime
-import com.shadowforgedmmo.engine.util.fromMinestom
-import com.shadowforgedmmo.engine.util.toMinestom
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
 import net.minestom.server.entity.LivingEntity
-import team.unnamed.hephaestus.minestom.ModelEntity
 import kotlin.math.ceil
 import com.shadowforgedmmo.engine.script.Character as ScriptCharacter
 
@@ -40,15 +36,6 @@ abstract class Character(
             TODO("don't just set the entity invisible, doesn't work for model entities")
         }
 
-    val isOnGround
-        get() = entity.isOnGround
-
-    var velocity
-        get() = Vector3.fromMinestom(entity.velocity)
-        set(value) {
-            entity.velocity = value.toMinestom()
-        }
-
     val height
         get() = entity.boundingBox.height()
 
@@ -74,29 +61,6 @@ abstract class Character(
     override fun tick() {
         super.tick()
         nameplate.tick()
-    }
-
-    // TODO:  should this go in GameObject?
-    fun lookAt(position: Vector3) {
-        entity.lookAt(position.toMinestom())
-    }
-
-    fun lookAt(character: Character) = lookAt(character.eyePosition)
-
-    fun playAnimation(animation: String) {
-        val entity = this.entity
-        if (entity is ModelEntity) {
-            if (animation in entity.model().animations())
-                entity.playAnimation(animation)
-        } else {
-            if (animation == ANIMATION_SWING_MAIN_HAND) entity.swingMainHand()
-            else if (animation == ANIMATION_SWING_OFF_HAND) entity.swingOffHand()
-        }
-    }
-
-    fun emitSound(sound: Sound, localOffset: Vector3 = Vector3.ZERO) {
-        val globalOffset = position.localToGlobalDirection(localOffset)
-        instance.playSound(position.toVector3() + globalOffset, sound)
     }
 
     open fun speak(dialogue: Component, to: PlayerCharacter) = to.sendMessage(

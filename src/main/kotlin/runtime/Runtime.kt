@@ -2,7 +2,6 @@ package com.shadowforgedmmo.engine.runtime
 
 import com.shadowforgedmmo.engine.api.Api
 import com.shadowforgedmmo.engine.character.CharacterBlueprint
-import com.shadowforgedmmo.engine.character.CharacterEvents
 import com.shadowforgedmmo.engine.instance.Instance
 import com.shadowforgedmmo.engine.item.Item
 import com.shadowforgedmmo.engine.login.LoginManager
@@ -34,7 +33,6 @@ class Runtime(resources: Resources) {
     val zonesById = resources.zones.associateBy(Zone::id)
     val questObjectiveManager = QuestObjectiveManager()
     val loginManager = LoginManager(this)
-    val characterEvents = CharacterEvents(this)
 
     var timeMillis = 0L
         private set
@@ -44,7 +42,6 @@ class Runtime(resources: Resources) {
         instancesById.values.forEach(Instance::start)
         questsById.values.forEach { it.start(this) }
         loginManager.start()
-        characterEvents.start()
 
         schedulerManager.buildTask(::tick)
             .repeat(TaskSchedule.tick(1))
