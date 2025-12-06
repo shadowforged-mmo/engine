@@ -114,9 +114,7 @@ abstract class GameObject(
         val entity = entity
         entity.setTag(OBJECT_TAG, this)
 
-        if (this is PlayerCharacter) {
-            entity.teleport(position.toMinestom())
-        } else {
+        if (this !is PlayerCharacter) {
             entityTeleporting = true
             entity.setInstance(instance.instanceContainer, position.toMinestom()).thenRun {
                 entityTeleporting = false

@@ -3,6 +3,7 @@ package com.shadowforgedmmo.engine.login
 import com.shadowforgedmmo.engine.character.PlayerCharacterSpawner
 import com.shadowforgedmmo.engine.runtime.Runtime
 import com.shadowforgedmmo.engine.util.globalEventHandler
+import com.shadowforgedmmo.engine.util.toMinestom
 import net.kyori.adventure.resource.ResourcePackInfo
 import net.kyori.adventure.resource.ResourcePackRequest
 import net.minestom.server.entity.GameMode
@@ -25,6 +26,7 @@ class LoginManager(val runtime: Runtime) {
         event.player.sendResourcePacks(resourcePackRequest())
         val playerCharacterData = runtime.api.getCharacterData(event.player.uuid)
         event.spawningInstance = playerCharacterData.instance.instanceContainer
+        event.player.respawnPoint = playerCharacterData.position.toMinestom()
         event.player.eventNode().addListener(
             EventListener.builder(PlayerSpawnEvent::class.java)
                 .handler {
