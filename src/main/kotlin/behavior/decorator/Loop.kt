@@ -1,7 +1,7 @@
-package com.shadowforgedmmo.engine.ai.behavior.decorator
+package com.shadowforgedmmo.engine.behavior.decorator
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.shadowforgedmmo.engine.ai.behavior.*
+import com.shadowforgedmmo.engine.behavior.*
 import com.shadowforgedmmo.engine.character.NonPlayerCharacter
 
 class Loop(child: Behavior, private val count: Int) : Decorator(child) {

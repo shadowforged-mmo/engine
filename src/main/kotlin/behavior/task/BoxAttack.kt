@@ -1,10 +1,10 @@
-package com.shadowforgedmmo.engine.ai.behavior.task
+package com.shadowforgedmmo.engine.behavior.task
 
 import com.fasterxml.jackson.databind.JsonNode
 import net.kyori.adventure.sound.Sound
-import com.shadowforgedmmo.engine.ai.behavior.BehaviorBlueprint
-import com.shadowforgedmmo.engine.ai.behavior.BehaviorStatus
-import com.shadowforgedmmo.engine.ai.behavior.Task
+import com.shadowforgedmmo.engine.behavior.BehaviorBlueprint
+import com.shadowforgedmmo.engine.behavior.BehaviorStatus
+import com.shadowforgedmmo.engine.behavior.Task
 import com.shadowforgedmmo.engine.character.Character
 import com.shadowforgedmmo.engine.character.NonPlayerCharacter
 import com.shadowforgedmmo.engine.character.Stance

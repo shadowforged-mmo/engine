@@ -1,8 +1,8 @@
 package com.shadowforgedmmo.engine.character
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.shadowforgedmmo.engine.ai.behavior.BehaviorBlueprint
-import com.shadowforgedmmo.engine.ai.behavior.deserializeBehaviorBlueprint
+import com.shadowforgedmmo.engine.behavior.BehaviorBlueprint
+import com.shadowforgedmmo.engine.behavior.deserializeBehaviorBlueprint
 import com.shadowforgedmmo.engine.loot.LootTable
 import com.shadowforgedmmo.engine.loot.deserializeLootTable
 import com.shadowforgedmmo.engine.model.BlockbenchItemModel

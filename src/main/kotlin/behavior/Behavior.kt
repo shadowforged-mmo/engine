@@ -1,9 +1,9 @@
-package com.shadowforgedmmo.engine.ai.behavior
+package com.shadowforgedmmo.engine.behavior
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.shadowforgedmmo.engine.ai.behavior.composite.*
-import com.shadowforgedmmo.engine.ai.behavior.decorator.*
-import com.shadowforgedmmo.engine.ai.behavior.task.*
+import com.shadowforgedmmo.engine.behavior.composite.*
+import com.shadowforgedmmo.engine.behavior.decorator.*
+import com.shadowforgedmmo.engine.behavior.task.*
 import com.shadowforgedmmo.engine.character.NonPlayerCharacter
 
 abstract class Behavior {

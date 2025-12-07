@@ -1,7 +1,7 @@
-package com.shadowforgedmmo.engine.ai.behavior.composite
+package com.shadowforgedmmo.engine.behavior.composite
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.shadowforgedmmo.engine.ai.behavior.*
+import com.shadowforgedmmo.engine.behavior.*
 import com.shadowforgedmmo.engine.character.NonPlayerCharacter
 import com.shadowforgedmmo.engine.math.weightedRandomIndex
 
