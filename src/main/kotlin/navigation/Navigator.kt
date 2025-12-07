@@ -1,4 +1,4 @@
-package com.shadowforgedmmo.engine.ai.navigation
+package com.shadowforgedmmo.engine.navigation
 
 import com.shadowforgedmmo.engine.character.NonPlayerCharacter
 import com.shadowforgedmmo.engine.math.Vector3

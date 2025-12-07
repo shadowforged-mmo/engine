@@ -1,6 +1,6 @@
 package com.shadowforgedmmo.engine.character
 
-import com.shadowforgedmmo.engine.ai.navigation.Navigator
+import com.shadowforgedmmo.engine.navigation.Navigator
 import com.shadowforgedmmo.engine.combat.Damage
 import com.shadowforgedmmo.engine.instance.Instance
 import com.shadowforgedmmo.engine.math.Position
