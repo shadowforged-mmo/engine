@@ -4,6 +4,7 @@ import com.shadowforgedmmo.engine.pack.PackBuilder
 import com.shadowforgedmmo.engine.resource.ResourceLoader
 import com.shadowforgedmmo.engine.runtime.Runtime
 import java.io.File
+import java.lang.Runtime as JavaRuntime
 import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
@@ -23,6 +24,9 @@ fun startRuntime(root: File) {
     val resources = ResourceLoader(root).loadAll()
     val runtime = Runtime(resources)
     runtime.start()
+    JavaRuntime.getRuntime().addShutdownHook(Thread {
+        runtime.stop()
+    })
 }
 
 fun buildPack(root: File) {

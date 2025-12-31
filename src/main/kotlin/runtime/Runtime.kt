@@ -55,4 +55,8 @@ class Runtime(resources: Resources) {
 
         timeMillis += MinecraftServer.TICK_MS
     }
+
+    fun stop() {
+        interpreter.close()
+    }
 }

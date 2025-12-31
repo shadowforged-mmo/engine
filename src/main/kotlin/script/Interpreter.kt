@@ -6,8 +6,7 @@ import org.python.core.PyObject
 import org.python.util.PythonInterpreter
 import java.io.File
 
-class Interpreter(val scriptDir: File) {
-    // TODO: close resource
+class Interpreter(scriptDir: File) {
     private val interpreter = PythonInterpreter()
 
     init {
@@ -29,5 +28,9 @@ class Interpreter(val scriptDir: File) {
         return scriptClass
             .__call__(args.map(Py::java2py).toTypedArray())
             .__tojava__(T::class.java) as T
+    }
+
+    fun close() {
+        interpreter.close()
     }
 }
