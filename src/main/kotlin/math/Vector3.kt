@@ -29,6 +29,10 @@ data class Vector3(val x: Double, val y: Double, val z: Double) {
         fun sqrDistance(a: Vector3, b: Vector3) = (b - a).sqrMagnitude
 
         fun lerp(a: Vector3, b: Vector3, t: Double) = a * (1.0 - t) + b * t
+
+        fun min(a: Vector3, b: Vector3) = Vector3(minOf(a.x, b.x), minOf(a.y, b.y), minOf(a.z, b.z))
+
+        fun max(a: Vector3, b: Vector3) = Vector3(maxOf(a.x, b.x), maxOf(a.y, b.y), maxOf(a.z, b.z))
     }
 
     operator fun get(index: Int) = when (index) {
