@@ -8,7 +8,7 @@ import com.shadowforgedmmo.engine.character.NonPlayerCharacter
 import org.python.core.Py
 import org.python.core.PyBoolean
 
-class Custom(private val methodName: String) : Task() {
+class CallMethod(private val methodName: String) : Task() {
     override fun update(character: NonPlayerCharacter): BehaviorStatus {
         val status = Py.java2py(character.handle).invoke(methodName)
         if (status is PyBoolean) {
@@ -18,8 +18,8 @@ class Custom(private val methodName: String) : Task() {
     }
 }
 
-class CustomBlueprint(private val methodName: String) : BehaviorBlueprint() {
-    override fun create() = Custom(methodName)
+class CallMethodBlueprint(private val methodName: String) : BehaviorBlueprint() {
+    override fun create() = CallMethod(methodName)
 }
 
-fun deserializeCustom(data: JsonNode) = CustomBlueprint(data["method"].asText())
+fun deserializeCallMethodBlueprint(data: JsonNode) = CallMethodBlueprint(data["method"].asText())

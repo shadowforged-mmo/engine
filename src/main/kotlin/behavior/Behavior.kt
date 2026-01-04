@@ -85,5 +85,6 @@ fun deserializeBehaviorBlueprint(data: JsonNode): BehaviorBlueprint =
         "emit_particle" -> deserializeEmitParticleBlueprint(data)
         "play_animation" -> deserializePlayAnimationBlueprint(data)
         "follow_path" -> deserializeFollowPathBlueprint(data)
+        "call_method" -> deserializeCallMethodBlueprint(data)
         else -> throw IllegalArgumentException()
     }
