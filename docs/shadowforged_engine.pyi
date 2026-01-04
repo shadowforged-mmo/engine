@@ -225,7 +225,7 @@ class Instance:
         direction: Vector,
         max_distance: float,
         filter: Callable[[Character], bool]
-    ) -> Union[None, RaycastHit]:
+    ) -> Union[None, CharacterRaycastHit]:
         """Casts a ray from the origin in the given direction and returns the first character hit satisfying the filter.
 
         Args:
@@ -235,7 +235,7 @@ class Instance:
             filter (Callable[[Character], bool]): A filter function to apply to each character.
 
         Returns:
-            Union[None, RaycastHit]: The raycast hit information, or None if no character was hit.
+            Union[None, CharacterRaycastHit]: The raycast hit information, or None if no character was hit.
         """
         ...
 
