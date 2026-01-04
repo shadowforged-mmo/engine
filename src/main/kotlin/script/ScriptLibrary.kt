@@ -90,6 +90,10 @@ data class Vector(
     fun __sub__(v: Vector) = Vector(x - v.x, y - v.y, z - v.z)
 
     fun __mul__(s: Double) = Vector(x * s, y * s, z * s)
+
+    fun __truediv__(s: Double) = Vector(x / s, y / s, z / s)
+
+    fun __neg__() = Vector(-x, -y, -z)
 }
 
 data class Position(
