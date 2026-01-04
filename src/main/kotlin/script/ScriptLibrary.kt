@@ -122,6 +122,15 @@ class Instance(val handle: EngineInstance) {
             .filter { (filter.__call__(Py.java2py(it.handle)) as PyBoolean).booleanValue }
             .map(EngineCharacter::handle)
 
+    fun raycast_characters(origin: Point, direction: Vector, maxDistance: Double, filter: PyObject) =
+        handle.raycast<EngineCharacter>(
+            ScriptToEngine.vector3(origin),
+            ScriptToEngine.vector3(direction),
+            maxDistance
+        ) {
+            (filter.__call__(Py.java2py(it.handle)) as PyBoolean).booleanValue
+        }?.let(EngineToScript::characterRaycastHit)
+
     fun play_sound(position: Point, sound: Sound) = handle.playSound(
         ScriptToEngine.vector3(position),
         ScriptToEngine.sound(sound)
@@ -166,6 +175,8 @@ open class Character(private val handle: EngineCharacter) : GameObject(handle) {
         ScriptToEngine.damage(damage),
         source.handle
     )
+
+    fun apply_impulse(impulse: Vector) = handle.applyImpulse(ScriptToEngine.vector3(impulse))
 }
 
 class PlayerCharacter(private val handle: EnginePlayerCharacter) : Character(handle)
@@ -193,6 +204,8 @@ open class SkillExecutor(private val handle: EngineSkillExecutor) {
 
     open fun tick() = Unit
 }
+
+class CharacterRaycastHit(val character: Character, val point: Vector)
 
 class GetTime(val runtime: Runtime) : PyObject() {
     override fun __call__(): PyObject = Py.java2py(millisToSeconds(runtime.timeMillis))

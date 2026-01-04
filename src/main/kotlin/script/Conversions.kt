@@ -1,5 +1,7 @@
 package com.shadowforgedmmo.engine.script
 
+import com.shadowforgedmmo.engine.character.Character
+import com.shadowforgedmmo.engine.instance.RaycastHit
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound as EngineSound
 import com.shadowforgedmmo.engine.math.Position as EnginePosition
@@ -27,4 +29,9 @@ object EngineToScript {
     fun vector3(v: EngineVector3) = Vector(v.x, v.y, v.z)
 
     fun position(p: EnginePosition) = Position(p.x, p.y, p.z, p.yaw, p.pitch)
+
+    fun characterRaycastHit(raycastHit: RaycastHit<Character>) = CharacterRaycastHit(
+        raycastHit.gameObject.handle,
+        vector3(raycastHit.point)
+    )
 }

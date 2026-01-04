@@ -20,4 +20,8 @@ data class BoundingBox3(val min: Vector3, val max: Vector3) {
         coordinateWiseLeq(min, boundingBox3.max) && coordinateWiseLeq(boundingBox3.min, max)
 
     fun expand(amount: Vector3) = BoundingBox3(min - amount / 2.0, max + amount / 2.0)
+
+    fun raycast(origin: Vector3, direction: Vector3, maxDistance: Double): Vector3? {
+        TODO()
+    }
 }

@@ -17,6 +17,7 @@ import com.shadowforgedmmo.engine.zone.parseZoneId
 import net.kyori.adventure.sound.Sound
 import net.minestom.server.MinecraftServer
 import net.minestom.server.adventure.AdventurePacketConvertor
+import net.minestom.server.entity.Player
 import net.minestom.server.instance.InstanceContainer
 import net.minestom.server.instance.anvil.AnvilLoader
 import net.minestom.server.network.packet.server.play.ParticlePacket
@@ -88,11 +89,38 @@ class Instance(
         .filterIsInstance<T>()
         .filter { Vector3.sqrDistance(position, it.position.toVector3()) <= radius.pow(2) }
 
-    fun getNearbyPlayers(position: Vector3, radius: Double) =
+    fun getNearbyPlayers(position: Vector3, radius: Double): Collection<Player> =
         getNearbyObjects<PlayerCharacter>(position, radius).map(PlayerCharacter::entity)
 
-    inline fun <reified T : GameObject> getObjectsInBox(box: BoundingBox3) =
+    inline fun <reified T : GameObject> getObjectsInBox(box: BoundingBox3): Collection<T> =
         objects.query(box).filterIsInstance<T>().filter { it.boundingBox.intersects(box) }
+
+    inline fun <reified T : GameObject> raycastAll(
+        origin: Vector3,
+        direction: Vector3,
+        maxDistance: Double,
+        filter: (T) -> Boolean
+    ): Collection<RaycastHit<T>> {
+        val end = origin + direction * maxDistance
+        val min = Vector3.min(origin, end)
+        val max = Vector3.max(origin, end)
+        return objects
+            .query(BoundingBox3(min, max))
+            .filterIsInstance<T>()
+            .filter(filter)
+            .mapNotNull { gameObject ->
+                val point = gameObject.boundingBox.raycast(origin, direction, maxDistance)
+                point?.let { RaycastHit(gameObject, it) }
+            }
+    }
+
+    inline fun <reified T : GameObject> raycast(
+        origin: Vector3,
+        direction: Vector3,
+        maxDistance: Double,
+        filter: (T) -> Boolean
+    ) = raycastAll(origin, direction, maxDistance, filter)
+        .minByOrNull { Vector3.sqrDistance(origin, it.point) }
 
     fun playSound(position: Vector3, sound: Sound) = PacketSendingUtils.sendGroupedPacket(
         getNearbyPlayers(position, soundRange(sound)),
