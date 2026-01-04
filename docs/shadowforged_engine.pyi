@@ -81,6 +81,25 @@ class Vector:
         """
         ...
 
+    def __truediv__(self, s: float) -> Vector:
+        """Divides the vector by a scalar.
+
+        Args:
+            s (float): The scalar to divide by.
+
+        Returns:
+            Vector: The scaled vector.
+        """
+        ...
+
+    def __neg__(self) -> Vector:
+        """Negates the vector.
+
+        Returns:
+            Vector: The negated vector.
+        """
+        ...
+
 
 @dataclass
 class Position:
@@ -200,6 +219,26 @@ class Instance:
         """
         ...
 
+    def raycast_characters(
+        self,
+        origin: Point,
+        direction: Vector,
+        max_distance: float,
+        filter: Callable[[Character], bool]
+    ) -> Union[None, RaycastHit]:
+        """Casts a ray from the origin in the given direction and returns the first character hit satisfying the filter.
+
+        Args:
+            origin (Position): The starting position of the ray.
+            direction (Vector): The direction of the ray.
+            max_distance (float): The maximum distance to cast the ray.
+            filter (Callable[[Character], bool]): A filter function to apply to each character.
+
+        Returns:
+            Union[None, RaycastHit]: The raycast hit information, or None if no character was hit.
+        """
+        ...
+
     def spawn_projectile(
         self,
         position: Position,
@@ -258,6 +297,11 @@ class GameObject:
 
 class Character(GameObject):
     @property
+    def eye_position(self) -> Vector :
+        """The eye position of the character."""
+        ...
+
+    @property
     def on_take_damage(self) -> Signal[TakeDamageEvent]:
         """Signal emitted when the character takes damage."""
         ...
@@ -271,6 +315,17 @@ class Character(GameObject):
 
         Examples:
             >>> player.damage(Damage({DamageType.PHYSICAL: 5, DamageType.FIRE: 10}), pyromancer)
+        """
+        ...
+
+    def apply_impulse(self, impulse: Vector) -> None:
+        """Applies an impulse to the character.
+
+        Args:
+            impulse (Vector): The impulse vector to apply.
+
+        Examples:
+            >>> goblin.apply_impulse(Vector(0, 10, 0))
         """
         ...
 
@@ -407,3 +462,9 @@ def run_delayed(delay: float, function: Callable[[], None]) -> Task:
         function (callable): The function to run.
     """
     ...
+
+
+@dataclass
+class CharacterRaycastHit:
+    character: Character
+    point: Vector
