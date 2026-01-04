@@ -51,7 +51,7 @@ fun deserializeCharacterBlueprint(
     data["name"].asText(),
     data["level"].asInt(),
     data["max_health"]?.asDouble() ?: 1.0,
-    data["mass"]?.asDouble() ?: 70.0,
+    data["mass"]?.asDouble() ?: 75.0,
     data["experience_points"]?.asInt() ?: 0,
     deserializeCharacterModel(
         data["model"],

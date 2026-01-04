@@ -72,7 +72,7 @@ class PlayerCharacter(
         }
 
     override val mass
-        get() = 70.0
+        get() = 75.0
 
     var maxMana = data.maxMana
         set(value) {
