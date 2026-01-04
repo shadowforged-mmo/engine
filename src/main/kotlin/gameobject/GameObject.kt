@@ -84,7 +84,6 @@ abstract class GameObject(
         }
     }
 
-    // TODO:  should this go in GameObject?
     fun lookAt(position: Vector3) {
         entity.lookAt(position.toMinestom())
     }
