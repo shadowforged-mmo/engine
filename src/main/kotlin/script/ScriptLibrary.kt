@@ -31,6 +31,7 @@ fun scriptLibraryModule(runtime: Runtime): PyModule {
         Vector::class,
         Position::class,
         Instance::class,
+        PlayerCharacter::class,
         NonPlayerCharacter::class,
         SkillExecutor::class,
         SkillStatus::class,
@@ -171,6 +172,9 @@ open class GameObject(private val handle: EngineGameObject) {
 }
 
 open class Character(private val handle: EngineCharacter) : GameObject(handle) {
+    val eye_position
+        get() = EngineToScript.position(handle.position)
+
     fun damage(damage: Damage, source: Character) = handle.damage(
         ScriptToEngine.damage(damage),
         source.handle
