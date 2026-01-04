@@ -1,0 +1,5 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/character-model.schema.yaml
+title: Character Model
+description: A non-player character's model
+oneOf: TODO

@@ -1,0 +1,4 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/behavior.schema.yaml
+title: Character Behavior
+description: A non-player character's behavior

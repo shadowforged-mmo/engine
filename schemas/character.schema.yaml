@@ -1,0 +1,73 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/character.schema.yaml
+title: Character
+description: A non-player character blueprint
+type: object
+properties:
+  name:
+    description: The name of the character
+    type: string
+  level:
+    description: The level of the character
+    type: integer
+    minimum: 1
+  max_health:
+    description: The maximum health of the character
+    type: integer
+    minimum: 1
+    default: 1
+  mass:
+    description: The mass of the character in kilograms
+    type: number
+    exclusiveMinimum: 0.0
+    default: 75.0
+  experience_points:
+    description: Experience points distributed on death
+    type: integer
+    minimum: 0
+    default: 0
+  model:
+    description: The character's model
+    $ref: https://shadowforgedmmo.com/schemas/character-model.schema.yaml
+  boss_fight:
+    description:
+    type: object
+    properties:
+      radius:
+        description: The radius of the boss fight area in meters
+        type: number
+        minimum: 0.0
+      music:
+        description: The music to play during the boss fight
+        $ref: TODO
+  behavior:
+    description: The behavior of the character
+    $ref: TODO
+  stances: TODO
+  step_sound: TODO
+  speak_sound: TODO
+  death_sound: TODO
+  interactions:
+    description: This character's interactions
+    type: array
+    items: TODO
+  loot: TODO
+  script:
+    description: The script attached to the character
+    oneOf:
+      - TODO
+      - type: null
+  removal_delay:
+    description: The delay in seconds before the character is removed after death
+    type: number
+    minimum: 0.0
+    default: 1.0
+  respawn_time:
+    description: The time in seconds before the character respawns after being removed
+    type: number
+    minimum: 0.0
+    default: 300.0
+required:
+  - name
+  - level
+  - model
