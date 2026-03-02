@@ -1,7 +1,7 @@
 plugins {
-    kotlin("jvm") version "2.2.21"
+    alias(libs.plugins.kotlin.jvm)
     application
-    id("com.gradleup.shadow") version "9.2.0"
+    alias(libs.plugins.shadow)
 }
 
 group = "com.shadowforgedmmo"
@@ -9,37 +9,25 @@ version = System.getenv("VERSION") ?: "dev"
 
 repositories {
     mavenCentral()
-
     maven("https://jitpack.io")
-
-    maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
-
-    implementation("net.minestom:minestom-snapshots:1_21_5-468b85eb42")
-
-    implementation("com.google.guava:guava:33.0.0-jre")
-
-    implementation("com.google.code.gson:gson:2.10.1")
-
-    implementation("com.fasterxml.jackson.core:jackson-core:2.13.0")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.0")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.0")
-
-    implementation("org.python:jython-standalone:2.7.4b2")
-
-    implementation("team.unnamed:creative-api:1.8.2-SNAPSHOT")
-    implementation("team.unnamed:creative-serializer-minecraft:1.8.2-SNAPSHOT")
-
-    implementation("team.unnamed:mocha:3.0.0")
-
-    implementation("com.github.shadowforged-mmo:hephaestus-engine:81f9474b17")
-
-    implementation("net.kyori:adventure-text-minimessage:4.16.0")
-
-    implementation("org.gagravarr:vorbis-java-core:0.8")
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.minestom)
+    implementation(libs.guava)
+    implementation(libs.gson)
+    implementation(libs.jackson.core)
+    implementation(libs.jackson.databind)
+    implementation(libs.jackson.dataformat.yaml)
+    implementation(libs.jython.standalone)
+    implementation(libs.creative.api)
+    implementation(libs.creative.serializer.minecraft)
+    implementation(libs.hephaestus.api)
+    implementation(libs.hephaestus.reader.blockbench)
+    implementation(libs.hephaestus.runtime.minestom)
+    implementation(libs.adventure.text.minimessage)
+    implementation(libs.vorbis.java.core.lib)
 
     testImplementation(kotlin("test"))
 }
