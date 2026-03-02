@@ -28,7 +28,7 @@ class BossFight(
     }
 
     fun tick() {
-        bossBar.progress((character.health / character.maxHealth).toFloat())
+        bossBar.progress((character.health.toFloat() / character.maxHealth.toFloat()))
 
         viewers.filter {
             it.removed || Position.sqrDistance(
