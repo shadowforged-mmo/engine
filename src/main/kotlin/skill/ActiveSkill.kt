@@ -16,7 +16,7 @@ class ActiveSkill(
     id: String,
     name: String,
     description: String,
-    val manaCost: Double,
+    val manaCost: Int,
     val cooldownMillis: Long,
     scriptId: String
 ) : Skill(id, name, description, scriptId) {
@@ -43,7 +43,7 @@ fun deserializeActiveSkill(
     id,
     data["name"].asText(),
     data["description"].asText(),
-    data["mana_cost"].asDouble(),
+    data["mana_cost"].asInt(),
     secondsToMillis(data["cooldown"].asDouble()),
     parseScriptId(data["script"].asText())
 )

@@ -151,8 +151,8 @@ class Task(private val handle: EngineTask) {
     fun cancel() = handle.cancel()
 }
 
-data class Damage(val damage: Map<DamageType, Double>) {
-    constructor(amount: Double) : this(mapOf(DamageType.PHYSICAL to amount))
+data class Damage(val damage: Map<DamageType, Int>) {
+    constructor(amount: Int) : this(mapOf(DamageType.PHYSICAL to amount))
 }
 
 data class Sound(val name: String, val volume: Float, val pitch: Float) {

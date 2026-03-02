@@ -149,14 +149,14 @@ class DamageType(Enum):
     HOLY = 7
 
 
-class Damage(dict[DamageType, float]):
+class Damage(dict[DamageType, int]):
     """Represents a blow of damage with damage types and amounts."""
 
-    def __init__(self, damage: Union[float, dict[DamageType, float]]) -> None:
+    def __init__(self, damage: Union[int, dict[DamageType, int]]) -> None:
         """Initializes the damage object.
 
         Args:
-            damage (Union[float, dict[DamageType, float]]): The damage types and amounts.
+            damage (Union[int, dict[DamageType, int]]): The damage types and amounts.
 
         Examples:
             >>> Damage(10)
@@ -186,18 +186,6 @@ class Instance:
 
         Examples:
             >>> orc_grunt = instance.spawn_character(Position(0, 0, 0), 'characters:orc_grunt')
-        """
-        ...
-
-    def play_sound(self, position: Point, sound: Sound) -> None:
-        """Plays a sound at the given position.
-
-        Args:
-            position (Position): The position to play the sound.
-            sound (Sound): The sound to play.
-
-        Examples:
-            >>> instance.play_sound(position, Sound('sounds:portcullis_close'))
         """
         ...
 
@@ -263,6 +251,19 @@ class Instance:
             >>> fireball.velocity = Vector(0, 0, 5)
         """
         ...
+
+    def play_sound(self, position: Point, sound: Sound) -> None:
+        """Plays a sound at the given position.
+
+        Args:
+            position (Position): The position to play the sound.
+            sound (Sound): The sound to play.
+
+        Examples:
+            >>> instance.play_sound(position, Sound('sounds:portcullis_close'))
+        """
+        ...
+
 
 
 class GameObject:

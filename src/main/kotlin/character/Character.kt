@@ -21,8 +21,8 @@ abstract class Character(
     abstract override val entity: LivingEntity
     abstract val name: String
     abstract val level: Int
-    abstract val maxHealth: Double
-    abstract var health: Double
+    abstract val maxHealth: Int
+    abstract var health: Int
     abstract val mass: Double
     abstract val handle: ScriptCharacter
     val nameplate = CharacterNameplate(this)
@@ -76,9 +76,9 @@ abstract class Character(
     open fun damage(damage: Damage, source: Character) {
         if (!isAlive) return
         // TODO: Factor in resistances
-        health = maxOf(0.0, health - damage.damage.values.sum())
+        health = maxOf(0, health - damage.damage.values.sum())
         nameplate.updateHealthBar()
-        if (health == 0.0) die()
+        if (health == 0) die()
     }
 
     protected abstract fun die()
@@ -97,7 +97,7 @@ abstract class Character(
 
     fun healthBarText(): Component {
         val numBars = 20
-        val ratio = health / maxHealth
+        val ratio = health.toDouble() / maxHealth.toDouble()
         val numRedBars = ceil(numBars * ratio).toInt()
         val numGrayBars = numBars - numRedBars
         return Component.text("[", NamedTextColor.GRAY)

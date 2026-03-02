@@ -20,7 +20,7 @@ class CharacterBlueprint(
     val id: String,
     val name: String,
     val level: Int,
-    val maxHealth: Double,
+    val maxHealth: Int,
     val mass: Double,
     val experiencePoints: Int,
     val model: CharacterModel,
@@ -50,7 +50,7 @@ fun deserializeCharacterBlueprint(
     id,
     data["name"].asText(),
     data["level"].asInt(),
-    data["max_health"]?.asDouble() ?: 1.0,
+    data["max_health"]?.asInt() ?: 1,
     data["mass"]?.asDouble() ?: 75.0,
     data["experience_points"]?.asInt() ?: 0,
     deserializeCharacterModel(

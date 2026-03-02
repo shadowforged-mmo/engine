@@ -13,7 +13,7 @@ import team.unnamed.hephaestus.minestom.ModelEntity
 val hitboxEntityTypes = loadJsonResource(
     "data/hitbox_entity_types.json",
     Array<String>::class
-).map(EntityType::fromKey)
+).map { EntityType.fromKey(it) ?: error("Missing entity type $it") }
 
 abstract class CharacterModel {
     abstract fun createEntity(): EntityCreature
@@ -108,7 +108,7 @@ fun deserializeCharacterModel(
         return when (prefix) {
             "models" -> BlockbenchCharacterModel(blockbenchModelsById.getValue(id))
             "skins" -> SkinCharacterModel(skinsById.getValue(id))
-            "minecraft" -> EntityCharacterModel(EntityType.fromKey(fullId))
+            "minecraft" -> EntityCharacterModel(EntityType.fromKey(fullId) ?: error("Missing entity type $fullId"))
             else -> throw IllegalArgumentException()
         }
     }
@@ -131,7 +131,8 @@ fun deserializeCharacterModel(
         }
 
         "entity" -> {
-            val entityType = EntityType.fromKey(data["entity"].asText())
+            val entityTypeKey = data["entityType"].asText()
+            val entityType = EntityType.fromKey(entityTypeKey) ?: error("Missing entity type $entityTypeKey")
             val equipment = data["equipment"]?.let {
                 deserializeCharacterModelEquipment(it, blockbenchItemModelsById)
             } ?: CharacterModelEquipment()

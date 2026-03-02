@@ -238,7 +238,7 @@ class PlayerCharacter(
 
     private fun actionBar() =
         Component.text(
-            "❤ ${ceil(health).toInt()}/${ceil(maxHealth).toInt()}",
+            "❤ $health/$maxHealth",
             NamedTextColor.RED
         ).append(
             Component.text(
@@ -246,7 +246,7 @@ class PlayerCharacter(
             )
         ).append(
             Component.text(
-                "❈ ${ceil(mana).toInt()}/${ceil(maxMana).toInt()}",
+                "❈ $mana/$maxMana",
                 NamedTextColor.AQUA
             )
         )
