@@ -1,6 +1,7 @@
 package com.shadowforgedmmo.engine
 
 import com.shadowforgedmmo.engine.pack.PackBuilder
+import com.shadowforgedmmo.engine.resource.DefinitionLoader
 import com.shadowforgedmmo.engine.resource.ResourceLoader
 import com.shadowforgedmmo.engine.runtime.Runtime
 import java.io.File
@@ -21,7 +22,7 @@ fun main(args: Array<String>) {
 }
 
 fun startRuntime(root: File) {
-    val resources = ResourceLoader(root).loadAll()
+    val resources = ResourceLoader(DefinitionLoader(root)).loadAll()
     val runtime = Runtime(resources)
     runtime.start()
     JavaRuntime.getRuntime().addShutdownHook(Thread {
@@ -30,8 +31,8 @@ fun startRuntime(root: File) {
 }
 
 fun buildPack(root: File) {
-    val resourceLoader = ResourceLoader(root)
-    val packBuilder = PackBuilder(resourceLoader)
+    val resources = ResourceLoader(DefinitionLoader(root)).loadResourcePackResources()
+    val packBuilder = PackBuilder(resources)
     packBuilder.build()
 }
 

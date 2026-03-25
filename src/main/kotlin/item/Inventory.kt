@@ -1,18 +1,11 @@
 package com.shadowforgedmmo.engine.item
 
-import com.shadowforgedmmo.engine.character.PlayerCharacter
-import com.shadowforgedmmo.engine.persistence.InventoryData
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.shadowforgedmmo.engine.resource.Registry
 import net.minestom.server.inventory.PlayerInventory
 import net.minestom.server.utils.inventory.PlayerInventoryUtils
 
-class Inventory(private val pc: PlayerCharacter, data: InventoryData) {
-    init {
-        data.weapon?.let { inventory.setItemStack(8, it.itemStack(pc)) }
-    }
-
-    private val inventory: PlayerInventory
-        get() = pc.entity.inventory
-
+class Inventory(val inventory: PlayerInventory, val itemRegistry: Registry<Item>) {
     val weapon: WeaponInstance?
         get() = equipment(8) as? WeaponInstance
 
@@ -46,9 +39,9 @@ class Inventory(private val pc: PlayerCharacter, data: InventoryData) {
     fun equipment(inventorySlot: Int): EquipmentItemInstance? {
         val itemStack = inventory.getItemStack(inventorySlot)
         val itemId = itemStack.getTag(ITEM_ID_TAG) ?: return null
-        val equipment = pc.runtime.itemsById.getValue(itemId) as EquipmentItem
+        val equipment = itemRegistry[itemId] as EquipmentItem
         val gems = (0..<equipment.sockets).mapNotNull {
-            itemStack.getTag(socketTag(it))?.let(pc.runtime.itemsById::getValue) as? Gem
+            itemStack.getTag(socketTag(it))?.let(itemRegistry::getValue) as? Gem
         }
         return equipment.instance(gems)
     }
@@ -56,4 +49,23 @@ class Inventory(private val pc: PlayerCharacter, data: InventoryData) {
     fun tryUseConsumable(slot: Int) {
 
     }
+}
+
+class InventoryDefinition(
+    @JsonProperty("weapon") val weapon: ItemInstanceDefinition?,
+    @JsonProperty("head") val head: ItemInstanceDefinition?,
+    @JsonProperty("chest") val chest: ItemInstanceDefinition?,
+    @JsonProperty("legs") val legs: ItemInstanceDefinition?,
+    @JsonProperty("feet") val feet: ItemInstanceDefinition?,
+    @JsonProperty("finger_1") val finger1: ItemInstanceDefinition?,
+    @JsonProperty("finger_2") val finger2: ItemInstanceDefinition?,
+    @JsonProperty("wrist") val wrist: ItemInstanceDefinition?,
+    @JsonProperty("trinket") val trinket: ItemInstanceDefinition?,
+    @JsonProperty("action_bar") val actionBar: Array<ItemInstanceDefinition?>,
+    @JsonProperty("bag") val bag: Array<ItemInstanceDefinition?>
+) {
+    fun toInventory(playerInventory: PlayerInventory, itemRegistry: Registry<Item>) = Inventory(
+        playerInventory,
+        itemRegistry
+    )
 }

@@ -1,9 +1,9 @@
 package com.shadowforgedmmo.engine.item
 
-import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.shadowforgedmmo.engine.character.PlayerCharacter
-import com.shadowforgedmmo.engine.resource.deserializeEnum
-import com.shadowforgedmmo.engine.runtime.Runtime
+import com.shadowforgedmmo.engine.resource.EnumDeserializer
 import net.minestom.server.item.ItemStack
 
 class Accessory(
@@ -16,7 +16,14 @@ class Accessory(
     override fun instance(gems: List<Gem>) = AccessoryInstance(this, gems)
 }
 
-enum class AccessorySlot { FINGER_1, FINGER_2, WRIST, TRINKET }
+data class AccessoryDefinition(
+    @JsonProperty("name") val name: String,
+    @JsonProperty("quality") val quality: ItemQuality,
+    @JsonProperty("slot") val slot: AccessorySlot,
+    @JsonProperty("sockets") val sockets: Int
+) {
+    fun toAccessory(id: String) = Accessory(id, name, quality, slot, sockets)
+}
 
 class AccessoryInstance(item: Accessory, gems: List<Gem>) : EquipmentItemInstance(item, gems) {
     override val quantity
@@ -26,13 +33,5 @@ class AccessoryInstance(item: Accessory, gems: List<Gem>) : EquipmentItemInstanc
         .build()
 }
 
-fun deserializeAccessory(id: String, data: JsonNode) = Accessory(
-    id,
-    data["name"].asText(),
-    deserializeEnum(data["quality"]),
-    deserializeEnum(data["slot"]),
-    data["sockets"]?.asInt() ?: 0
-)
-
-fun deserializeAccessoryInstance(data: JsonNode, runtime: Runtime) =
-    deserializeItemInstance(data, runtime) as AccessoryInstance
+@JsonDeserialize(using = EnumDeserializer::class)
+enum class AccessorySlot { FINGER_1, FINGER_2, WRIST, TRINKET }

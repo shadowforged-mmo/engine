@@ -1,7 +1,20 @@
 package com.shadowforgedmmo.engine.world
 
-import com.shadowforgedmmo.engine.resource.parseId
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.shadowforgedmmo.engine.resource.ResourceReference
+import com.shadowforgedmmo.engine.resource.ResourceReferenceDeserializer
+import com.shadowforgedmmo.engine.resource.WORLDS
 
-fun parseWorldId(id: String) = parseId(id, "worlds")
+class World(val id: String, val path: String)
 
-fun worldIdToWorldPath(id: String) = id.replace(".", "/")
+data class WorldDefinition(val path: String) {
+    fun toWorld(id: String) = World(id, path)
+}
+
+@JsonDeserialize(using = WorldReferenceDeserializer::class)
+class WorldReference(id: String) : ResourceReference(id)
+
+class WorldReferenceDeserializer : ResourceReferenceDeserializer<WorldReference>(
+    WORLDS,
+    ::WorldReference
+)

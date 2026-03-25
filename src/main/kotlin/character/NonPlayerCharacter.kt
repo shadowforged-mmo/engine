@@ -37,7 +37,7 @@ class NonPlayerCharacter(
     private val bossFight = blueprint.bossFight?.create(this)
     private val interactionIndices = mutableMapOf<Pair<PlayerCharacter, Interaction>, Int>()
     private val attackers = mutableSetOf<PlayerCharacter>()
-    override val handle = blueprint.scriptId?.let {
+    override val handle = blueprint.script?.let {
         runtime.interpreter.instantiate(it, this)
     } ?: ScriptNonPlayerCharacter(this)
 

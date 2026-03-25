@@ -1,12 +1,15 @@
 package com.shadowforgedmmo.engine.character
 
-import com.fasterxml.jackson.databind.JsonNode
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.minimessage.MiniMessage
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.shadowforgedmmo.engine.instance.Instance
 import com.shadowforgedmmo.engine.math.Position
 import com.shadowforgedmmo.engine.quest.Quest
-import com.shadowforgedmmo.engine.quest.parseQuestId
+import com.shadowforgedmmo.engine.quest.QuestReference
+import com.shadowforgedmmo.engine.resource.Registry
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.minimessage.MiniMessage
 
 abstract class Interaction {
     abstract fun isAvailable(pc: PlayerCharacter): Boolean
@@ -18,6 +21,19 @@ abstract class Interaction {
         pc: PlayerCharacter,
         index: Int
     ): Boolean
+}
+
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "type"
+)
+@JsonSubTypes(
+    JsonSubTypes.Type(value = StartQuestInteractionDefinition::class, name = "start_quest"),
+    JsonSubTypes.Type(value = TurnInQuestInteractionDefinition::class, name = "turn_in_quest")
+)
+sealed class InteractionDefinition {
+    abstract fun toInteraction(questRegistry: Registry<Quest>): Interaction
 }
 
 class StartQuestInteraction(
@@ -46,6 +62,16 @@ class StartQuestInteraction(
     }
 }
 
+data class StartQuestInteractionDefinition(
+    @JsonProperty("quest") private val questReference: QuestReference,
+    @JsonProperty("dialogue") private val dialogue: List<String>
+) : InteractionDefinition() {
+    override fun toInteraction(questRegistry: Registry<Quest>) = StartQuestInteraction(
+        questReference.resolve(questRegistry),
+        dialogue.map(MiniMessage.miniMessage()::deserialize)
+    )
+}
+
 class TurnInQuestInteraction(
     private val quest: Quest,
     private val dialogue: List<Component>
@@ -72,21 +98,12 @@ class TurnInQuestInteraction(
     }
 }
 
-fun deserializeInteraction(
-    data: JsonNode,
-    questsById: Map<String, Quest>
-): Interaction = when (data["type"].asText()) {
-    "start_quest" -> StartQuestInteraction(
-        questsById.getValue(parseQuestId(data["quest"].asText())),
-        data["dialogue"].map(JsonNode::asText)
-            .map(MiniMessage.miniMessage()::deserialize)
+data class TurnInQuestInteractionDefinition(
+    @JsonProperty("quest") private val questReference: QuestReference,
+    @JsonProperty("dialogue") private val dialogue: List<String>
+) : InteractionDefinition() {
+    override fun toInteraction(questRegistry: Registry<Quest>) = TurnInQuestInteraction(
+        questReference.resolve(questRegistry),
+        dialogue.map(MiniMessage.miniMessage()::deserialize)
     )
-
-    "turn_in_quest" -> TurnInQuestInteraction(
-        questsById.getValue(parseQuestId(data["quest"].asText())),
-        data["dialogue"].map(JsonNode::asText)
-            .map(MiniMessage.miniMessage()::deserialize)
-    )
-
-    else -> throw IllegalArgumentException("Unknown interaction type: ${data["type"]}")
 }

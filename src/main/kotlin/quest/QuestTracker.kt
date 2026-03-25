@@ -8,24 +8,23 @@ import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.title.Title
 import com.shadowforgedmmo.engine.character.PlayerCharacter
 import com.shadowforgedmmo.engine.pack.Namespaces
-import com.shadowforgedmmo.engine.persistence.QuestData
 import net.minestom.server.scoreboard.Sidebar
 import net.minestom.server.scoreboard.Sidebar.ScoreboardLine
 
-class QuestTracker(val pc: PlayerCharacter, val data: QuestData) {
-    private val completed = data.completed.toMutableSet()
-    private val tracked = data.tracked.toMutableSet()
-    private val objectives = data.objectives.toMutableMap()
+class QuestTracker(val pc: PlayerCharacter, val progress: QuestProgress) { // TODO: refactor with QuestProgress
+    private val completedReferences = progress.completed.toMutableSet()
+    private val tracked = progress.tracked.toMutableSet()
+    private val objectivesByQuestId = progress.objectivesByQuestId.toMutableMap()
 
     fun start() {
         updateSidebar()
     }
 
     fun startQuest(quest: Quest) {
-        if (quest.id in objectives) error("Quest already started")
+        if (quest.id in objectivesByQuestId) error("Quest already started")
 
         tracked += quest
-        objectives[quest.id] = IntArray(quest.objectives.size)
+        objectivesByQuestId[quest.id] = IntArray(quest.objectives.size)
 
         pc.entity.showTitle(
             Title.title(
@@ -49,7 +48,7 @@ class QuestTracker(val pc: PlayerCharacter, val data: QuestData) {
 
     fun completeQuest(quest: Quest) {
         tracked -= quest
-        objectives -= quest.id
+        objectivesByQuestId -= quest.id
 
         pc.entity.showTitle(
             Title.title(
@@ -70,21 +69,21 @@ class QuestTracker(val pc: PlayerCharacter, val data: QuestData) {
         updateSidebar()
     }
 
-    fun isInProgress(quest: Quest) = quest.id in objectives
+    fun isInProgress(quest: Quest) = quest.id in objectivesByQuestId
 
     fun isInProgress(quest: Quest, objectiveIndex: Int) = isInProgress(quest) &&
             getProgress(quest, objectiveIndex) < quest.objectives[objectiveIndex].goal
 
     fun getProgress(quest: Quest, objectiveIndex: Int) =
-        objectives.getValue(quest.id)[objectiveIndex]
+        objectivesByQuestId.getValue(quest.id)[objectiveIndex]
 
     fun addProgress(quest: Quest, objectiveIndex: Int, progress: Int) {
-        if (quest.id !in objectives) return
-        val oldProgress = objectives.getValue(quest.id)[objectiveIndex]
+        if (quest.id !in objectivesByQuestId) return
+        val oldProgress = objectivesByQuestId.getValue(quest.id)[objectiveIndex]
         val newProgress = (oldProgress + progress)
             .coerceAtMost(quest.objectives[objectiveIndex].goal)
         if (oldProgress == newProgress) return
-        objectives.getValue(quest.id)[objectiveIndex] = newProgress
+        objectivesByQuestId.getValue(quest.id)[objectiveIndex] = newProgress
         updateSidebar()
     }
 
@@ -95,11 +94,11 @@ class QuestTracker(val pc: PlayerCharacter, val data: QuestData) {
     )
 
     fun isReadyToStart(quest: Quest) = pc.level >= quest.level &&
-            quest !in completed &&
-            quest.id !in objectives &&
-            quest.prerequisiteIds.map(pc.runtime.questsById::getValue).all { it in completed }
+            quest !in completedReferences &&
+            quest.id !in objectivesByQuestId &&
+            quest.prerequisiteReferences.all { it in completedReferences }
 
-    fun isReadyToTurnIn(quest: Quest) = quest.id in objectives &&
+    fun isReadyToTurnIn(quest: Quest) = quest.id in objectivesByQuestId &&
             quest.objectives.withIndex().all { (index, objective) ->
                 getProgress(quest, index) == objective.goal
             }

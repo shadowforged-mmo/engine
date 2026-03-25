@@ -1,14 +1,17 @@
 package com.shadowforgedmmo.engine.pack
 
-import net.kyori.adventure.key.Key
-import com.shadowforgedmmo.engine.model.BlockbenchModel
 import com.shadowforgedmmo.engine.model.BlockbenchItemModelAsset
-import com.shadowforgedmmo.engine.resource.ResourceLoader
+import com.shadowforgedmmo.engine.model.BlockbenchModel
+import com.shadowforgedmmo.engine.resource.ResourcePackResources
 import com.shadowforgedmmo.engine.util.loadJsonResource
+import net.kyori.adventure.key.Key
 import net.minestom.server.item.Material
 import team.unnamed.creative.ResourcePack
 import team.unnamed.creative.base.Writable
-import team.unnamed.creative.model.*
+import team.unnamed.creative.model.ItemOverride
+import team.unnamed.creative.model.Model
+import team.unnamed.creative.model.ModelTexture
+import team.unnamed.creative.model.ModelTextures
 import team.unnamed.creative.serialize.minecraft.MinecraftResourcePackWriter
 import team.unnamed.creative.sound.Sound
 import team.unnamed.creative.sound.SoundEntry
@@ -17,7 +20,7 @@ import team.unnamed.creative.sound.SoundRegistry
 import team.unnamed.hephaestus.writer.ModelWriter
 import java.io.File
 
-class PackBuilder(private val resourceLoader: ResourceLoader) {
+class PackBuilder(private val resources: ResourcePackResources) {
     private val pack = ResourcePack.resourcePack()
 
     fun build() {
@@ -34,9 +37,7 @@ class PackBuilder(private val resourceLoader: ResourceLoader) {
     }
 
     private fun writePackMeta() {
-        val config = resourceLoader.loadConfig()
-        // TODO: STORE PACK FORMAT IN RESOURCE FILE
-        pack.packMeta(46, "${config.name} resource pack")
+        pack.packMeta(46, "${resources.config.name} resource pack")
     }
 
     private fun writeBasePack() {
@@ -66,14 +67,12 @@ class PackBuilder(private val resourceLoader: ResourceLoader) {
     }
 
     private fun writeModels() {
-        val models = resourceLoader.loadModels().values.map(BlockbenchModel::model)
+        val models = resources.blockbenchModels.values.map(BlockbenchModel::model)
         ModelWriter.resource(Namespaces.MODELS).write(pack, models)
     }
 
     private fun writeItemModels() {
-        val itemModelAssets = resourceLoader.loadBlockbenchItemModelAssets().values
-        val overrides = mutableListOf<ItemOverride>()
-        itemModelAssets.forEach { writeBlockbenchItemModel(it, overrides) }
+        // TODO
     }
 
     private fun writeBlockbenchItemModel(
@@ -114,8 +113,7 @@ class PackBuilder(private val resourceLoader: ResourceLoader) {
     }
 
     private fun writeMusic() {
-        val songAssets = resourceLoader.loadMusicAssets().values
-        songAssets.forEach { songAsset ->
+        resources.musicTrackAssets.values.forEach { songAsset ->
             val sound = Sound.sound(songAsset.key, Writable.file(songAsset.file))
             val soundEvent = SoundEvent.soundEvent(
                 songAsset.key,
@@ -129,8 +127,7 @@ class PackBuilder(private val resourceLoader: ResourceLoader) {
     }
 
     private fun writeSoundAssets() {
-        val soundAssets = resourceLoader.loadSoundAssets().values
-        soundAssets.forEach {
+        resources.soundAssets.values.forEach {
             val sound = Sound.sound(
                 it.key,
                 Writable.file(it.file)

@@ -6,20 +6,20 @@ import net.minestom.server.timer.Task
 import java.time.Duration
 
 class MusicPlayer(private val pc: PlayerCharacter) {
-    private var song: Song? = null
+    private var musicTrack: MusicTrack? = null
     private var replayTask: Task? = null
 
-    fun setSong(song: Song?) {
-        if (song == this.song) return
+    fun setSong(musicTrack: MusicTrack?) {
+        if (musicTrack == this.musicTrack) return
 
         replayTask?.cancel()
-        this.song?.let { pc.entity.stopSound(it.sound) }
+        this.musicTrack?.let { pc.entity.stopSound(it.sound) }
 
-        song?.let {
+        musicTrack?.let {
             replayTask = schedulerManager.buildTask {
                 pc.entity.playSound(it.sound)
-            }.repeat(Duration.ofMillis(it.durationMillis)).schedule()
+            }.repeat(it.duration).schedule()
         }
-        this.song = song
+        this.musicTrack = musicTrack
     }
 }

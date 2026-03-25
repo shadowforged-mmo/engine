@@ -8,7 +8,7 @@ class SkillExecutor(
     private val skill: ActiveSkill,
     private val startTimeMillis: Long
 ) {
-    private val handle = user.runtime.interpreter.instantiate<ScriptSkillExecutor>(skill.scriptId, this)
+    private val handle = user.runtime.interpreter.instantiate<ScriptSkillExecutor>(skill.script, this)
 
     var completed = false
         private set

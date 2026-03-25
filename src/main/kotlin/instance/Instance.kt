@@ -1,19 +1,26 @@
 package com.shadowforgedmmo.engine.instance
 
-import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.shadowforgedmmo.engine.character.PlayerCharacter
 import com.shadowforgedmmo.engine.datastructure.SpatialHash2
 import com.shadowforgedmmo.engine.datastructure.SpatialHash3
 import com.shadowforgedmmo.engine.gameobject.GameObject
 import com.shadowforgedmmo.engine.gameobject.GameObjectSpawner
-import com.shadowforgedmmo.engine.math.*
+import com.shadowforgedmmo.engine.math.BoundingBox3
+import com.shadowforgedmmo.engine.math.Vector2
+import com.shadowforgedmmo.engine.math.Vector2Int
+import com.shadowforgedmmo.engine.math.Vector3
 import com.shadowforgedmmo.engine.quest.Quest
-import com.shadowforgedmmo.engine.resource.parseId
+import com.shadowforgedmmo.engine.resource.INSTANCES
+import com.shadowforgedmmo.engine.resource.Registry
+import com.shadowforgedmmo.engine.resource.ResourceReference
+import com.shadowforgedmmo.engine.resource.ResourceReferenceDeserializer
 import com.shadowforgedmmo.engine.runtime.Runtime
-import com.shadowforgedmmo.engine.world.parseWorldId
-import com.shadowforgedmmo.engine.world.worldIdToWorldPath
+import com.shadowforgedmmo.engine.world.World
+import com.shadowforgedmmo.engine.world.WorldReference
 import com.shadowforgedmmo.engine.zone.Zone
-import com.shadowforgedmmo.engine.zone.parseZoneId
+import com.shadowforgedmmo.engine.zone.ZoneReference
 import net.kyori.adventure.sound.Sound
 import net.minestom.server.MinecraftServer
 import net.minestom.server.adventure.AdventurePacketConvertor
@@ -24,7 +31,6 @@ import net.minestom.server.network.packet.server.play.ParticlePacket
 import net.minestom.server.particle.Particle
 import net.minestom.server.utils.PacketSendingUtils
 import net.minestom.server.world.DimensionType
-import java.io.File
 import java.util.*
 import kotlin.math.pow
 import com.shadowforgedmmo.engine.script.Instance as ScriptInstance
@@ -36,7 +42,7 @@ private const val DESPAWN_RADIUS = 85.0
 
 class Instance(
     val id: String,
-    worldFile: File,
+    val world: World,
     zones: Collection<Zone>,
     spawners: Collection<GameObjectSpawner>
 ) {
@@ -49,7 +55,7 @@ class Instance(
     val instanceContainer = InstanceContainer(
         UUID.randomUUID(),
         DimensionType.OVERWORLD,
-        AnvilLoader(worldFile.toPath())
+        AnvilLoader(world.path)
     )
     private val chunkUnloadTimes = mutableMapOf<Vector2Int, Long>()
 
@@ -211,21 +217,27 @@ class Instance(
     }.toSet()
 }
 
-fun deserializeInstance(
-    id: String,
-    data: JsonNode,
-    root: File,
-    zonesAndSpawnersByZoneId: Map<String, Pair<Zone, Collection<GameObjectSpawner>>>
-): Instance {
-    val zoneIds = data["zones"].map(JsonNode::asText).map(::parseZoneId)
-    return Instance(
+data class InstanceDefinition(
+    @JsonProperty("world") val worldReference: WorldReference,
+    @JsonProperty("zones") val zoneReferences: List<ZoneReference>
+) {
+    fun toInstance(
+        id: String,
+        worldRegistry: Registry<World>,
+        zoneRegistry: Registry<Zone>,
+        spawners: Collection<GameObjectSpawner>
+    ) = Instance(
         id,
-        root.resolve("worlds").resolve(
-            worldIdToWorldPath(parseWorldId(data["world"].asText()))
-        ),
-        zoneIds.map { zonesAndSpawnersByZoneId.getValue(it).first },
-        zoneIds.flatMap { zonesAndSpawnersByZoneId.getValue(it).second }
+        worldReference.resolve(worldRegistry),
+        zoneReferences.map { it.resolve(zoneRegistry) },
+        spawners
     )
 }
 
-fun parseInstanceId(id: String) = parseId(id, "instances")
+@JsonDeserialize(using = InstanceReferenceDeserializer::class)
+class InstanceReference(id: String) : ResourceReference(id)
+
+class InstanceReferenceDeserializer : ResourceReferenceDeserializer<InstanceReference>(
+    INSTANCES,
+    ::InstanceReference
+)

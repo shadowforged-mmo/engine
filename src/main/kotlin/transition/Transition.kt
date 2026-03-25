@@ -1,16 +1,14 @@
 package com.shadowforgedmmo.engine.transition
 
-import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.shadowforgedmmo.engine.character.PlayerCharacter
 import com.shadowforgedmmo.engine.entity.Hologram
 import com.shadowforgedmmo.engine.gameobject.GameObject
 import com.shadowforgedmmo.engine.gameobject.GameObjectSpawner
 import com.shadowforgedmmo.engine.instance.Instance
-import com.shadowforgedmmo.engine.instance.parseInstanceId
+import com.shadowforgedmmo.engine.instance.InstanceReference
 import com.shadowforgedmmo.engine.math.Position
 import com.shadowforgedmmo.engine.math.Vector3
-import com.shadowforgedmmo.engine.math.deserializePosition
-import com.shadowforgedmmo.engine.math.deserializeVector3
 import com.shadowforgedmmo.engine.runtime.Runtime
 import com.shadowforgedmmo.engine.util.toMinestom
 import net.minestom.server.entity.Entity
@@ -26,7 +24,7 @@ class Transition(
     private val zoneLevelHologram = Hologram()
 
     private val toInstance
-        get() = runtime.instancesById.getValue((spawner as TransitionSpawner).toInstance)
+        get() = (spawner as TransitionSpawner).toInstanceReference.resolve(runtime.resources.instanceRegistry)
 
     private val toPosition
         get() = (spawner as TransitionSpawner).toPosition
@@ -64,17 +62,24 @@ class Transition(
 
 class TransitionSpawner(
     position: Position,
-    val toInstance: String,
-    val toPosition: Position,
-    val halfExtents: Vector3
+    val halfExtents: Vector3,
+    val toInstanceReference: InstanceReference,
+    val toPosition: Position
 ) : GameObjectSpawner(position) {
     override fun spawn(instance: Instance, runtime: Runtime) =
         Transition(this, instance, runtime)
 }
 
-fun deserializeTransitionSpawner(data: JsonNode) = TransitionSpawner(
-    deserializePosition(data["position"]),
-    parseInstanceId(data["to_instance"].textValue()),
-    deserializePosition(data["to_position"]),
-    deserializeVector3(data["size"]) / 2.0
-)
+data class TransitionDefinition(
+    @JsonProperty("position") val position: Position,
+    @JsonProperty("size") val size: Vector3,
+    @JsonProperty("to_instance") val toInstanceReference: InstanceReference,
+    @JsonProperty("to_position") val toPosition: Position
+) {
+    fun toTransitionSpawner() = TransitionSpawner(
+        position,
+        size / 2.0,
+        toInstanceReference,
+        toPosition
+    )
+}
