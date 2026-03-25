@@ -1,10 +1,7 @@
 package com.shadowforgedmmo.engine.loot
 
-import com.fasterxml.jackson.databind.JsonNode
+class LootTable
 
-class LootTable {
-}
-
-fun deserializeLootTable(data: JsonNode): LootTable {
-    return LootTable()
+class LootTableDefinition {
+    fun toLootTable() = LootTable()
 }

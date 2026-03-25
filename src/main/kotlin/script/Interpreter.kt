@@ -1,5 +1,6 @@
 package com.shadowforgedmmo.engine.script
 
+import com.google.common.base.CaseFormat
 import com.shadowforgedmmo.engine.runtime.Runtime
 import org.python.core.Py
 import org.python.core.PyObject
@@ -21,14 +22,19 @@ class Interpreter(scriptDir: File) {
 
     fun eval(s: String): PyObject = interpreter.eval(s)
 
-    inline fun <reified T> instantiate(scriptId: String, vararg args: Any): T {
-        exec("import $scriptId")
-        val className = idToPythonClassName(scriptId)
-        val scriptClass = eval("${scriptId}.${className}")
+    inline fun <reified T> instantiate(script: Script, vararg args: Any): T {
+        exec("import ${script.id}")
+        val className = idToPythonClassName(script.id)
+        val scriptClass = eval("${script.id}.${className}")
         return scriptClass
             .__call__(args.map(Py::java2py).toTypedArray())
             .__tojava__(T::class.java) as T
     }
+
+    fun idToPythonClassName(id: String): String = CaseFormat.LOWER_UNDERSCORE.to(
+        CaseFormat.UPPER_CAMEL,
+        id.split('.').last()
+    )
 
     fun close() {
         interpreter.close()

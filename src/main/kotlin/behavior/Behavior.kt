@@ -1,10 +1,9 @@
 package com.shadowforgedmmo.engine.behavior
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.shadowforgedmmo.engine.behavior.composite.*
-import com.shadowforgedmmo.engine.behavior.decorator.*
-import com.shadowforgedmmo.engine.behavior.task.*
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.shadowforgedmmo.engine.character.NonPlayerCharacter
+
 
 abstract class Behavior {
     var status: BehaviorStatus = BehaviorStatus.UNINITIALIZED
@@ -60,31 +59,37 @@ enum class BehaviorStatus {
     FAILURE
 }
 
-fun deserializeBehaviorBlueprint(data: JsonNode): BehaviorBlueprint =
-    when (data["type"].asText()) {
-        "sequence" -> deserializeSequenceBlueprint(data)
-        "selector" -> deserializeSelectorBlueprint(data)
-        "priority_selector" -> deserializePrioritySelectorBlueprint(data)
-        "simple_parallel" -> deserializeSimpleParallelBlueprint(data)
-        "random_selector" -> deserializeRandomSelectorBlueprint(data)
-        "inverter" -> deserializeInverterBlueprint(data)
-        "loop" -> deserializeLoopBlueprint(data)
-        "loop_forever" -> deserializeLoopForeverBlueprint(data)
-        "with_cooldown" -> deserializeWithCooldownBlueprint(data)
-        "wait" -> deserializeWaitBlueprint(data)
-        "go_to_random_position" -> deserializeGoToRandomPositionBlueprint(data)
-        "has_target" -> deserializeHasTargetBlueprint(data)
-        "set_velocity" -> deserializeSetVelocityBlueprint(data)
-        "follow_target" -> deserializeFollowTargetBlueprint(data)
-        "face_target" -> deserializeFaceTargetBlueprint(data)
-        "look_at_target" -> deserializeLookAtTargetBlueprint(data)
-        "is_target_in_range" -> deserializeIsTargetInRangeBlueprint(data)
-        "box_attack" -> deserializeBoxAttackBlueprint(data)
-        "was_damaged" -> deserializeWasDamagedBlueprint(data)
-        "emit_sound" -> deserializeEmitSoundBlueprint(data)
-        "emit_particle" -> deserializeEmitParticleBlueprint(data)
-        "play_animation" -> deserializePlayAnimationBlueprint(data)
-        "follow_path" -> deserializeFollowPathBlueprint(data)
-        "call_method" -> deserializeCallMethodBlueprint(data)
-        else -> throw IllegalArgumentException()
-    }
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "type"
+)
+@JsonSubTypes(
+    JsonSubTypes.Type(value = SequenceDefinition::class, name = "sequence"),
+    JsonSubTypes.Type(value = SelectorDefinition::class, name = "selector"),
+    JsonSubTypes.Type(value = PrioritySelectorDefinition::class, name = "priority_selector"),
+    JsonSubTypes.Type(value = RandomSelectorDefinition::class, name = "random_selector"),
+    JsonSubTypes.Type(value = SimpleParallelDefinition::class, name = "simple_parallel"),
+    JsonSubTypes.Type(value = InverterDefinition::class, name = "inverter"),
+    JsonSubTypes.Type(value = LoopDefinition::class, name = "loop"),
+    JsonSubTypes.Type(value = LoopForeverDefinition::class, name = "loop_forever"),
+    JsonSubTypes.Type(value = WithCooldownDefinition::class, name = "with_cooldown"),
+    JsonSubTypes.Type(value = BoxAttackDefinition::class, name = "box_attack"),
+    JsonSubTypes.Type(value = CallMethodDefinition::class, name = "call_method"),
+    JsonSubTypes.Type(value = EmitParticleDefinition::class, name = "emit_particle"),
+    JsonSubTypes.Type(value = EmitSoundDefinition::class, name = "emit_sound"),
+    JsonSubTypes.Type(value = FaceTargetDefinition::class, name = "face_target"),
+    JsonSubTypes.Type(value = FollowPathDefinition::class, name = "follow_path"),
+    JsonSubTypes.Type(value = FollowTargetDefinition::class, name = "follow_target"),
+    JsonSubTypes.Type(value = GoToRandomPositionDefinition::class, name = "go_to_random_position"),
+    JsonSubTypes.Type(value = HasTargetDefinition::class, name = "has_target"),
+    JsonSubTypes.Type(value = IsTargetInRangeDefinition::class, name = "is_target_in_range"),
+    JsonSubTypes.Type(value = LookAtTargetDefinition::class, name = "look_at_target"),
+    JsonSubTypes.Type(value = PlayAnimationDefinition::class, name = "play_animation"),
+    JsonSubTypes.Type(value = SetVelocityDefinition::class, name = "set_velocity"),
+    JsonSubTypes.Type(value = WaitDefinition::class, name = "wait"),
+    JsonSubTypes.Type(value = WasDamagedDefinition::class, name = "was_damaged")
+)
+sealed class BehaviorDefinition {
+    abstract fun toBlueprint(): BehaviorBlueprint
+}

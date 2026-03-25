@@ -1,5 +1,6 @@
 package com.shadowforgedmmo.engine.item
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
 

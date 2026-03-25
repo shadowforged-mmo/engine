@@ -1,21 +1,26 @@
 package com.shadowforgedmmo.engine.skill
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.shadowforgedmmo.engine.script.parseScriptId
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.shadowforgedmmo.engine.resource.Registry
+import com.shadowforgedmmo.engine.script.Script
+import com.shadowforgedmmo.engine.script.ScriptReference
 
 class PassiveSkill(
     id: String,
     name: String,
     description: String,
-    scriptId: String
-) : Skill(id, name, description, scriptId)
+    script: Script
+) : Skill(id, name, description, script)
 
-fun deserializePassiveSkill(
-    id: String,
-    data: JsonNode
-) = PassiveSkill(
-    id,
-    data["name"].asText(),
-    data["description"].asText(),
-    parseScriptId(data["scriptId"].asText())
-)
+data class PassiveSkillDefinition(
+    @JsonProperty("name") val name: String,
+    @JsonProperty("description") val description: String,
+    @JsonProperty("script") val scriptReference: ScriptReference
+) : SkillDefinition() {
+    override fun toSKill(id: String, scriptRegistry: Registry<Script>) = PassiveSkill(
+        id,
+        name,
+        description,
+        scriptReference.resolve(scriptRegistry)
+    )
+}

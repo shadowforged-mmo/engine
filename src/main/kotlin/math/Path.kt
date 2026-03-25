@@ -1,7 +1,5 @@
 package com.shadowforgedmmo.engine.math
 
-import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.annotation.JsonProperty
 
-class Path(val corners: List<Vector3>)
-
-fun deserializePath(data: JsonNode) = Path(data.map(::deserializeVector3))
+data class Path(@JsonProperty("corners") val corners: List<Vector3>)

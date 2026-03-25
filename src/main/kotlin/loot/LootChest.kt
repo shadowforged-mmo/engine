@@ -37,3 +37,8 @@ class LootChestSpawner(
     override fun spawn(instance: Instance, runtime: Runtime) =
         LootChest(this, instance, runtime)
 }
+
+data class LootChestDefinition(
+    val position: Position,
+    // TODO
+)

@@ -1,13 +1,20 @@
 package com.shadowforgedmmo.engine.model
 
-import com.shadowforgedmmo.engine.resource.parseId
-import team.unnamed.hephaestus.Model
-import team.unnamed.hephaestus.reader.ModelReader
-import java.io.File
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.shadowforgedmmo.engine.resource.ResourceReference
+import com.shadowforgedmmo.engine.resource.ResourceReferenceDeserializer
+import team.unnamed.hephaestus.Model as HephaestusModel
 
-class BlockbenchModel(val id: String, val model: Model)
+class BlockbenchModel(val id: String, val model: HephaestusModel)
 
-fun deserializeBlockbenchModel(id: String, file: File, modelReader: ModelReader) =
-    BlockbenchModel(id, modelReader.read(file))
+class BlockbenchModelDefinition(val model: HephaestusModel) {
+    fun toBlockbenchModel(id: String) = BlockbenchModel(id, model)
+}
 
-fun parseBlockbenchModelId(id: String) = parseId(id, "models")
+@JsonDeserialize(using = BlockbenchModelReferenceDeserializer::class)
+class BlockbenchModelReference(id: String) : ResourceReference(id)
+
+class BlockbenchModelReferenceDeserializer : ResourceReferenceDeserializer<BlockbenchModelReference>(
+    "models",
+    ::BlockbenchModelReference
+)

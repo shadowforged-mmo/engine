@@ -16,7 +16,7 @@ class SkillTracker(private val pc: PlayerCharacter) {
     }
 
     private fun hotbarSkill(slot: Int) = pc.entity.inventory.getItemStack(slot).getTag(SKILL_TAG)?.let {
-        pc.runtime.skillsById.getValue(it) as? ActiveSkill
+        pc.runtime.resources.skillRegistry.getValue(it) as? ActiveSkill
     }
 
     private fun tryUseSkill(skill: ActiveSkill) {

@@ -1,15 +1,30 @@
 package com.shadowforgedmmo.engine.playerclass
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.shadowforgedmmo.engine.resource.parseId
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.shadowforgedmmo.engine.resource.CLASSES
+import com.shadowforgedmmo.engine.resource.Registry
+import com.shadowforgedmmo.engine.resource.ResourceReference
+import com.shadowforgedmmo.engine.resource.ResourceReferenceDeserializer
 import com.shadowforgedmmo.engine.skill.Skill
-import com.shadowforgedmmo.engine.skill.parseSkillId
+import com.shadowforgedmmo.engine.skill.SkillReference
 
 class PlayerClass(val id: String, val skills: List<Skill>)
 
-fun deserializePlayerClass(id: String, data: JsonNode, skillsById: Map<String, Skill>) = PlayerClass(
-    id,
-    data["skills"].map(JsonNode::asText).map(::parseSkillId).map(skillsById::getValue)
-)
+data class PlayerClassDefinition(
+    @JsonProperty("name") val name: String,
+    @JsonProperty("skills") val skills: List<SkillReference>
+) {
+    fun toPlayerClass(id: String, skillRegistry: Registry<Skill>) = PlayerClass(
+        id,
+        skills.map { it.resolve(skillRegistry) }
+    )
+}
 
-fun parsePlayerClassId(id: String) = parseId(id, "classes")
+@JsonDeserialize(using = PlayerClassReferenceDeserializer::class)
+class PlayerClassReference(id: String) : ResourceReference(id)
+
+class PlayerClassReferenceDeserializer : ResourceReferenceDeserializer<PlayerClassReference>(
+    CLASSES,
+    ::PlayerClassReference
+)

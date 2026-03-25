@@ -1,11 +1,19 @@
 package com.shadowforgedmmo.engine.zone
 
-import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.shadowforgedmmo.engine.time.secondsToMillis
 
-data class WeatherCycle(val weatherEntries: List<WeatherEntry>)
+data class WeatherCycleEntry(val durationMillis: Long, val weather: Weather)
 
-data class WeatherEntry(val durationMillis: Long, val weather: Weather)
+data class WeatherCycleEntryDefinition(
+    @JsonProperty("duration") val durationSeconds: Double,
+    @JsonProperty("weather") val weather: String // TODO
+) {
+    fun toWeatherCycleEntry() = WeatherCycleEntry(
+        secondsToMillis(durationSeconds),
+        Weather(0.0F, 0.0F) // TODO
+    )
+}
 
 data class Weather(val rain: Float, val thunder: Float) {
     init {
@@ -19,23 +27,3 @@ data class Weather(val rain: Float, val thunder: Float) {
         val THUNDER = Weather(1.0F, 1.0F)
     }
 }
-
-fun deserializeWeatherCycle(data: JsonNode) =
-    WeatherCycle(data.map(::deserializeWeatherEntry))
-
-private fun deserializeWeatherEntry(data: JsonNode) = WeatherEntry(
-    secondsToMillis(data["duration"].asDouble()),
-    deserializeWeather(data["weather"])
-)
-
-private fun deserializeWeather(data: JsonNode) =
-    if (data.isTextual) {
-        when (data.asText()) {
-            "clear" -> Weather.CLEAR
-            "rain" -> Weather.RAIN
-            "thunder" -> Weather.THUNDER
-            else -> throw IllegalArgumentException()
-        }
-    } else {
-        Weather(data["rain"].floatValue(), data["thunder"].floatValue())
-    }

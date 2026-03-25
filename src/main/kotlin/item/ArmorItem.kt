@@ -1,12 +1,12 @@
 package com.shadowforgedmmo.engine.item
 
-import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.shadowforgedmmo.engine.character.PlayerCharacter
 import com.shadowforgedmmo.engine.model.ArmorModel
+import com.shadowforgedmmo.engine.model.ArmorModelDefinition
 import com.shadowforgedmmo.engine.model.BlockbenchItemModel
-import com.shadowforgedmmo.engine.model.deserializeArmorModel
-import com.shadowforgedmmo.engine.resource.deserializeEnum
-import com.shadowforgedmmo.engine.runtime.Runtime
+import com.shadowforgedmmo.engine.resource.Registry
 import net.minestom.server.item.ItemStack
 
 class ArmorItem(
@@ -20,7 +20,25 @@ class ArmorItem(
     override fun instance(gems: List<Gem>) = ArmorItemInstance(this, gems)
 }
 
-enum class ArmorSlot { FEET, LEGS, CHEST, HEAD }
+data class ArmorItemDefinition(
+    @JsonProperty("name") val name: String,
+    @JsonProperty("quality") val quality: ItemQuality,
+    @JsonProperty("slot") val slot: ArmorSlot,
+    @JsonProperty("sockets") val sockets: Int,
+    @JsonProperty("model") val modelDefinition: ArmorModelDefinition
+) : ItemDefinition() {
+    override fun toItem(
+        id: String,
+        blockbenchItemModelRegistry: Registry<BlockbenchItemModel>
+    ) = ArmorItem(
+        id,
+        name,
+        quality,
+        slot,
+        sockets,
+        modelDefinition.toArmorModel(blockbenchItemModelRegistry)
+    )
+}
 
 class ArmorItemInstance(item: ArmorItem, gems: List<Gem>) : EquipmentItemInstance(item, gems) {
     override val quantity
@@ -30,18 +48,4 @@ class ArmorItemInstance(item: ArmorItem, gems: List<Gem>) : EquipmentItemInstanc
         .build()
 }
 
-fun deserializeArmorItem(
-    id: String,
-    data: JsonNode,
-    blockbenchItemModelsById: Map<String, BlockbenchItemModel>
-) = ArmorItem(
-    id,
-    data["name"].asText(),
-    deserializeEnum(data["quality"]),
-    deserializeEnum(data["slot"]),
-    data["sockets"]?.asInt() ?: 0,
-    deserializeArmorModel(data["model"], blockbenchItemModelsById)
-)
-
-fun deserializeArmorItemInstance(data: JsonNode, runtime: Runtime) =
-    deserializeItemInstance(data, runtime) as ArmorItemInstance
+enum class ArmorSlot { FEET, LEGS, CHEST, HEAD }

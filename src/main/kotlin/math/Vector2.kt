@@ -1,8 +1,13 @@
 package com.shadowforgedmmo.engine.math
 
-import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JsonDeserializer
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.node.ArrayNode
 import kotlin.math.sqrt
 
+@JsonDeserialize(using = Vector2Deserializer::class)
 data class Vector2(val x: Double, val y: Double) {
     companion object {
         val ZERO = Vector2(0.0, 0.0)
@@ -53,6 +58,14 @@ data class Vector2(val x: Double, val y: Double) {
     operator fun div(scalar: Double) = Vector2(x / scalar, y / scalar)
 }
 
-fun deserializeVector2(data: JsonNode) = Vector2(
-    data[0].asDouble(), data[1].asDouble()
-)
+class Vector2Deserializer : JsonDeserializer<Vector2>() {
+    override fun deserialize(
+        p: JsonParser,
+        ctxt: DeserializationContext
+    ): Vector2 {
+        val node = p.codec.readTree<ArrayNode>(p)
+        val x = node[0].asDouble()
+        val y = node[1].asDouble()
+        return Vector2(x, y)
+    }
+}

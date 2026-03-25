@@ -1,10 +1,10 @@
 package com.shadowforgedmmo.engine.character
 
-import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.shadowforgedmmo.engine.gameobject.GameObjectSpawner
 import com.shadowforgedmmo.engine.instance.Instance
 import com.shadowforgedmmo.engine.math.Position
-import com.shadowforgedmmo.engine.math.deserializePosition
+import com.shadowforgedmmo.engine.resource.Registry
 import com.shadowforgedmmo.engine.runtime.Runtime
 
 class NonPlayerCharacterSpawner(
@@ -19,16 +19,16 @@ class NonPlayerCharacterSpawner(
         NonPlayerCharacter(this, instance, runtime)
 }
 
-fun deserializeNonPlayerCharacterSpawners(
-    data: JsonNode,
-    characterBlueprintsById: Map<String, CharacterBlueprint>
-): Collection<NonPlayerCharacterSpawner> {
-    val blueprint = characterBlueprintsById.getValue(parseCharacterBlueprintId(data["character"].asText()))
-    return if (data.has("position")) {
-        listOf(NonPlayerCharacterSpawner(deserializePosition(data["position"]), blueprint))
-    } else if (data.has("positions")) {
-        data["positions"].map { NonPlayerCharacterSpawner(deserializePosition(it), blueprint) }
-    } else {
-        throw IllegalArgumentException()
+data class CharacterSpawnsDefinition(
+    @JsonProperty("character") val characterBlueprintReference: CharacterBlueprintReference,
+    @JsonProperty("positions") val positions: List<Position>
+) {
+    fun toCharacterSpawners(
+        characterBlueprintRegistry: Registry<CharacterBlueprint>
+    ): Collection<NonPlayerCharacterSpawner> {
+        val blueprint = characterBlueprintReference.resolve(characterBlueprintRegistry)
+        return positions.map {
+            NonPlayerCharacterSpawner(it, blueprint)
+        }
     }
 }

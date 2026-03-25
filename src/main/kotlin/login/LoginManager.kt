@@ -24,14 +24,15 @@ class LoginManager(val runtime: Runtime) {
     private fun handlePlayerConfigure(event: AsyncPlayerConfigurationEvent) {
         event.player.gameMode = GameMode.ADVENTURE
         event.player.sendResourcePacks(resourcePackRequest())
-        val playerCharacterData = runtime.api.getCharacterData(event.player.uuid)
-        event.spawningInstance = playerCharacterData.instance.instanceContainer
-        event.player.respawnPoint = playerCharacterData.position.toMinestom()
+        val playerCharacterDefinition = runtime.apiClient.getPlayerCharacterDefinition(event.player.uuid)
+        val instance = playerCharacterDefinition.instanceReference.resolve(runtime.resources.instanceRegistry)
+        event.spawningInstance = instance.instanceContainer
+        event.player.respawnPoint = playerCharacterDefinition.position.toMinestom()
         event.player.eventNode().addListener(
             EventListener.builder(PlayerSpawnEvent::class.java)
                 .handler {
-                    val spawner = PlayerCharacterSpawner(event.player, playerCharacterData)
-                    playerCharacterData.instance.spawn(spawner, runtime)
+                    val spawner = PlayerCharacterSpawner(event.player, playerCharacterDefinition)
+                    instance.spawn(spawner, runtime)
                 }
                 .expireCount(1)
                 .build()
@@ -41,8 +42,8 @@ class LoginManager(val runtime: Runtime) {
     private fun resourcePackRequest() = ResourcePackRequest.addingRequest(
         ResourcePackInfo.resourcePackInfo(
             UUID.randomUUID(),
-            URI(runtime.environment.resourcePackUrl),
-            runtime.environment.resourcePackHash
+            URI(runtime.resources.environment.resourcePackUrl),
+            runtime.resources.environment.resourcePackHash
         )
     )
 }

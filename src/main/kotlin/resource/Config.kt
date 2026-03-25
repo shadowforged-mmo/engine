@@ -1,13 +1,9 @@
 package com.shadowforgedmmo.engine.resource
 
-import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.annotation.JsonProperty
 
 class Config(
-    val name: String
+    @JsonProperty("name") val name: String,
+    @JsonProperty("resource_pack_uri") val resourcePackUri: String,
+    @JsonProperty("mojang_auth") val mojangAuth: Boolean
 )
-
-fun deserializeConfig(data: JsonNode): Config {
-    return Config(
-        data["name"].asText()
-    )
-}

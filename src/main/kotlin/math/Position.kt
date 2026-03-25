@@ -1,10 +1,16 @@
 package com.shadowforgedmmo.engine.math
 
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.node.ArrayNode
 import java.lang.Math.toRadians
 import kotlin.math.cos
 import kotlin.math.sin
 
+@JsonDeserialize(using = PositionDeserializer::class)
 data class Position(
     val x: Double,
     val y: Double,
@@ -57,17 +63,18 @@ data class Position(
         globalDirection.rotateAroundY(toRadians(yaw))
 }
 
-fun deserializePosition(data: JsonNode) =
-    if (data.size() == 3) Position(
-        data[0].doubleValue(),
-        data[1].doubleValue(),
-        data[2].doubleValue()
-    )
-    else if (data.size() == 5) Position(
-        data[0].doubleValue(),
-        data[1].doubleValue(),
-        data[2].doubleValue(),
-        data[3].doubleValue(),
-        data[4].doubleValue()
-    )
-    else throw IllegalArgumentException()
+class PositionDeserializer : JsonDeserializer<Position>() {
+    override fun deserialize(
+        p: JsonParser,
+        ctxt: DeserializationContext
+    ): Position {
+        val node = p.codec.readTree<ArrayNode>(p)
+        val x = node[0].asDouble()
+        val y = node[1].asDouble()
+        val z = node[2].asDouble()
+        if (node.size() == 3) return Position(x, y, z)
+        val yaw = node[3].asDouble()
+        val pitch = node[4].asDouble()
+        return Position(x, y, z, yaw, pitch)
+    }
+}

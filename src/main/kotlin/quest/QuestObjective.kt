@@ -1,10 +1,13 @@
 package com.shadowforgedmmo.engine.quest
 
-import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.shadowforgedmmo.engine.character.CharacterBlueprint
-import com.shadowforgedmmo.engine.character.parseCharacterBlueprintId
+import com.shadowforgedmmo.engine.character.CharacterBlueprintReference
 import com.shadowforgedmmo.engine.item.Item
-import com.shadowforgedmmo.engine.item.parseItemId
+import com.shadowforgedmmo.engine.item.ItemReference
+import com.shadowforgedmmo.engine.item.QuestItem
 import com.shadowforgedmmo.engine.runtime.Runtime
 
 abstract class QuestObjective(val goal: Int, val markers: Collection<QuestObjectiveMarker>) {
@@ -13,61 +16,80 @@ abstract class QuestObjective(val goal: Int, val markers: Collection<QuestObject
     open fun start(runtime: Runtime, quest: Quest, objectiveIndex: Int) = Unit
 }
 
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "type"
+)
+@JsonSubTypes(
+    JsonSubTypes.Type(value = SlayCharacterObjectiveDefinition::class, name = "slay_character"),
+    JsonSubTypes.Type(value = CollectItemObjectiveDefinition::class, name = "collect_item")
+)
+sealed class QuestObjectiveDefinition {
+    abstract fun toQuestObjective(): QuestObjective
+}
+
 class SlayCharacterObjective(
     goal: Int,
     markers: Collection<QuestObjectiveMarker>,
-    val characterBlueprintId: String
+    val characterBlueprintReference: CharacterBlueprintReference
 ) : QuestObjective(goal, markers) {
     override val description
         get() = "Slay ${characterBlueprint?.name}"
 
-    private var characterBlueprint: CharacterBlueprint? = null
+    private lateinit var characterBlueprint: CharacterBlueprint
 
     override fun start(runtime: Runtime, quest: Quest, objectiveIndex: Int) {
-        if (characterBlueprintId !in runtime.characterBlueprintsById) {
-            System.err.println("No such resource: characters:$characterBlueprintId")
-            return
-        }
-        characterBlueprint = runtime.characterBlueprintsById.getValue(characterBlueprintId)
-        runtime.questObjectiveManager.registerSlayObjective(quest, objectiveIndex, characterBlueprintId)
+        characterBlueprint = characterBlueprintReference.resolve(runtime.resources.characterBlueprintRegistry)
+        runtime.questObjectiveManager.registerSlayObjective(
+            quest,
+            objectiveIndex,
+            characterBlueprintReference.id
+        )
     }
+}
+
+data class SlayCharacterObjectiveDefinition(
+    @JsonProperty("goal") val goal: Int,
+    @JsonProperty("markers") val markers: Collection<QuestObjectiveMarker>,
+    @JsonProperty("character") val characterBlueprintReference: CharacterBlueprintReference
+) : QuestObjectiveDefinition() {
+    override fun toQuestObjective() = SlayCharacterObjective(
+        goal,
+        markers,
+        characterBlueprintReference
+    )
 }
 
 class CollectItemObjective(
     goal: Int,
-    markers: Collection<QuestObjectiveMarker>,
-    val itemId: String
+    markers: List<QuestObjectiveMarker>,
+    val itemReference: ItemReference
 ) : QuestObjective(goal, markers) {
     override val description: String
         get() = "${item?.name}"
 
-    private var item: Item? = null
+    private lateinit var item: Item
 
     override fun start(runtime: Runtime, quest: Quest, objectiveIndex: Int) {
-        if (itemId !in runtime.itemsById) {
-            System.err.println("No such resource: items:$itemId")
-            return
-        }
-        item = runtime.itemsById.getValue(itemId)
-        runtime.questObjectiveManager.registerItemCollectObjective(quest, objectiveIndex, itemId)
+        item = itemReference.resolve(runtime.resources.itemRegistry)
+        if (item !is QuestItem) error("Item is not a quest item: $item.id")
+        runtime.questObjectiveManager.registerItemCollectObjective(
+            quest,
+            objectiveIndex,
+            itemReference.id
+        )
     }
 }
 
-fun deserializeQuestObjective(data: JsonNode): QuestObjective = when (data["type"]?.asText()) {
-    "slay_character" -> SlayCharacterObjective(
-        data["goal"]?.asInt() ?: 1,
-        deserializeQuestObjectiveMarkers(data["markers"]),
-        parseCharacterBlueprintId(data["character"].asText())
+data class CollectItemObjectiveDefinition(
+    @JsonProperty("goal") val goal: Int,
+    @JsonProperty("markers") val markers: List<QuestObjectiveMarker>,
+    @JsonProperty("item") val itemReference: ItemReference
+) : QuestObjectiveDefinition() {
+    override fun toQuestObjective() = CollectItemObjective(
+        goal,
+        markers,
+        itemReference
     )
-
-    "collect_item" -> CollectItemObjective(
-        data["goal"]?.asInt() ?: 1,
-        deserializeQuestObjectiveMarkers(data["markers"]),
-        parseItemId(data["item"].asText())
-    )
-
-    else -> throw IllegalArgumentException("Unknown quest objective type: ${data["type"].asText()}")
 }
-
-private fun deserializeQuestObjectiveMarkers(data: JsonNode) =
-    data.map(::deserializeQuestObjectiveMarker)

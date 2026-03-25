@@ -1,23 +1,23 @@
 package com.shadowforgedmmo.engine.zone
 
-import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.shadowforgedmmo.engine.character.CharacterBlueprint
+import com.shadowforgedmmo.engine.character.CharacterSpawnsDefinition
+import com.shadowforgedmmo.engine.character.NonPlayerCharacterSpawner
+import com.shadowforgedmmo.engine.character.PlayerCharacter
+import com.shadowforgedmmo.engine.loot.LootChestDefinition
+import com.shadowforgedmmo.engine.math.Polygon
+import com.shadowforgedmmo.engine.music.MusicTrack
+import com.shadowforgedmmo.engine.music.SongReference
+import com.shadowforgedmmo.engine.resource.Registry
+import com.shadowforgedmmo.engine.resource.ResourceReference
+import com.shadowforgedmmo.engine.resource.ResourceReferenceDeserializer
+import com.shadowforgedmmo.engine.resource.ZONES
+import com.shadowforgedmmo.engine.transition.TransitionDefinition
+import com.shadowforgedmmo.engine.util.schedulerManager
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
-import com.shadowforgedmmo.engine.character.CharacterBlueprint
-import com.shadowforgedmmo.engine.character.PlayerCharacter
-import com.shadowforgedmmo.engine.character.deserializeNonPlayerCharacterSpawners
-import com.shadowforgedmmo.engine.gameobject.GameObjectSpawner
-import com.shadowforgedmmo.engine.loot.LootChestSpawner
-import com.shadowforgedmmo.engine.map.AreaMap
-import com.shadowforgedmmo.engine.map.parseMapId
-import com.shadowforgedmmo.engine.math.Polygon
-import com.shadowforgedmmo.engine.math.deserializePolygon
-import com.shadowforgedmmo.engine.math.deserializePosition
-import com.shadowforgedmmo.engine.music.Song
-import com.shadowforgedmmo.engine.music.parseSongId
-import com.shadowforgedmmo.engine.resource.parseId
-import com.shadowforgedmmo.engine.transition.deserializeTransitionSpawner
-import com.shadowforgedmmo.engine.util.schedulerManager
 import java.time.Duration
 import net.minestom.server.instance.Weather as MinestomWeather
 
@@ -27,9 +27,8 @@ class Zone(
     val type: ZoneType,
     val level: Int,
     val boundary: Polygon,
-    val map: AreaMap,
-    val music: Song?,
-    val weatherCycle: WeatherCycle
+    val music: MusicTrack?,
+    val weatherCycle: List<WeatherCycleEntry>
 ) {
     val outerBoundary = boundary.offset(10.0) // TOOD: update offset
 
@@ -42,8 +41,8 @@ class Zone(
     val playerCharacters: Set<PlayerCharacter> = setOf()
 
     var weather =
-        if (weatherCycle.weatherEntries.isEmpty()) Weather.CLEAR
-        else weatherCycle.weatherEntries[0].weather
+        if (weatherCycle.isEmpty()) Weather.CLEAR
+        else weatherCycle[0].weather
         private set(value) {
             field = value
             val packets = MinestomWeather(
@@ -54,50 +53,55 @@ class Zone(
         }
 
     fun init() {
-        if (weatherCycle.weatherEntries.size > 1) scheduleWeatherUpdate(1)
+        if (weatherCycle.size > 1) scheduleWeatherUpdate(1)
     }
 
     private fun scheduleWeatherUpdate(index: Int) {
         schedulerManager.buildTask {
-            weather = weatherCycle.weatherEntries[index].weather
-            scheduleWeatherUpdate((index + 1) % weatherCycle.weatherEntries.size)
+            weather = weatherCycle[index].weather
+            scheduleWeatherUpdate((index + 1) % weatherCycle.size)
         }
-            .delay(Duration.ofMillis(weatherCycle.weatherEntries[index].durationMillis))
+            .delay(Duration.ofMillis(weatherCycle[index].durationMillis))
             .schedule()
     }
 }
 
-fun deserializeZone(
-    id: String,
-    data: JsonNode,
-    mapsById: Map<String, AreaMap>,
-    musicById: Map<String, Song>,
-    characterBlueprintsById: Map<String, CharacterBlueprint>
-): Pair<Zone, Collection<GameObjectSpawner>> {
-    val respawnPoints = data["respawn_points"]?.map(::deserializePosition) ?: emptyList()
-
-    val transitionSpawners = data["transitions"]?.map(::deserializeTransitionSpawner) ?: emptyList()
-
-    val characterSpawners = data["characters"]?.flatMap {
-        deserializeNonPlayerCharacterSpawners(it, characterBlueprintsById)
-    } ?: emptyList()
-
-    val lootChestSpawners = listOf<LootChestSpawner>() // TODO
-
-    val spawners = transitionSpawners + characterSpawners + lootChestSpawners
-
-    val zone = Zone(
+data class ZoneDefinition(
+    @JsonProperty("name") val name: String,
+    @JsonProperty("type") val type: ZoneType,
+    @JsonProperty("level") val level: Int,
+    @JsonProperty("boundary") val boundary: Polygon,
+    @JsonProperty("music") val songReference: SongReference?,
+    @JsonProperty("weather_cycle") val weatherCycle: List<WeatherCycleEntryDefinition>?,
+    @JsonProperty("transitions") val transitions: List<TransitionDefinition>?,
+    @JsonProperty("characters") val characters: List<CharacterSpawnsDefinition>?,
+    @JsonProperty("loot_chests") val lootChests: List<LootChestDefinition>?
+) {
+    fun toZone(id: String, musicTrackRegistry: Registry<MusicTrack>) = Zone(
         id,
-        data["name"].asText(),
-        ZoneType.valueOf(data["type"].asText().uppercase()),
-        data["level"].asInt(),
-        deserializePolygon(data["boundary"]),
-        mapsById.getValue(parseMapId(data["map"].asText())),
-        data["music"]?.let { musicById.getValue(parseSongId(it.asText())) },
-        data["weather_cycle"]?.let(::deserializeWeatherCycle) ?: WeatherCycle(listOf())
+        name,
+        type,
+        level,
+        boundary,
+        songReference?.resolve(musicTrackRegistry),
+        weatherCycle?.map(WeatherCycleEntryDefinition::toWeatherCycleEntry) ?: emptyList()
     )
 
-    return Pair(zone, spawners)
+    fun getSpawners(characterBlueprintRegistry: Registry<CharacterBlueprint>) =
+        getTransitionSpawners() + getCharacterSpawners(characterBlueprintRegistry)
+
+    private fun getTransitionSpawners() = transitions?.map { it.toTransitionSpawner() } ?: emptyList()
+
+    private fun getCharacterSpawners(
+        characterBlueprintRegistry: Registry<CharacterBlueprint>
+    ): Collection<NonPlayerCharacterSpawner> =
+        characters?.flatMap { it.toCharacterSpawners(characterBlueprintRegistry) } ?: emptyList()
 }
 
-fun parseZoneId(id: String) = parseId(id, "zones")
+@JsonDeserialize(using = ZoneReferenceDeserializer::class)
+class ZoneReference(id: String) : ResourceReference(id)
+
+class ZoneReferenceDeserializer : ResourceReferenceDeserializer<ZoneReference>(
+    ZONES,
+    ::ZoneReference
+)

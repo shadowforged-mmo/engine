@@ -1,8 +1,30 @@
 package com.shadowforgedmmo.engine.combat
 
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 
+@JsonDeserialize(using = DamageDeserializer::class)
 class Damage(val damage: Map<DamageType, Int>)
+
+class DamageDeserializer : JsonDeserializer<Damage>() {
+    override fun deserialize(
+        p: JsonParser,
+        ctxt: DeserializationContext
+    ): Damage {
+        val node = p.codec.readTree<JsonNode>(p)
+        if (node.isInt) {
+            return Damage(mapOf(DamageType.PHYSICAL to node.intValue()))
+        }
+
+        // TODO: error handling and clean up
+        return Damage(node.fields().asSequence().associate { (key, value) ->
+            DamageType.valueOf(key) to value.intValue()
+        })
+    }
+}
 
 enum class DamageType {
     PHYSICAL,
@@ -13,14 +35,3 @@ enum class DamageType {
     SHADOW,
     HOLY
 }
-
-fun deserializeDamage(data: JsonNode): Damage =
-    if (data.isNumber) {
-        Damage(mapOf(DamageType.PHYSICAL to data.asInt()))
-    } else if (data.isObject) {
-        Damage(data.fields().asSequence().associate { (type, amount) ->
-            DamageType.valueOf(type.uppercase()) to amount.asInt()
-        })
-    } else {
-        throw IllegalArgumentException()
-    }
