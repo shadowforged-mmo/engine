@@ -30,7 +30,7 @@ class ActiveSkill(
                 1,
                 ceil(
                     millisToSeconds(
-                        pc.skillTracker.cooldown(this).remainingMillis(pc.runtime.timeMillis)
+                        pc.cooldown(this).remainingMillis(pc.runtime.timeMillis)
                     )
                 ).toInt()
             )

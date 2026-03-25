@@ -41,7 +41,7 @@ class StartQuestInteraction(
     private val dialogue: List<Component>
 ) : Interaction() {
     override fun isAvailable(pc: PlayerCharacter) =
-        pc.questTracker.isReadyToStart(quest)
+        pc.isReadyToStart(quest)
 
     override fun start(instance: Instance, position: Position) {
         instance.questStarts.put(position.toVector2(), quest)
@@ -56,7 +56,7 @@ class StartQuestInteraction(
             npc.speak(dialogue[index], pc)
             return true
         } else {
-            pc.questTracker.startQuest(quest)
+            pc.startQuest(quest)
             return false
         }
     }
@@ -77,7 +77,7 @@ class TurnInQuestInteraction(
     private val dialogue: List<Component>
 ) : Interaction() {
     override fun isAvailable(pc: PlayerCharacter) =
-        pc.questTracker.isReadyToTurnIn(quest)
+        pc.isReadyToTurnIn(quest)
 
     override fun start(instance: Instance, position: Position) {
         instance.questTurnIns.put(position.toVector2(), quest)
@@ -92,7 +92,7 @@ class TurnInQuestInteraction(
             npc.speak(dialogue[index], pc)
             return true
         } else {
-            pc.questTracker.completeQuest(quest)
+            pc.completeQuest(quest)
             return false
         }
     }

@@ -35,19 +35,19 @@ class QuestObjectiveManager {
 
     fun handleCharacterDeath(killer: PlayerCharacter, killed: NonPlayerCharacter) {
         slayObjectivesByCharacterBlueprintId[killed.blueprint.id]
-            .firstOrNull() { (quest, objectiveIndex) ->
-                killer.questTracker.isInProgress(quest, objectiveIndex)
+            .firstOrNull { (quest, objectiveIndex) ->
+                killer.isInProgress(quest, objectiveIndex)
             }?.let { (quest, objectiveIndex) ->
-                killer.questTracker.incrementProgress(quest, objectiveIndex)
+                killer.incrementProgress(quest, objectiveIndex)
             }
     }
 
     fun handleItemPickup(player: PlayerCharacter, item: QuestItem) {
         collectItemObjectivesByItemBlueprintId[item.id]
             .first { (quest, objectiveIndex) ->
-                player.questTracker.isInProgress(quest, objectiveIndex)
+                player.isInProgress(quest, objectiveIndex)
             }.let { (quest, objectiveIndex) ->
-                player.questTracker.incrementProgress(quest, objectiveIndex)
+                player.incrementProgress(quest, objectiveIndex)
             }
     }
 }

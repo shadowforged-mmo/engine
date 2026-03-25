@@ -81,13 +81,13 @@ class ResourceLoader(private val definitionLoader: DefinitionLoader) {
 
     fun loadResourcePackResources(): ResourcePackResources {
         val config = definitionLoader.loadConfig()
-        val blockbenchModels = definitionLoader.loadBlockbenchModels().map { (id, modelDefinition) ->
+        val blockbenchModels = definitionLoader.loadBlockbenchModels().mapValues { (id, modelDefinition) ->
             modelDefinition.toBlockbenchModel(id)
         }
-        val blockbenchItemModelAssets = definitionLoader.loadBlockbenchItemModels().map { (id, itemDefinition) ->
+        val blockbenchItemModelAssets = definitionLoader.loadBlockbenchItemModels().mapValues { (id, itemDefinition) ->
 
         }
-        val musicTrackAssets = definitionLoader.loadMusicTracks().map { (id, trackDefinition) ->
+        val musicTrackAssets = definitionLoader.loadMusicTracks().mapValues { (id, trackDefinition) ->
             trackDefinition.toMusicTrackAsset(id)
         }
         val soundAssets = definitionLoader

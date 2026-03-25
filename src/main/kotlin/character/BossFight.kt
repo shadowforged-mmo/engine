@@ -49,14 +49,14 @@ class BossFight(
         viewers.add(viewer)
         bossBar.addViewer(viewer.entity)
         viewer.bossFights.add(this)
-        viewer.updateMusic()
+        viewer.updateMusicTrack()
     }
 
     private fun removeViewer(viewer: PlayerCharacter) {
         viewers.remove(viewer)
         bossBar.removeViewer(viewer.entity)
         viewer.bossFights.remove(this)
-        viewer.updateMusic()
+        viewer.updateMusicTrack()
     }
 
     fun remove() {
