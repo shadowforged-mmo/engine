@@ -3,11 +3,14 @@ package com.shadowforgedmmo.engine.item
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.shadowforgedmmo.engine.behavior.PrioritySelectorDefinition
 import com.shadowforgedmmo.engine.character.PlayerCharacter
 import com.shadowforgedmmo.engine.model.BlockbenchItemModel
+import com.shadowforgedmmo.engine.resource.ITEMS
 import com.shadowforgedmmo.engine.resource.Registry
 import com.shadowforgedmmo.engine.resource.ResourceReference
+import com.shadowforgedmmo.engine.resource.ResourceReferenceDeserializer
 import net.minestom.server.item.ItemStack
 import net.minestom.server.tag.Tag
 
@@ -53,9 +56,9 @@ class ItemInstanceDefinition(
     @JsonProperty("quantity") val quantity: Int?,
     @JsonProperty("gems") val gems: List<ItemReference>?
 ) {
-    fun toItemInstance(itemsById: Map<String, Item>) = when (val item = itemReference.resolve(itemsById)) {
+    fun toItemInstance(itemRegistry: Registry<Item>) = when (val item = itemReference.resolve(itemRegistry)) {
         is EquipmentItem -> item.instance(
-            gems?.map { it.resolve(itemsById) as? Gem ?: error("${it.id} is not a gem") } ?: emptyList()
+            gems?.map { it.resolve(itemRegistry) as? Gem ?: error("${it.id} is not a gem") } ?: emptyList()
         )
 
         is ConsumableItem -> ConsumableItemInstance(item, quantity ?: 1)
@@ -64,4 +67,10 @@ class ItemInstanceDefinition(
     }
 }
 
+@JsonDeserialize(using = ItemReferenceDeserializer::class)
 class ItemReference(id: String) : ResourceReference(id)
+
+class ItemReferenceDeserializer : ResourceReferenceDeserializer<ItemReference>(
+    ITEMS,
+    ::ItemReference
+)

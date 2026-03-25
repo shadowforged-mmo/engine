@@ -1,11 +1,9 @@
 package com.shadowforgedmmo.engine.item
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.shadowforgedmmo.engine.resource.EnumDeserializer
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
 
-@JsonDeserialize(using = EnumDeserializer::class)
 enum class ItemQuality(val text: String, val color: TextColor) {
     COMMON("Common", NamedTextColor.WHITE),
     UNCOMMON("Uncommon", NamedTextColor.GREEN),

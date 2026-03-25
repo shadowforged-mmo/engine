@@ -2,9 +2,9 @@ package com.shadowforgedmmo.engine.quest
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.shadowforgedmmo.engine.resource.QUESTS
 import com.shadowforgedmmo.engine.resource.ResourceReference
 import com.shadowforgedmmo.engine.resource.ResourceReferenceDeserializer
-import com.shadowforgedmmo.engine.resource.SKINS
 import com.shadowforgedmmo.engine.runtime.Runtime
 
 class Quest(
@@ -24,15 +24,16 @@ class Quest(
 data class QuestDefinition(
     @JsonProperty("name") val name: String,
     @JsonProperty("level") val level: Int,
-    @JsonProperty("prerequisites") val prerequisiteReferences: List<QuestReference>,
-    @JsonProperty("objects") val objectives: List<QuestObjectiveDefinition>,
+    @JsonProperty("prerequisites") val prerequisiteReferences: List<QuestReference>?,
+    @JsonProperty("objectives") val objectives: List<QuestObjectiveDefinition>?,
+    @JsonProperty("rewards") val rewards: QuestRewardsDefinition?
 ) {
     fun toQuest(id: String) = Quest(
         id,
         name,
         level,
-        prerequisiteReferences,
-        objectives.map(QuestObjectiveDefinition::toQuestObjective)
+        prerequisiteReferences ?: emptyList(),
+        objectives?.map(QuestObjectiveDefinition::toQuestObjective) ?: emptyList()
     )
 }
 
@@ -40,6 +41,6 @@ data class QuestDefinition(
 class QuestReference(id: String) : ResourceReference(id)
 
 class QuestReferenceDeserializer : ResourceReferenceDeserializer<QuestReference>(
-    SKINS,
+    QUESTS,
     ::QuestReference
 )

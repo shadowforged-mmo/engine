@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.shadowforgedmmo.engine.resource.EnumDeserializer
 import com.shadowforgedmmo.engine.resource.Registry
 import net.minestom.server.item.ItemStack
 import net.minestom.server.item.armor.TrimMaterial
@@ -40,7 +39,6 @@ data class BasicArmorModelDefinition(
         BasicArmorModel(material, trim.toTrim())
 }
 
-@JsonDeserialize(using = EnumDeserializer::class)
 enum class ArmorMaterial { LEATHER, IRON }
 
 class ArmorTrim(val material: TrimMaterial, val pattern: TrimPattern)

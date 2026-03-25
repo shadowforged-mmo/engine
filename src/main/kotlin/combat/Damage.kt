@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.shadowforgedmmo.engine.resource.EnumDeserializer
 
 @JsonDeserialize(using = DamageDeserializer::class)
 class Damage(val damage: Map<DamageType, Int>)
@@ -27,7 +26,6 @@ class DamageDeserializer : JsonDeserializer<Damage>() {
     }
 }
 
-@JsonDeserialize(using = EnumDeserializer::class)
 enum class DamageType {
     PHYSICAL,
     ARCANE,

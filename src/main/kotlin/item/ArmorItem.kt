@@ -6,7 +6,6 @@ import com.shadowforgedmmo.engine.character.PlayerCharacter
 import com.shadowforgedmmo.engine.model.ArmorModel
 import com.shadowforgedmmo.engine.model.ArmorModelDefinition
 import com.shadowforgedmmo.engine.model.BlockbenchItemModel
-import com.shadowforgedmmo.engine.resource.EnumDeserializer
 import com.shadowforgedmmo.engine.resource.Registry
 import net.minestom.server.item.ItemStack
 
@@ -49,5 +48,4 @@ class ArmorItemInstance(item: ArmorItem, gems: List<Gem>) : EquipmentItemInstanc
         .build()
 }
 
-@JsonDeserialize(using = EnumDeserializer::class)
 enum class ArmorSlot { FEET, LEGS, CHEST, HEAD }

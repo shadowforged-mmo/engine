@@ -28,7 +28,7 @@ class Zone(
     val level: Int,
     val boundary: Polygon,
     val music: MusicTrack?,
-    val weatherCycle: WeatherCycle
+    val weatherCycle: List<WeatherCycleEntry>
 ) {
     val outerBoundary = boundary.offset(10.0) // TOOD: update offset
 
@@ -41,8 +41,8 @@ class Zone(
     val playerCharacters: Set<PlayerCharacter> = setOf()
 
     var weather =
-        if (weatherCycle.weatherEntries.isEmpty()) Weather.CLEAR
-        else weatherCycle.weatherEntries[0].weather
+        if (weatherCycle.isEmpty()) Weather.CLEAR
+        else weatherCycle[0].weather
         private set(value) {
             field = value
             val packets = MinestomWeather(
@@ -53,15 +53,15 @@ class Zone(
         }
 
     fun init() {
-        if (weatherCycle.weatherEntries.size > 1) scheduleWeatherUpdate(1)
+        if (weatherCycle.size > 1) scheduleWeatherUpdate(1)
     }
 
     private fun scheduleWeatherUpdate(index: Int) {
         schedulerManager.buildTask {
-            weather = weatherCycle.weatherEntries[index].weather
-            scheduleWeatherUpdate((index + 1) % weatherCycle.weatherEntries.size)
+            weather = weatherCycle[index].weather
+            scheduleWeatherUpdate((index + 1) % weatherCycle.size)
         }
-            .delay(Duration.ofMillis(weatherCycle.weatherEntries[index].durationMillis))
+            .delay(Duration.ofMillis(weatherCycle[index].durationMillis))
             .schedule()
     }
 }
@@ -72,10 +72,10 @@ data class ZoneDefinition(
     @JsonProperty("level") val level: Int,
     @JsonProperty("boundary") val boundary: Polygon,
     @JsonProperty("music") val songReference: SongReference?,
-    @JsonProperty("weather_cycle") val weatherCycle: WeatherCycle,
-    @JsonProperty("transitions") val transitions: List<TransitionDefinition>,
-    @JsonProperty("characters") val characters: List<CharacterSpawnsDefinition>,
-    @JsonProperty("loot_chests") val lootChests: List<LootChestDefinition>
+    @JsonProperty("weather_cycle") val weatherCycle: List<WeatherCycleEntryDefinition>?,
+    @JsonProperty("transitions") val transitions: List<TransitionDefinition>?,
+    @JsonProperty("characters") val characters: List<CharacterSpawnsDefinition>?,
+    @JsonProperty("loot_chests") val lootChests: List<LootChestDefinition>?
 ) {
     fun toZone(id: String, musicTrackRegistry: Registry<MusicTrack>) = Zone(
         id,
@@ -84,18 +84,18 @@ data class ZoneDefinition(
         level,
         boundary,
         songReference?.resolve(musicTrackRegistry),
-        weatherCycle
+        weatherCycle?.map(WeatherCycleEntryDefinition::toWeatherCycleEntry) ?: emptyList()
     )
 
     fun getSpawners(characterBlueprintRegistry: Registry<CharacterBlueprint>) =
         getTransitionSpawners() + getCharacterSpawners(characterBlueprintRegistry)
 
-    private fun getTransitionSpawners() = transitions.map { it.toTransitionSpawner() }
+    private fun getTransitionSpawners() = transitions?.map { it.toTransitionSpawner() } ?: emptyList()
 
     private fun getCharacterSpawners(
         characterBlueprintRegistry: Registry<CharacterBlueprint>
     ): Collection<NonPlayerCharacterSpawner> =
-        characters.flatMap { it.toCharacterSpawners(characterBlueprintRegistry) }
+        characters?.flatMap { it.toCharacterSpawners(characterBlueprintRegistry) } ?: emptyList()
 }
 
 @JsonDeserialize(using = ZoneReferenceDeserializer::class)

@@ -19,8 +19,9 @@ class MusicTrack(val id: String, val duration: Duration) {
     )
 }
 
-class MusicTrackDefinition(val duration: Duration) {
+class MusicTrackDefinition(val duration: Duration, val file: File) {
     fun toMusicTrack(id: String) = MusicTrack(id, duration)
+    fun toMusicTrackAsset(id: String) = MusicTrackAsset(id, file)
 }
 
 class MusicTrackAsset(val id: String, val file: File) {

@@ -21,7 +21,7 @@ class NonPlayerCharacterSpawner(
 
 data class CharacterSpawnsDefinition(
     @JsonProperty("character") val characterBlueprintReference: CharacterBlueprintReference,
-    @JsonProperty("positions") val positions: List<Position> // TODO: handle single position
+    @JsonProperty("positions") val positions: List<Position>
 ) {
     fun toCharacterSpawners(
         characterBlueprintRegistry: Registry<CharacterBlueprint>

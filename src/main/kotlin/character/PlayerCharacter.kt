@@ -17,6 +17,7 @@ import com.shadowforgedmmo.engine.playerclass.PlayerClassReference
 import com.shadowforgedmmo.engine.quest.Quest
 import com.shadowforgedmmo.engine.quest.QuestObjective
 import com.shadowforgedmmo.engine.quest.QuestProgress
+import com.shadowforgedmmo.engine.quest.QuestProgressDefinition
 import com.shadowforgedmmo.engine.runtime.Runtime
 import com.shadowforgedmmo.engine.skill.ActiveSkill
 import com.shadowforgedmmo.engine.skill.SKILL_TAG
@@ -622,11 +623,11 @@ class PlayerCharacterDefinition(
     @JsonProperty("instance") val instanceReference: InstanceReference,
     @JsonProperty("position") val position: Position,
     @JsonProperty("zone") val zoneReference: ZoneReference,
-    @JsonProperty("maxHealth") val maxHealth: Int,
+    @JsonProperty("max_health") val maxHealth: Int,
     @JsonProperty("health") val health: Int,
-    @JsonProperty("maxMana") val maxMana: Int,
+    @JsonProperty("max_mana") val maxMana: Int,
     @JsonProperty("mana") val mana: Int,
-    @JsonProperty("quests") val questProgress: QuestProgress,
+    @JsonProperty("quests") val questProgress: QuestProgressDefinition,
     @JsonProperty("action_bar_skills") val actionBarSkills: List<SkillReference?>,
     @JsonProperty("inventory") val inventory: InventoryDefinition
 ) {
@@ -642,9 +643,9 @@ class PlayerCharacterDefinition(
                 maxMana,
                 mana,
                 playerClassReference.resolve(classRegistry),
-                questProgress,
+                questProgress.toQuestProgress(questRegistry),
                 inventory.toInventory(itemRegistry),
-                actionBarSkills.map { it?.resolve(skillRegistry) as ActiveSkill }.toTypedArray(),
+                actionBarSkills.map { it?.resolve(skillRegistry) as? ActiveSkill }.toTypedArray(),
                 zoneReference.resolve(zoneRegistry)
             )
         }

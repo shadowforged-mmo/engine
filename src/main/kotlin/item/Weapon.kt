@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.shadowforgedmmo.engine.character.PlayerCharacter
 import com.shadowforgedmmo.engine.model.BlockbenchItemModel
 import com.shadowforgedmmo.engine.model.BlockbenchItemModelReference
-import com.shadowforgedmmo.engine.resource.EnumDeserializer
 import com.shadowforgedmmo.engine.resource.Registry
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
@@ -26,9 +25,14 @@ class Weapon(
 data class WeaponDefinition(
     @JsonProperty("name") val name: String,
     @JsonProperty("quality") val quality: ItemQuality,
-    @JsonProperty("type") val type: WeaponType,
+    @JsonProperty("level") val level: Int,
+    @JsonProperty("weapon_type") val type: WeaponType,
     @JsonProperty("sockets") val sockets: Int,
-    @JsonProperty("model") val modelReference: BlockbenchItemModelReference
+    @JsonProperty("model") val modelReference: BlockbenchItemModelReference,
+    @JsonProperty("attack_speed") val attackSpeed: Double,
+    @JsonProperty("physical_damage") val physicalDamage: Double,
+    @JsonProperty("water_damage") val waterDamage: Double,
+    @JsonProperty("lightning_damage") val lightningDamage: Double
 ) : ItemDefinition() {
     override fun toItem(
         id: String,
@@ -45,7 +49,6 @@ class WeaponInstance(item: Weapon, gems: List<Gem>) : EquipmentItemInstance(item
         .build()
 }
 
-@JsonDeserialize(using = EnumDeserializer::class)
 enum class WeaponType {
     SWORD
 }

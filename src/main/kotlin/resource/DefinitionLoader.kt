@@ -1,5 +1,6 @@
 package com.shadowforgedmmo.engine.resource
 
+import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.shadowforgedmmo.engine.character.CharacterBlueprintDefinition
@@ -14,6 +15,7 @@ import com.shadowforgedmmo.engine.quest.QuestDefinition
 import com.shadowforgedmmo.engine.script.ScriptDefinition
 import com.shadowforgedmmo.engine.skill.SkillDefinition
 import com.shadowforgedmmo.engine.time.secondsToDuration
+import com.shadowforgedmmo.engine.util.readYaml
 import com.shadowforgedmmo.engine.world.WorldDefinition
 import com.shadowforgedmmo.engine.zone.ZoneDefinition
 import org.gagravarr.ogg.audio.OggAudioStatistics
@@ -41,8 +43,6 @@ data class Definitions(
 )
 
 class DefinitionLoader(private val root: File) {
-    private val objectMapper = ObjectMapper(YAMLFactory())
-
     fun loadAll() = Definitions(
         loadConfig(),
         loadCharacterBlueprints(),
@@ -88,7 +88,7 @@ class DefinitionLoader(private val root: File) {
     fun loadSkills() = loadYamlResources(SKILLS, SkillDefinition::class)
 
     fun loadMusicTracks() = loadResources(MUSIC) { file ->
-        MusicTrackDefinition(computeDuration(file))
+        MusicTrackDefinition(computeDuration(file), file)
     }
 
     fun loadScripts() = loadResources(SCRIPTS) { file ->
@@ -101,7 +101,11 @@ class DefinitionLoader(private val root: File) {
         loadResources(MODELS) { file -> BlockbenchModelDefinition(read(file)) }
     }
 
-    fun loadBlockbenchItemModels(): Registry<BlockbenchItemModelDefinition> = emptyMap() // TODO
+    fun loadBlockbenchItemModels() = with(BBModelReader.blockbench()) {
+        loadResources(ITEM_MODELS) { file -> BlockbenchItemModelDefinition(read(file)) }
+    }
+
+    fun loadSounds() = loadResources(SOUNDS) { file -> file }
 
     private fun computeDuration(file: File) = secondsToDuration(
         VorbisFile(file).use { vorbisFile ->
@@ -115,9 +119,7 @@ class DefinitionLoader(private val root: File) {
         loadYamlResources(root.resolve(relativePath), classOfT)
 
     private fun <T : Any> loadYamlResources(dir: File, classOfT: KClass<T>): Registry<T> =
-        loadResources(dir) { file ->
-            objectMapper.readValue(file, classOfT.java)
-        }
+        loadResources(dir) { file -> readYaml(file, classOfT) }
 
     private fun <T> loadResources(relativePath: String, loader: (File) -> T) =
         loadResources(root.resolve(relativePath), loader)
@@ -144,9 +146,7 @@ class DefinitionLoader(private val root: File) {
         loadYamlResource(root.resolve("$relativePath.yaml"), classOfT)
 
     private fun <T : Any> loadYamlResource(file: File, classOfT: KClass<T>): T =
-        loadResource(file) { file ->
-            objectMapper.readValue(file, classOfT.java)
-        }
+        loadResource(file) { file -> readYaml(file, classOfT) }
 
     private fun <T> loadResource(file: File, loader: (File) -> T) = loader(file)
 

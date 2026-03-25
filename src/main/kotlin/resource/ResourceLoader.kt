@@ -1,6 +1,7 @@
 package com.shadowforgedmmo.engine.resource
 
 import com.shadowforgedmmo.engine.runtime.createRuntimeEnvironment
+import com.shadowforgedmmo.engine.sound.SoundAsset
 import net.minestom.server.MinecraftServer
 
 class ResourceLoader(private val definitionLoader: DefinitionLoader) {
@@ -57,7 +58,7 @@ class ResourceLoader(private val definitionLoader: DefinitionLoader) {
         }
         val instanceRegistry = definitions.instances.mapValues { (id, instanceDefinition) ->
             val spawners = instanceDefinition.zoneReferences
-                .map { it.resolve(definitions.zones) } // TODO: need to flip reference and registry
+                .map { it.resolve(definitions.zones) }
                 .flatMap { it.getSpawners(characterBlueprintRegistry) }
             instanceDefinition.toInstance(id, worldRegistry, zoneRegistry, spawners)
         }
@@ -85,12 +86,14 @@ class ResourceLoader(private val definitionLoader: DefinitionLoader) {
             modelDefinition.toBlockbenchModel(id)
         }
         val blockbenchItemModelAssets = definitionLoader.loadBlockbenchItemModels().mapValues { (id, itemDefinition) ->
-
+            itemDefinition.toBlockbenchItemModelAsset(id)
         }
         val musicTrackAssets = definitionLoader.loadMusicTracks().mapValues { (id, trackDefinition) ->
             trackDefinition.toMusicTrackAsset(id)
         }
-        val soundAssets = definitionLoader
+        val soundAssets = definitionLoader.loadSounds().mapValues { (id, file) ->
+            SoundAsset(id, file)
+        }
         // TODO: consolidate some of this logic with loadAll()
         return ResourcePackResources(
             config,

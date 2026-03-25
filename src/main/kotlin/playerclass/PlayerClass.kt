@@ -12,6 +12,7 @@ import com.shadowforgedmmo.engine.skill.SkillReference
 class PlayerClass(val id: String, val skills: List<Skill>)
 
 data class PlayerClassDefinition(
+    @JsonProperty("name") val name: String,
     @JsonProperty("skills") val skills: List<SkillReference>
 ) {
     fun toPlayerClass(id: String, skillRegistry: Registry<Skill>) = PlayerClass(

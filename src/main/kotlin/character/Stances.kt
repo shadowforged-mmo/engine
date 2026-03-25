@@ -1,16 +1,14 @@
 package com.shadowforgedmmo.engine.character
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.shadowforgedmmo.engine.resource.EnumDeserializer
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
 
 class Stances(
-    private val default: Stance,
-    private val friendlyIds: Collection<String>,
-    private val neutralIds: Collection<String>,
-    private val hostileIds: Collection<String>
+    private val default: Stance = Stance.FRIENDLY,
+    private val friendlyIds: Collection<String> = emptyList(),
+    private val neutralIds: Collection<String> = emptyList(),
+    private val hostileIds: Collection<String> = emptyList()
 ) {
     fun stance(toward: Character): Stance {
         val id = if (toward is NonPlayerCharacter) "characters:${toward.blueprint.id}" else "player"
@@ -27,20 +25,19 @@ class Stances(
 }
 
 data class StancesDefinition(
-    @JsonProperty("default") val default: Stance,
-    @JsonProperty("friendly") val friendlyReferences: List<CharacterBlueprintReference>,
-    @JsonProperty("neutral") val neutralReferences: List<CharacterBlueprintReference>,
-    @JsonProperty("hostile") val hostileReferences: List<CharacterBlueprintReference>
+    @JsonProperty("default") val default: Stance?,
+    @JsonProperty("friendly") val friendlyReferences: List<String>?,
+    @JsonProperty("neutral") val neutralReferences: List<String>?,
+    @JsonProperty("hostile") val hostileReferences: List<String>?
 ) {
     fun toStances() = Stances(
-        default,
-        friendlyReferences.map(CharacterBlueprintReference::id),
-        neutralReferences.map(CharacterBlueprintReference::id),
-        hostileReferences.map(CharacterBlueprintReference::id)
+        default ?: Stance.FRIENDLY,
+        friendlyReferences ?: emptyList(),
+        neutralReferences ?: emptyList(),
+        hostileReferences ?: emptyList()
     )
 }
 
-@JsonDeserialize(using = EnumDeserializer::class)
 enum class Stance(val color: TextColor) {
     FRIENDLY(NamedTextColor.GREEN),
     NEUTRAL(NamedTextColor.YELLOW),

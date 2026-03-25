@@ -40,6 +40,7 @@ class ActiveSkill(
 
 data class ActiveSkillDefinition(
     @JsonProperty("name") val name: String,
+    @JsonProperty("icon") val icon: String, // TODO
     @JsonProperty("description") val description: String,
     @JsonProperty("mana_cost") val manaCost: Int,
     @JsonProperty("cooldown") val cooldownSeconds: Double,

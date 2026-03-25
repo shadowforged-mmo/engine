@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.JsonMappingException
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.node.ArrayNode
 
 @JsonDeserialize(using = PolygonDeserializer::class)
 data class Polygon(val points: List<Vector2>) {
@@ -63,11 +64,7 @@ class PolygonDeserializer : JsonDeserializer<Polygon>() {
         p: JsonParser,
         ctxt: DeserializationContext
     ): Polygon {
-        val node = p.codec.readTree<JsonNode>(p)
-
-        if (!node.isArray) {
-            throw JsonMappingException.from(p, "Polygon must be an array")
-        }
+        val node = p.codec.readTree<ArrayNode>(p)
 
         if (node.size() < 3) {
             throw JsonMappingException.from(p, "Polygon must have at least 3 vertices")

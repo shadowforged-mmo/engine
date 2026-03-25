@@ -7,6 +7,7 @@ import com.shadowforgedmmo.engine.character.Stance
 import com.shadowforgedmmo.engine.combat.Damage
 import com.shadowforgedmmo.engine.math.BoundingBox3
 import com.shadowforgedmmo.engine.math.Vector3
+import com.shadowforgedmmo.engine.sound.SoundDefinition
 import net.kyori.adventure.sound.Sound
 
 class BoxAttack(
@@ -66,9 +67,9 @@ data class BoxAttackDefinition(
     @JsonProperty("width") val width: Double,
     @JsonProperty("height") val height: Double,
     @JsonProperty("knockback") val knockback: Vector3,
-    @JsonProperty("hit_sound") val hitSound: Sound? = null,
-    @JsonProperty("miss_sound") val missSound: Sound? = null
+    @JsonProperty("hit_sound") val hitSound: SoundDefinition?,
+    @JsonProperty("miss_sound") val missSound: SoundDefinition?
 ) : BehaviorDefinition() {
     override fun toBlueprint() =
-        BoxAttackBlueprint(damage, offset, width, height, knockback, hitSound, missSound)
+        BoxAttackBlueprint(damage, offset, width, height, knockback, hitSound?.toSound(), missSound?.toSound())
 }

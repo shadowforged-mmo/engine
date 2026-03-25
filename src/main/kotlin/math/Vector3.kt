@@ -1,10 +1,15 @@
 package com.shadowforgedmmo.engine.math
 
-import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JsonDeserializer
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.node.ArrayNode
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
 
+@JsonDeserialize(using = Vector3Deserializer::class)
 data class Vector3(val x: Double, val y: Double, val z: Double) {
     companion object {
         val ZERO = Vector3(0.0, 0.0, 0.0)
@@ -82,8 +87,15 @@ data class Vector3(val x: Double, val y: Double, val z: Double) {
     }
 }
 
-fun deserializeVector3(data: JsonNode) = Vector3(
-    data[0].asDouble(),
-    data[1].asDouble(),
-    data[2].asDouble()
-)
+class Vector3Deserializer : JsonDeserializer<Vector3>() {
+    override fun deserialize(
+        p: JsonParser,
+        ctxt: DeserializationContext
+    ): Vector3 {
+        val node = p.codec.readTree<ArrayNode>(p)
+        val x = node[0].asDouble()
+        val y = node[1].asDouble()
+        val z = node[2].asDouble()
+        return Vector3(x, y, z)
+    }
+}

@@ -14,8 +14,9 @@ class BlockbenchItemModel(val id: String, val customModelData: Int) {
     val itemStack = ItemStack.builder(Material.GLOW_ITEM_FRAME).build()
 }
 
-class BlockbenchItemModelDefinition() {
+class BlockbenchItemModelDefinition(val model: Model) {
     fun toBlockbenchItemModel(id: String, customModelData: Int) = BlockbenchItemModel(id, customModelData)
+    fun toBlockbenchItemModelAsset(id: String) = BlockbenchItemModelAsset(id, model)
 }
 
 @JsonDeserialize(using = BlockbenchItemModelReferenceDeserializer::class)

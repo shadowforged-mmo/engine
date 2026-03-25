@@ -3,7 +3,6 @@ package com.shadowforgedmmo.engine.item
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.shadowforgedmmo.engine.character.PlayerCharacter
-import com.shadowforgedmmo.engine.resource.EnumDeserializer
 import net.minestom.server.item.ItemStack
 
 class Accessory(
@@ -33,5 +32,4 @@ class AccessoryInstance(item: Accessory, gems: List<Gem>) : EquipmentItemInstanc
         .build()
 }
 
-@JsonDeserialize(using = EnumDeserializer::class)
 enum class AccessorySlot { FINGER_1, FINGER_2, WRIST, TRINKET }
