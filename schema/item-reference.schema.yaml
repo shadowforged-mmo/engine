@@ -3,4 +3,4 @@ $id: https://shadowforgedmmo.com/schemas/item-reference.schema.yaml
 title: Item Reference
 description: A reference to an item resource
 type: string
-pattern: "^items:[a-z0-9_/]+(\.[a-z0-9_/]+)*$"
+pattern: "^items:[a-z0-9_]+(\.[a-z0-9_]+)*$"

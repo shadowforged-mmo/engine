@@ -3,4 +3,4 @@ $id: https://shadowforgedmmo.com/schemas/sound-reference.schema.yaml
 title: Sound Asset Reference
 description: A reference to a sound asset resource
 type: string
-pattern: "^sounds:[a-z0-9_/]+(\.[a-z0-9_/]+)*$"
+pattern: "^sounds:[a-z0-9_]+(\.[a-z0-9_]+)*$"

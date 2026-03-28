@@ -3,4 +3,4 @@ $id: https://shadowforgedmmo.com/schemas/character-reference.schema.yaml
 title: Character Blueprint Reference
 description: A reference to a character blueprint resource
 type: string
-pattern: "^characters:[a-z0-9_/]+(\.[a-z0-9_/]+)*$"
+pattern: "^characters:[a-z0-9_]+(\.[a-z0-9_]+)*$"

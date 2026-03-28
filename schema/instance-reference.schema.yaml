@@ -3,4 +3,4 @@ $id: https://shadowforgedmmo.com/schemas/instance-reference.schema.yaml
 title: Instance Reference
 description: A reference to an instance resource
 type: string
-pattern: "^instances:[a-z0-9_/]+(\.[a-z0-9_/]+)*$"
+pattern: "^instances:[a-z0-9_]+(\.[a-z0-9_]+)*$"

@@ -3,4 +3,4 @@ $id: https://shadowforgedmmo.com/schemas/quest-reference.schema.yaml
 title: Quest Reference
 description: A reference to a quest resource
 type: string
-pattern: "^quests:[a-z0-9_/]+(\.[a-z0-9_/]+)*$"
+pattern: "^quests:[a-z0-9_]+(\.[a-z0-9_]+)*$"

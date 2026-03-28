@@ -3,4 +3,4 @@ $id: https://shadowforgedmmo.com/schemas/skin-reference.schema.yaml
 title: Skin Reference
 description: A reference to a skin resource
 type: string
-pattern: "^skins:[a-z0-9_/]+(\.[a-z0-9_/]+)*$"
+pattern: "^skins:[a-z0-9_]+(\.[a-z0-9_]+)*$"

@@ -3,4 +3,4 @@ $id: https://shadowforgedmmo.com/schemas/zone-reference.schema.yaml
 title: Zone Reference
 description: A reference to a zone resource
 type: string
-pattern: "^zones:[a-z0-9_/]+(\.[a-z0-9_/]+)*$"
+pattern: "^zones:[a-z0-9_]+(\.[a-z0-9_]+)*$"
