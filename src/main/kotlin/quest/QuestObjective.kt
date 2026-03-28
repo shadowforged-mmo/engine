@@ -50,12 +50,12 @@ class SlayCharacterObjective(
 }
 
 data class SlayCharacterObjectiveDefinition(
-    @JsonProperty("goal") val goal: Int,
+    @JsonProperty("goal") val goal: Int?,
     @JsonProperty("markers") val markers: Collection<QuestObjectiveMarker>,
     @JsonProperty("character") val characterBlueprintReference: CharacterBlueprintReference
 ) : QuestObjectiveDefinition() {
     override fun toQuestObjective() = SlayCharacterObjective(
-        goal,
+        goal ?: 1,
         markers,
         characterBlueprintReference
     )
