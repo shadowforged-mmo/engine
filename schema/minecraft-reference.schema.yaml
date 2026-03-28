@@ -1,0 +1,6 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/minecraft-reference.schema.yaml
+title: Minecraft Reference
+description: A reference to a Minecraft namespace resource
+type: string
+pattern: "^minecraft:[a-z0-9_/]+(\.[a-z0-9_/]+)*$"

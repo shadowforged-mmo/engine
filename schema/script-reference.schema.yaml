@@ -1,0 +1,6 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/script-reference.schema.yaml
+title: Script Reference
+description: A reference to a script resource
+type: string
+pattern: "^scripts:[a-z0-9_/]+(\.[a-z0-9_/]+)*$"

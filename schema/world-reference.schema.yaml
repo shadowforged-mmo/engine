@@ -1,0 +1,6 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/world-reference.schema.yaml
+title: World Reference
+description: A reference to a world resource
+type: string
+pattern: "^worlds:[a-z0-9_/]+(\.[a-z0-9_/]+)*$"

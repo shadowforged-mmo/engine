@@ -1,0 +1,6 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/model-reference.schema.yaml
+title: Blockbench Model Reference
+description: A reference to a Blockbench model resource
+type: string
+pattern: "^models:[a-z0-9_/]+(\.[a-z0-9_/]+)*$"
