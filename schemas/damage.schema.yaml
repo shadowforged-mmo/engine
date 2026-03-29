@@ -1,0 +1,34 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/damage.schema.yaml
+title: Damage
+description: Damage amount, either a single physical damage integer or a map of damage types to amounts
+oneOf:
+  - type: integer
+    description: Physical damage amount
+    minimum: 0
+  - type: object
+    description: Damage amounts by type
+    properties:
+      physical:
+        type: integer
+        minimum: 0
+      arcane:
+        type: integer
+        minimum: 0
+      fire:
+        type: integer
+        minimum: 0
+      frost:
+        type: integer
+        minimum: 0
+      nature:
+        type: integer
+        minimum: 0
+      shadow:
+        type: integer
+        minimum: 0
+      holy:
+        type: integer
+        minimum: 0
+    additionalProperties: false
+    minProperties: 1
