@@ -1,0 +1,9 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/vector2.schema.yaml
+title: Vector2
+description: A 2-dimensional vector with x and y components
+type: array
+items:
+  type: number
+minItems: 2
+maxItems: 2

@@ -1,0 +1,8 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/polygon.schema.yaml
+title: Polygon
+description: A polygon defined by an ordered list of 2D vertices
+type: array
+items:
+  $ref: "vector2.schema.yaml"
+minItems: 3

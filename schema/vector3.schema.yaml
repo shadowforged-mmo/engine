@@ -1,0 +1,9 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/vector3.schema.yaml
+title: Vector3
+description: A 3-dimensional vector with x, y, and z components
+type: array
+items:
+  type: number
+minItems: 3
+maxItems: 3

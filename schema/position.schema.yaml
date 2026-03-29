@@ -1,0 +1,12 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/position.schema.yaml
+title: Position
+description: A world position as [x, y, z] or [x, y, z, yaw, pitch]
+type: array
+items:
+  type: number
+oneOf:
+  - minItems: 3
+    maxItems: 3
+  - minItems: 5
+    maxItems: 5
