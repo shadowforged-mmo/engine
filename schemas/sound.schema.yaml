@@ -1,0 +1,7 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/sound.schema.yaml
+title: Sound
+description: A sound
+oneOf:
+  - $ref: "minecraft-sound.schema.yaml"
+  - $ref: "sound-asset-sound.schema.yaml"

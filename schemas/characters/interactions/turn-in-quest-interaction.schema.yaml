@@ -1,0 +1,22 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/turn-in-quest-interaction.schema.yaml
+title: Turn In Quest Interaction
+description: Completes a quest after showing dialogue
+type: object
+properties:
+  type:
+    type: string
+    const: turn_in_quest
+  quest:
+    description: The quest to complete
+    $ref: "../../quest-reference.schema.yaml"
+  dialogue:
+    description: Lines of dialogue shown when turning in the quest; supports MiniMessage formatting
+    type: array
+    items:
+      type: string
+required:
+  - type
+  - quest
+  - dialogue
+additionalProperties: false

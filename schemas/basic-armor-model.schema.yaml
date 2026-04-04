@@ -1,0 +1,20 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/basic-armor-model.schema.yaml
+title: Basic Armor Model
+description: A standard Minecraft armor appearance using a material and trim
+type: object
+properties:
+  type:
+    type: string
+    const: basic
+  material:
+    description: The armor material
+    $ref: "armor-material.schema.yaml"
+  trim:
+    description: The armor trim applied to the piece
+    $ref: "armor-trim.schema.yaml"
+required:
+  - type
+  - material
+  - trim
+additionalProperties: false

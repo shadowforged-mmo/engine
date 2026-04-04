@@ -1,0 +1,22 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/start-quest-interaction.schema.yaml
+title: Start Quest Interaction
+description: Starts a quest after showing dialogue
+type: object
+properties:
+  type:
+    type: string
+    const: start_quest
+  quest:
+    description: The quest to start
+    $ref: "../../quest-reference.schema.yaml"
+  dialogue:
+    description: Lines of dialogue shown before the quest is started; supports MiniMessage formatting
+    type: array
+    items:
+      type: string
+required:
+  - type
+  - quest
+  - dialogue
+additionalProperties: false

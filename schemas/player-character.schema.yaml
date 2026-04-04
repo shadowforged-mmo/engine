@@ -1,2 +1,60 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://shadowforgedmmo.com/schemas/player-character.schema.yaml
+title: Player Character
+description: A player character save state
+type: object
+properties:
+  class:
+    description: The player's class
+    $ref: "class-reference.schema.yaml"
+  instance:
+    description: The instance the player is in
+    $ref: "instance-reference.schema.yaml"
+  position:
+    description: The player's position
+    $ref: "position.schema.yaml"
+  zone:
+    description: The zone the player is in
+    $ref: "zone-reference.schema.yaml"
+  max_health:
+    description: The player's maximum health
+    type: integer
+    minimum: 1
+  health:
+    description: The player's current health
+    type: integer
+    minimum: 0
+  max_mana:
+    description: The player's maximum mana
+    type: integer
+    minimum: 0
+  mana:
+    description: The player's current mana
+    type: integer
+    minimum: 0
+  quests:
+    description: The player's quest progress
+    $ref: "quest-progress.schema.yaml"
+  action_bar_skills:
+    description: Skills assigned to the action bar slots
+    type: array
+    items:
+      oneOf:
+        - $ref: "skill-reference.schema.yaml"
+        - type: "null"
+  inventory:
+    description: The player's inventory
+    $ref: "inventory.schema.yaml"
+required:
+  - class
+  - instance
+  - position
+  - zone
+  - max_health
+  - health
+  - max_mana
+  - mana
+  - quests
+  - action_bar_skills
+  - inventory
+additionalProperties: false

@@ -1,0 +1,29 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/items/accessory.schema.yaml
+title: Accessory
+description: An accessory item (rings, wrist, trinket)
+type: object
+properties:
+  type:
+    type: string
+    const: accessory
+  name:
+    description: The display name of the accessory
+    type: string
+  quality:
+    description: The quality tier of the accessory
+    $ref: "item-quality.schema.yaml"
+  slot:
+    description: The accessory slot this item occupies
+    $ref: "accessory-slot.schema.yaml"
+  sockets:
+    description: Number of gem sockets
+    type: integer
+    minimum: 0
+required:
+  - type
+  - name
+  - quality
+  - slot
+  - sockets
+additionalProperties: false

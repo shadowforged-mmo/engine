@@ -1,0 +1,26 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/stances.schema.yaml
+title: Stances
+description: Stance configuration toward other characters
+type: object
+properties:
+  default:
+    description: Default stance toward characters not in any specific list
+    type: string
+    enum: [FRIENDLY, NEUTRAL, HOSTILE]
+  friendly:
+    description: Character references this character is friendly toward
+    type: array
+    items:
+      type: string
+  neutral:
+    description: Character references this character is neutral toward
+    type: array
+    items:
+      type: string
+  hostile:
+    description: Character references this character is hostile toward
+    type: array
+    items:
+      type: string
+additionalProperties: false

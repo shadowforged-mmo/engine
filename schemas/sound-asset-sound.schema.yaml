@@ -1,0 +1,31 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/sound-asset-sound.schema.yaml
+title: Sound Asset Sound
+description: A custom sound asset
+type: object
+properties:
+  type:
+    type: string
+    const: sound_asset
+  name:
+    description: The sound asset reference
+    type: string
+    pattern: "^sounds:[a-z0-9_/]+$"
+  source:
+    description: The sound source category
+    type: string
+    enum: [master, music, record, weather, block, hostile, neutral, player, ambient, voice]
+  volume:
+    description: The volume of the sound
+    type: number
+    minimum: 0.0
+    default: 1.0
+  pitch:
+    description: The pitch of the sound
+    type: number
+    exclusiveMinimum: 0.0
+    default: 1.0
+required:
+  - type
+  - name
+additionalProperties: false

@@ -1,0 +1,10 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/items/accessory-slot.schema.yaml
+title: Accessory Slot
+description: An equipment slot for accessories
+type: string
+enum:
+  - FINGER_1
+  - FINGER_2
+  - WRIST
+  - TRINKET

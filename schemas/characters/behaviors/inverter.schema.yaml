@@ -1,0 +1,15 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/behaviors/inverter.schema.yaml
+title: Inverter
+description: Inverts the success/failure result of the child behavior
+type: object
+properties:
+  type:
+    type: string
+    const: inverter
+  child:
+    $ref: "../behavior.schema.yaml"
+required:
+  - type
+  - child
+additionalProperties: false

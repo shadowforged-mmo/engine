@@ -1,0 +1,18 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/zones/character-spawns.schema.yaml
+title: Character Spawns
+description: A group of spawn points for a character
+type: object
+properties:
+  character:
+    description: The character to spawn
+    $ref: "../character-reference.schema.yaml"
+  positions:
+    description: Positions where the character spawns
+    type: array
+    items:
+      $ref: "../position.schema.yaml"
+required:
+  - character
+  - positions
+additionalProperties: false

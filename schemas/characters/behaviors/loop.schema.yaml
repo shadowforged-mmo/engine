@@ -1,0 +1,20 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/behaviors/loop.schema.yaml
+title: Loop
+description: Repeats the child behavior a fixed number of times
+type: object
+properties:
+  type:
+    type: string
+    const: loop
+  child:
+    $ref: "../behavior.schema.yaml"
+  count:
+    description: Number of times to repeat the child
+    type: integer
+    minimum: 1
+required:
+  - type
+  - child
+  - count
+additionalProperties: false

@@ -1,0 +1,82 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/character.schema.yaml
+title: Character
+description: A non-player character blueprint
+type: object
+properties:
+  name:
+    description: The display name of the character
+    type: string
+  level:
+    description: The level of the character
+    type: integer
+    minimum: 1
+  max_health:
+    description: The maximum health of the character
+    type: integer
+    minimum: 1
+    default: 1
+  mass:
+    description: The mass of the character in kilograms, used for physics
+    type: number
+    exclusiveMinimum: 0.0
+    default: 75.0
+  experience_points:
+    description: Experience points awarded to players on death
+    type: integer
+    minimum: 0
+    default: 0
+  model:
+    description: The visual model of the character
+    $ref: "character-model.schema.yaml"
+  boss_fight:
+    description: Boss fight configuration; if present the character shows a boss health bar
+    $ref: "boss-fight.schema.yaml"
+  behavior:
+    description: The root node of the AI behavior tree
+    $ref: "behavior.schema.yaml"
+  stance:
+    description: Stance configuration toward other characters
+    $ref: "stances.schema.yaml"
+  step_sound:
+    description: Sound played on each footstep
+    $ref: "sound.schema.yaml"
+  speak_sound:
+    description: Sound played when the character speaks
+    $ref: "sound.schema.yaml"
+  hurt_sound:
+    description: Sound played when the character takes damage
+    $ref: "sound.schema.yaml"
+  hurt_sound_cooldown:
+    description: Minimum time in seconds between hurt sound plays
+    type: number
+    minimum: 0.0
+  death_sound:
+    description: Sound played when the character dies
+    $ref: "sound.schema.yaml"
+  interactions:
+    description: Interactions available when a player interacts with this character
+    type: array
+    items:
+      $ref: "interaction.schema.yaml"
+  loot:
+    description: Loot table dropped when this character is killed
+    type: object
+  script:
+    description: Script reference for custom logic
+    $ref: "script-reference.schema.yaml"
+  removal_delay:
+    description: Time in seconds before the corpse is removed after death
+    type: number
+    minimum: 0.0
+    default: 1.0
+  respawn_time:
+    description: Time in seconds before the character respawns after death
+    type: number
+    minimum: 0.0
+    default: 300.0
+required:
+  - name
+  - level
+  - model
+additionalProperties: false

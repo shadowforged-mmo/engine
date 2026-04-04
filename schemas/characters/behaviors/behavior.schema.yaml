@@ -1,0 +1,460 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/behavior.schema.yaml
+title: Behavior
+description: A behavior tree node for non-player character AI
+oneOf:
+  - $ref: "#/$defs/Sequence"
+  - $ref: "#/$defs/Selector"
+  - $ref: "#/$defs/PrioritySelector"
+  - $ref: "#/$defs/RandomSelector"
+  - $ref: "#/$defs/SimpleParallel"
+  - $ref: "#/$defs/Inverter"
+  - $ref: "#/$defs/Loop"
+  - $ref: "#/$defs/LoopForever"
+  - $ref: "#/$defs/WithCooldown"
+  - $ref: "#/$defs/BoxAttack"
+  - $ref: "#/$defs/CallMethod"
+  - $ref: "#/$defs/EmitParticle"
+  - $ref: "#/$defs/EmitSound"
+  - $ref: "#/$defs/FaceTarget"
+  - $ref: "#/$defs/FollowPath"
+  - $ref: "#/$defs/FollowTarget"
+  - $ref: "#/$defs/GoToRandomPosition"
+  - $ref: "#/$defs/HasTarget"
+  - $ref: "#/$defs/IsTargetInRange"
+  - $ref: "#/$defs/LookAtTarget"
+  - $ref: "#/$defs/PlayAnimation"
+  - $ref: "#/$defs/SetVelocity"
+  - $ref: "#/$defs/Wait"
+  - $ref: "#/$defs/WasDamaged"
+$defs:
+  # Composites
+  Sequence:
+    type: object
+    title: Sequence
+    description: Executes children in order; succeeds only if all children succeed
+    properties:
+      type:
+        type: string
+        const: sequence
+      children:
+        type: array
+        items:
+          $ref: "#"
+        minItems: 1
+    required:
+      - type
+      - children
+    additionalProperties: false
+  Selector:
+    type: object
+    title: Selector
+    description: Executes children in order until one succeeds
+    properties:
+      type:
+        type: string
+        const: selector
+      children:
+        type: array
+        items:
+          $ref: "#"
+        minItems: 1
+    required:
+      - type
+      - children
+    additionalProperties: false
+  PrioritySelector:
+    type: object
+    title: Priority Selector
+    description: Each tick, evaluates children from the start and aborts the running child if a higher-priority one succeeds
+    properties:
+      type:
+        type: string
+        const: priority_selector
+      children:
+        type: array
+        items:
+          $ref: "#"
+        minItems: 1
+    required:
+      - type
+      - children
+    additionalProperties: false
+  RandomSelector:
+    type: object
+    title: Random Selector
+    description: Randomly selects one child to execute based on the given weights
+    properties:
+      type:
+        type: string
+        const: random_selector
+      weights:
+        description: Relative weights for each child; must have the same length as children
+        type: array
+        items:
+          type: number
+          minimum: 0.0
+        minItems: 1
+      children:
+        type: array
+        items:
+          $ref: "#"
+        minItems: 1
+    required:
+      - type
+      - weights
+      - children
+    additionalProperties: false
+  SimpleParallel:
+    type: object
+    title: Simple Parallel
+    description: Runs two behaviors simultaneously; result follows the primary behavior
+    properties:
+      type:
+        type: string
+        const: simple_parallel
+      primary:
+        $ref: "#"
+      secondary:
+        $ref: "#"
+    required:
+      - type
+      - primary
+      - secondary
+    additionalProperties: false
+  # Decorators
+  Inverter:
+    type: object
+    title: Inverter
+    description: Inverts the success/failure result of the child behavior
+    properties:
+      type:
+        type: string
+        const: inverter
+      child:
+        $ref: "#"
+    required:
+      - type
+      - child
+    additionalProperties: false
+  Loop:
+    type: object
+    title: Loop
+    description: Repeats the child behavior a fixed number of times
+    properties:
+      type:
+        type: string
+        const: loop
+      child:
+        $ref: "#"
+      count:
+        description: Number of times to repeat the child
+        type: integer
+        minimum: 1
+    required:
+      - type
+      - child
+      - count
+    additionalProperties: false
+  LoopForever:
+    type: object
+    title: Loop Forever
+    description: Repeats the child behavior indefinitely
+    properties:
+      type:
+        type: string
+        const: loop_forever
+      child:
+        $ref: "#"
+    required:
+      - type
+      - child
+    additionalProperties: false
+  WithCooldown:
+    type: object
+    title: With Cooldown
+    description: Executes the child behavior, then prevents re-execution for a cooldown period
+    properties:
+      type:
+        type: string
+        const: with_cooldown
+      child:
+        $ref: "#"
+      cooldown:
+        description: Cooldown duration in milliseconds
+        type: integer
+        minimum: 0
+    required:
+      - type
+      - child
+      - cooldown
+    additionalProperties: false
+  # Tasks
+  BoxAttack:
+    type: object
+    title: Box Attack
+    description: Performs a box-shaped melee attack
+    properties:
+      type:
+        type: string
+        const: box_attack
+      damage:
+        description: Damage dealt to each target hit
+        $ref: "damage.schema.yaml"
+      offset:
+        description: Center of the attack box relative to the character in local space
+        $ref: "vector3.schema.yaml"
+      width:
+        description: Width and depth of the attack box in blocks
+        type: number
+        exclusiveMinimum: 0.0
+      height:
+        description: Height of the attack box in blocks
+        type: number
+        exclusiveMinimum: 0.0
+      knockback:
+        description: Velocity impulse applied to targets in local space
+        $ref: "vector3.schema.yaml"
+      hit_sound:
+        description: Sound played when at least one target is hit
+        $ref: "sound.schema.yaml"
+      miss_sound:
+        description: Sound played when no targets are hit
+        $ref: "sound.schema.yaml"
+    required:
+      - type
+      - damage
+      - offset
+      - width
+      - height
+      - knockback
+    additionalProperties: false
+  CallMethod:
+    type: object
+    title: Call Method
+    description: Calls a method on the character's script; succeeds if the method returns true or void
+    properties:
+      type:
+        type: string
+        const: call_method
+      method:
+        description: The name of the method to call on the character's script
+        type: string
+    required:
+      - type
+      - method
+    additionalProperties: false
+  EmitParticle:
+    type: object
+    title: Emit Particle
+    description: Spawns a particle effect at the character's position
+    properties:
+      type:
+        type: string
+        const: emit_particle
+      particle:
+        description: The Minecraft particle type name
+        type: string
+      offset:
+        description: Offset from the character's position in local space
+        $ref: "vector3.schema.yaml"
+    required:
+      - type
+      - particle
+    additionalProperties: false
+  EmitSound:
+    type: object
+    title: Emit Sound
+    description: Plays a sound at the character's position
+    properties:
+      type:
+        type: string
+        const: emit_sound
+      sound:
+        description: The sound to play
+        $ref: "sound.schema.yaml"
+      offset:
+        description: Offset from the character's position in local space
+        $ref: "vector3.schema.yaml"
+    required:
+      - type
+      - sound
+    additionalProperties: false
+  FaceTarget:
+    type: object
+    title: Face Target
+    description: Instantly rotates to face the current target
+    properties:
+      type:
+        type: string
+        const: face_target
+    required:
+      - type
+    additionalProperties: false
+  FollowPath:
+    type: object
+    title: Follow Path
+    description: Follows a predefined path
+    properties:
+      type:
+        type: string
+        const: follow_path
+    required:
+      - type
+    additionalProperties: false
+  FollowTarget:
+    type: object
+    title: Follow Target
+    description: Pathfinds toward the current target until within acceptance radius
+    properties:
+      type:
+        type: string
+        const: follow_target
+      acceptance_radius:
+        description: Distance at which the character stops and considers the target reached
+        type: number
+        minimum: 0.0
+      max_distance:
+        description: Distance beyond which the character gives up following
+        type: number
+        minimum: 0.0
+      speed:
+        description: Movement speed in blocks per second
+        type: number
+        exclusiveMinimum: 0.0
+    required:
+      - type
+      - acceptance_radius
+      - max_distance
+      - speed
+    additionalProperties: false
+  GoToRandomPosition:
+    type: object
+    title: Go To Random Position
+    description: Pathfinds to a random nearby position
+    properties:
+      type:
+        type: string
+        const: go_to_random_position
+      radius:
+        description: Maximum distance from the current position to pick a destination
+        type: number
+        exclusiveMinimum: 0.0
+      speed:
+        description: Movement speed in blocks per second
+        type: number
+        exclusiveMinimum: 0.0
+    required:
+      - type
+      - radius
+      - speed
+    additionalProperties: false
+  HasTarget:
+    type: object
+    title: Has Target
+    description: Succeeds if the character has a current target
+    properties:
+      type:
+        type: string
+        const: has_target
+    required:
+      - type
+    additionalProperties: false
+  IsTargetInRange:
+    type: object
+    title: Is Target In Range
+    description: Succeeds if the target's distance is within [min_distance, max_distance]
+    properties:
+      type:
+        type: string
+        const: is_target_in_range
+      min_distance:
+        description: Minimum distance to the target in blocks
+        type: number
+        minimum: 0.0
+        default: 0.0
+      max_distance:
+        description: Maximum distance to the target in blocks
+        type: number
+        minimum: 0.0
+    required:
+      - type
+    additionalProperties: false
+  LookAtTarget:
+    type: object
+    title: Look At Target
+    description: Continuously faces the target for a given duration
+    properties:
+      type:
+        type: string
+        const: look_at_target
+      duration:
+        description: Duration in seconds to look at the target
+        type: number
+        exclusiveMinimum: 0.0
+    required:
+      - type
+      - duration
+    additionalProperties: false
+  PlayAnimation:
+    type: object
+    title: Play Animation
+    description: Plays a named animation on the character's Blockbench model
+    properties:
+      type:
+        type: string
+        const: play_animation
+      animation:
+        description: The name of the animation to play
+        type: string
+    required:
+      - type
+      - animation
+    additionalProperties: false
+  SetVelocity:
+    type: object
+    title: Set Velocity
+    description: Sets the character's velocity in local space
+    properties:
+      type:
+        type: string
+        const: set_velocity
+      velocity:
+        description: Velocity vector in local space
+        $ref: "vector3.schema.yaml"
+    required:
+      - type
+      - velocity
+    additionalProperties: false
+  Wait:
+    type: object
+    title: Wait
+    description: Waits for the specified duration before succeeding
+    properties:
+      type:
+        type: string
+        const: wait
+      duration:
+        description: Duration in seconds to wait
+        type: number
+        exclusiveMinimum: 0.0
+    required:
+      - type
+      - duration
+    additionalProperties: false
+  WasDamaged:
+    type: object
+    title: Was Damaged
+    description: Succeeds if the character was damaged within the given time window
+    properties:
+      type:
+        type: string
+        const: was_damaged
+      duration:
+        description: Time window in seconds to check for received damage
+        type: number
+        exclusiveMinimum: 0.0
+    required:
+      - type
+      - duration
+    additionalProperties: false

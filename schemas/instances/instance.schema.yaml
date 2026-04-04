@@ -1,0 +1,18 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/instances/instance.schema.yaml
+title: Instance
+description: A world instance containing zones
+type: object
+properties:
+  world:
+    description: The world this instance uses
+    $ref: "../world-reference.schema.yaml"
+  zones:
+    description: Zones contained in this instance
+    type: array
+    items:
+      $ref: "../zone-reference.schema.yaml"
+required:
+  - world
+  - zones
+additionalProperties: false

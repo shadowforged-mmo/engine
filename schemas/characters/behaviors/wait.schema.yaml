@@ -1,0 +1,17 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/behaviors/wait.schema.yaml
+title: Wait
+description: Waits for the specified duration before succeeding
+type: object
+properties:
+  type:
+    type: string
+    const: wait
+  duration:
+    description: Duration in seconds to wait
+    type: number
+    exclusiveMinimum: 0.0
+required:
+  - type
+  - duration
+additionalProperties: false

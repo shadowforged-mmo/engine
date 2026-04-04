@@ -1,0 +1,15 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/behaviors/loop-forever.schema.yaml
+title: Loop Forever
+description: Repeats the child behavior indefinitely
+type: object
+properties:
+  type:
+    type: string
+    const: loop_forever
+  child:
+    $ref: "../behavior.schema.yaml"
+required:
+  - type
+  - child
+additionalProperties: false

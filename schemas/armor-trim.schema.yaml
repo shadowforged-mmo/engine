@@ -1,0 +1,16 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/armor-trim.schema.yaml
+title: Armor Trim
+description: A Minecraft armor trim composed of a material and pattern
+type: object
+properties:
+  material:
+    description: The trim material name
+    type: string
+  pattern:
+    description: The trim pattern name
+    type: string
+required:
+  - material
+  - pattern
+additionalProperties: false

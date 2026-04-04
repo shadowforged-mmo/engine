@@ -1,0 +1,10 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/items/armor-slot.schema.yaml
+title: Armor Slot
+description: An equipment slot for armor
+type: string
+enum:
+  - FEET
+  - LEGS
+  - CHEST
+  - HEAD

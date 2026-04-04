@@ -1,0 +1,22 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/quests/quest-rewards.schema.yaml
+title: Quest Rewards
+description: Rewards granted upon quest completion
+type: object
+properties:
+  experience:
+    description: Experience points awarded
+    type: integer
+    minimum: 0
+    default: 0
+  currency:
+    description: Currency awarded
+    type: integer
+    minimum: 0
+    default: 0
+  items:
+    description: Items awarded
+    type: array
+    items:
+      $ref: "quest-reward-item.schema.yaml"
+additionalProperties: false

@@ -1,0 +1,38 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/skills/active-skill.schema.yaml
+title: Active Skill
+description: A skill the player can actively use, with a mana cost and cooldown
+type: object
+properties:
+  type:
+    type: string
+    const: active
+  name:
+    description: The display name of the skill
+    type: string
+  icon:
+    description: The icon identifier for the skill
+    type: string
+  description:
+    description: A description of the skill's effect
+    type: string
+  mana_cost:
+    description: Mana consumed when using this skill
+    type: integer
+    minimum: 0
+  cooldown:
+    description: Cooldown duration in seconds
+    type: number
+    minimum: 0.0
+  script:
+    description: Script that implements the skill logic
+    $ref: "../script-reference.schema.yaml"
+required:
+  - type
+  - name
+  - icon
+  - description
+  - mana_cost
+  - cooldown
+  - script
+additionalProperties: false

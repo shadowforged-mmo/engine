@@ -1,0 +1,10 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/zones/zone-type.schema.yaml
+title: Zone Type
+description: The type of a zone
+type: string
+enum:
+  - region
+  - wilderness
+  - settlement
+  - dungeon

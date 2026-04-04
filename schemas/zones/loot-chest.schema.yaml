@@ -1,0 +1,12 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/zones/loot-chest.schema.yaml
+title: Loot Chest
+description: A loot chest spawn point
+type: object
+properties:
+  position:
+    description: The position of the loot chest
+    $ref: "../position.schema.yaml"
+required:
+  - position
+additionalProperties: false

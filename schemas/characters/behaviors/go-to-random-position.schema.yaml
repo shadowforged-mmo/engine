@@ -1,0 +1,22 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/behaviors/go-to-random-position.schema.yaml
+title: Go To Random Position
+description: Pathfinds to a random nearby position
+type: object
+properties:
+  type:
+    type: string
+    const: go_to_random_position
+  radius:
+    description: Maximum distance from the current position to pick a destination
+    type: number
+    exclusiveMinimum: 0.0
+  speed:
+    description: Movement speed in blocks per second
+    type: number
+    exclusiveMinimum: 0.0
+required:
+  - type
+  - radius
+  - speed
+additionalProperties: false

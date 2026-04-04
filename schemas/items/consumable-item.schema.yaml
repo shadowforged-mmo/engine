@@ -1,0 +1,20 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/items/consumable-item.schema.yaml
+title: Consumable Item
+description: A consumable item
+type: object
+properties:
+  type:
+    type: string
+    const: consumable
+  name:
+    description: The display name of the consumable
+    type: string
+  quality:
+    description: The quality tier of the consumable
+    $ref: "item-quality.schema.yaml"
+required:
+  - type
+  - name
+  - quality
+additionalProperties: false

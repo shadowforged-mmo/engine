@@ -1,0 +1,8 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/armor-material.schema.yaml
+title: Armor Material
+description: The material of a piece of armor
+type: string
+enum:
+  - leather
+  - iron

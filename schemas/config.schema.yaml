@@ -1,0 +1,20 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/config.schema.yaml
+title: Config
+description: Server configuration
+type: object
+properties:
+  name:
+    description: The name of the game
+    type: string
+  resource_pack_uri:
+    description: The URI of the resource pack
+    type: string
+  mojang_auth:
+    description: Whether to enable Mojang authentication
+    type: boolean
+required:
+  - name
+  - resource_pack_uri
+  - mojang_auth
+additionalProperties: false

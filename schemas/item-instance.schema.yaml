@@ -1,0 +1,22 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/item-instance.schema.yaml
+title: Item Instance
+description: An item instance with optional quantity and gems
+type: object
+properties:
+  item:
+    description: The item reference
+    $ref: "item-reference.schema.yaml"
+  quantity:
+    description: Stack size
+    type: integer
+    minimum: 1
+    default: 1
+  gems:
+    description: Gems socketed into this item
+    type: array
+    items:
+      $ref: "item-reference.schema.yaml"
+required:
+  - item
+additionalProperties: false

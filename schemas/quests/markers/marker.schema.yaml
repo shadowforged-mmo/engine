@@ -1,0 +1,7 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/quests/markers/marker.schema.yaml
+title: Quest Objective Marker
+description: A map marker for a quest objective, discriminated by type
+oneOf:
+  - $ref: "point-marker.schema.yaml"
+  - $ref: "polygon-marker.schema.yaml"

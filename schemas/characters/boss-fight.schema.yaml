@@ -1,0 +1,17 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/boss-fight.schema.yaml
+title: Boss Fight
+description: Boss fight configuration
+type: object
+properties:
+  radius:
+    description: Distance in blocks within which players are pulled into the boss fight
+    type: number
+    exclusiveMinimum: 0.0
+  music:
+    description: Music track played during the boss fight
+    $ref: "music-reference.schema.yaml"
+required:
+  - radius
+  - music
+additionalProperties: false

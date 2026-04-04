@@ -1,0 +1,18 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/classes/class.schema.yaml
+title: Player Class
+description: A player class defining available skills
+type: object
+properties:
+  name:
+    description: The display name of the class
+    type: string
+  skills:
+    description: Skills available to this class
+    type: array
+    items:
+      $ref: "../skill-reference.schema.yaml"
+required:
+  - name
+  - skills
+additionalProperties: false

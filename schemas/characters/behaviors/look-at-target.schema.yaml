@@ -1,0 +1,17 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/behaviors/look-at-target.schema.yaml
+title: Look At Target
+description: Continuously faces the target for a given duration
+type: object
+properties:
+  type:
+    type: string
+    const: look_at_target
+  duration:
+    description: Duration in seconds to look at the target
+    type: number
+    exclusiveMinimum: 0.0
+required:
+  - type
+  - duration
+additionalProperties: false

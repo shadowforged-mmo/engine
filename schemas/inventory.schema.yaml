@@ -1,0 +1,40 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/inventory.schema.yaml
+title: Inventory
+description: Player inventory state
+type: object
+properties:
+  weapon:
+    $ref: "item-instance.schema.yaml"
+  head:
+    $ref: "item-instance.schema.yaml"
+  chest:
+    $ref: "item-instance.schema.yaml"
+  legs:
+    $ref: "item-instance.schema.yaml"
+  feet:
+    $ref: "item-instance.schema.yaml"
+  finger_1:
+    $ref: "item-instance.schema.yaml"
+  finger_2:
+    $ref: "item-instance.schema.yaml"
+  wrist:
+    $ref: "item-instance.schema.yaml"
+  trinket:
+    $ref: "item-instance.schema.yaml"
+  action_bar:
+    type: array
+    items:
+      oneOf:
+        - $ref: "item-instance.schema.yaml"
+        - type: "null"
+  bag:
+    type: array
+    items:
+      oneOf:
+        - $ref: "item-instance.schema.yaml"
+        - type: "null"
+required:
+  - action_bar
+  - bag
+additionalProperties: false

@@ -1,0 +1,11 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/items/item-quality.schema.yaml
+title: Item Quality
+description: The quality tier of an item
+type: string
+enum:
+  - COMMON
+  - UNCOMMON
+  - RARE
+  - EPIC
+  - LEGENDARY

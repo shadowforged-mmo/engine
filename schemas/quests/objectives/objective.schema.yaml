@@ -1,0 +1,7 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/quests/objectives/objective.schema.yaml
+title: Quest Objective
+description: A quest objective, discriminated by type
+oneOf:
+  - $ref: "slay-character-objective.schema.yaml"
+  - $ref: "collect-item-objective.schema.yaml"

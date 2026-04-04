@@ -1,0 +1,7 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/items/weapon-type.schema.yaml
+title: Weapon Type
+description: The type of a weapon
+type: string
+enum:
+  - SWORD

@@ -1,0 +1,12 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/behaviors/follow-path.schema.yaml
+title: Follow Path
+description: Follows a predefined path
+type: object
+properties:
+  type:
+    type: string
+    const: follow_path
+required:
+  - type
+additionalProperties: false

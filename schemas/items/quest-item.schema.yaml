@@ -1,0 +1,20 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/items/quest-item.schema.yaml
+title: Quest Item
+description: A quest-related item
+type: object
+properties:
+  type:
+    type: string
+    const: quest
+  name:
+    description: The display name of the quest item
+    type: string
+  quality:
+    description: The quality tier of the quest item
+    $ref: "item-quality.schema.yaml"
+required:
+  - type
+  - name
+  - quality
+additionalProperties: false

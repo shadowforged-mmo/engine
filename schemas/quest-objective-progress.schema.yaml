@@ -1,0 +1,19 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/quest-objective-progress.schema.yaml
+title: Quest Objective Progress
+description: Progress for a single quest's objectives
+type: object
+properties:
+  quest:
+    description: The quest reference
+    $ref: "quest-reference.schema.yaml"
+  progress:
+    description: Progress count for each objective in order
+    type: array
+    items:
+      type: integer
+      minimum: 0
+required:
+  - quest
+  - progress
+additionalProperties: false

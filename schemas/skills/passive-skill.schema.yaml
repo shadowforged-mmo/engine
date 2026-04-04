@@ -1,0 +1,24 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/skills/passive-skill.schema.yaml
+title: Passive Skill
+description: A skill that is always active
+type: object
+properties:
+  type:
+    type: string
+    const: passive
+  name:
+    description: The display name of the skill
+    type: string
+  description:
+    description: A description of the skill's effect
+    type: string
+  script:
+    description: Script that implements the skill logic
+    $ref: "../script-reference.schema.yaml"
+required:
+  - type
+  - name
+  - description
+  - script
+additionalProperties: false

@@ -1,0 +1,17 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/behaviors/was-damaged.schema.yaml
+title: Was Damaged
+description: Succeeds if the character was damaged within the given time window
+type: object
+properties:
+  type:
+    type: string
+    const: was_damaged
+  duration:
+    description: Time window in seconds to check for received damage
+    type: number
+    exclusiveMinimum: 0.0
+required:
+  - type
+  - duration
+additionalProperties: false

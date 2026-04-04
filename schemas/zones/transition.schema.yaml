@@ -1,0 +1,24 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/zones/transition.schema.yaml
+title: Transition
+description: A transition that teleports players to another instance
+type: object
+properties:
+  position:
+    description: The position of the transition trigger volume
+    $ref: "../position.schema.yaml"
+  size:
+    description: The size of the transition trigger volume
+    $ref: "../vector3.schema.yaml"
+  to_instance:
+    description: The destination instance
+    $ref: "../instance-reference.schema.yaml"
+  to_position:
+    description: The destination position in the destination instance
+    $ref: "../position.schema.yaml"
+required:
+  - position
+  - size
+  - to_instance
+  - to_position
+additionalProperties: false

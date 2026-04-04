@@ -1,0 +1,16 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/behaviors/call-method.schema.yaml
+title: Call Method
+description: Calls a method on the character's script; succeeds if the method returns true or void
+type: object
+properties:
+  type:
+    type: string
+    const: call_method
+  method:
+    description: The name of the method to call on the character's script
+    type: string
+required:
+  - type
+  - method
+additionalProperties: false

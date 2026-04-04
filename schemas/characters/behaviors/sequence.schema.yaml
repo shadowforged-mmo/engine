@@ -1,0 +1,18 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/behaviors/sequence.schema.yaml
+title: Sequence
+description: Executes children in order; succeeds only if all children succeed
+type: object
+properties:
+  type:
+    type: string
+    const: sequence
+  children:
+    type: array
+    items:
+      $ref: "../behavior.schema.yaml"
+    minItems: 1
+required:
+  - type
+  - children
+additionalProperties: false

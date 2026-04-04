@@ -1,0 +1,79 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/items/weapon.schema.yaml
+title: Weapon
+description: A weapon item
+type: object
+properties:
+  type:
+    type: string
+    const: weapon
+  name:
+    description: The display name of the weapon
+    type: string
+  quality:
+    description: The quality tier of the weapon
+    $ref: "item-quality.schema.yaml"
+  level:
+    description: The required level to equip this weapon
+    type: integer
+    minimum: 1
+  weapon_type:
+    description: The type of weapon
+    $ref: "weapon-type.schema.yaml"
+  sockets:
+    description: Number of gem sockets
+    type: integer
+    minimum: 0
+  model:
+    description: The Blockbench item model used to render this weapon
+    $ref: "../item-model-reference.schema.yaml"
+  attack_speed:
+    description: Attack speed in attacks per second
+    type: number
+    exclusiveMinimum: 0.0
+  physical_damage:
+    description: Physical damage per hit
+    type: number
+    minimum: 0.0
+  arcane_damage:
+    description: Arcane damage per hit
+    type: number
+    minimum: 0.0
+  fire_damage:
+    description: Fire damage per hit
+    type: number
+    minimum: 0.0
+  frost_damage:
+    description: Frost damage per hit
+    type: number
+    minimum: 0.0
+  nature_damage:
+    description: Nature damage per hit
+    type: number
+    minimum: 0.0
+  shadow_damage:
+    description: Shadow damage per hit
+    type: number
+    minimum: 0.0
+  holy_damage:
+    description: Holy damage per hit
+    type: number
+    minimum: 0.0
+  water_damage:
+    description: Water damage per hit
+    type: number
+    minimum: 0.0
+  lightning_damage:
+    description: Lightning damage per hit
+    type: number
+    minimum: 0.0
+required:
+  - type
+  - name
+  - quality
+  - level
+  - weapon_type
+  - sockets
+  - model
+  - attack_speed
+additionalProperties: false

@@ -1,0 +1,18 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/behaviors/simple-parallel.schema.yaml
+title: Simple Parallel
+description: Runs two behaviors simultaneously; result follows the primary behavior
+type: object
+properties:
+  type:
+    type: string
+    const: simple_parallel
+  primary:
+    $ref: "../behavior.schema.yaml"
+  secondary:
+    $ref: "../behavior.schema.yaml"
+required:
+  - type
+  - primary
+  - secondary
+additionalProperties: false

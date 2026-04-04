@@ -1,0 +1,19 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/behaviors/emit-sound.schema.yaml
+title: Emit Sound
+description: Plays a sound at the character's position
+type: object
+properties:
+  type:
+    type: string
+    const: emit_sound
+  sound:
+    description: The sound to play
+    $ref: "../sound.schema.yaml"
+  offset:
+    description: Offset from the character's position in local space
+    $ref: "../vector3.schema.yaml"
+required:
+  - type
+  - sound
+additionalProperties: false

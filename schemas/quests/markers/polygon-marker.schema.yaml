@@ -1,0 +1,20 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/quests/markers/polygon-marker.schema.yaml
+title: Polygon Marker
+description: A polygon-shaped area marker on the map
+type: object
+properties:
+  type:
+    type: string
+    const: polygon
+  instance:
+    description: The instance this marker is in
+    $ref: "../../instance-reference.schema.yaml"
+  boundary:
+    description: The polygon boundary of the marker area
+    $ref: "../../polygon.schema.yaml"
+required:
+  - type
+  - instance
+  - boundary
+additionalProperties: false

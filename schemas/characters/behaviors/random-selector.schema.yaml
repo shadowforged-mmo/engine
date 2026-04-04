@@ -1,0 +1,26 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/behaviors/random-selector.schema.yaml
+title: Random Selector
+description: Randomly selects one child to execute based on the given weights
+type: object
+properties:
+  type:
+    type: string
+    const: random_selector
+  weights:
+    description: Relative weights for each child; must have the same length as children
+    type: array
+    items:
+      type: number
+      minimum: 0.0
+    minItems: 1
+  children:
+    type: array
+    items:
+      $ref: "../behavior.schema.yaml"
+    minItems: 1
+required:
+  - type
+  - weights
+  - children
+additionalProperties: false
