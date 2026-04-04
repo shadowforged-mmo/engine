@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://shadowforgedmmo.com/schemas/behaviors/go-to-random-position.schema.yaml
+$id: https://shadowforgedmmo.com/schemas/characters/behaviors/go-to-random-position.schema.yaml
 title: Go To Random Position
 description: Pathfinds to a random nearby position
 type: object

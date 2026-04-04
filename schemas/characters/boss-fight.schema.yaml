@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://shadowforgedmmo.com/schemas/boss-fight.schema.yaml
+$id: https://shadowforgedmmo.com/schemas/characters/boss-fight.schema.yaml
 title: Boss Fight
 description: Boss fight configuration
 type: object
@@ -10,7 +10,7 @@ properties:
     exclusiveMinimum: 0.0
   music:
     description: Music track played during the boss fight
-    $ref: "music-reference.schema.yaml"
+    $ref: "../music-reference.schema.yaml"
 required:
   - radius
   - music

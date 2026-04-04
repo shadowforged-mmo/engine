@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://shadowforgedmmo.com/schemas/turn-in-quest-interaction.schema.yaml
+$id: https://shadowforgedmmo.com/schemas/characters/interactions/turn-in-quest-interaction.schema.yaml
 title: Turn In Quest Interaction
 description: Completes a quest after showing dialogue
 type: object

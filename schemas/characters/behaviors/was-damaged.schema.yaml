@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://shadowforgedmmo.com/schemas/behaviors/was-damaged.schema.yaml
+$id: https://shadowforgedmmo.com/schemas/characters/behaviors/was-damaged.schema.yaml
 title: Was Damaged
 description: Succeeds if the character was damaged within the given time window
 type: object

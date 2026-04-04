@@ -1,0 +1,21 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/characters/blockbench-character-model.schema.yaml
+title: Blockbench Character Model
+description: A custom 3D model created in Blockbench
+type: object
+properties:
+  type:
+    type: string
+    const: blockbench
+  scale:
+    description: Uniform scale factor applied to the model
+    type: number
+    exclusiveMinimum: 0.0
+    default: 1.0
+  model:
+    description: The Blockbench model reference
+    $ref: "../model-reference.schema.yaml"
+required:
+  - type
+  - model
+additionalProperties: false

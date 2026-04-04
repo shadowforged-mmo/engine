@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://shadowforgedmmo.com/schemas/zones/weather.schema.yaml
+$id: https://shadowforgedmmo.com/schemas/zones/weather-cycle.schema.yaml
 title: Weather
 description: A single entry in a zone's weather cycle
 type: object

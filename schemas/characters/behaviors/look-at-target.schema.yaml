@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://shadowforgedmmo.com/schemas/behaviors/look-at-target.schema.yaml
+$id: https://shadowforgedmmo.com/schemas/characters/behaviors/look-at-target.schema.yaml
 title: Look At Target
 description: Continuously faces the target for a given duration
 type: object

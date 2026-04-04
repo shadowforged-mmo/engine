@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://shadowforgedmmo.com/schemas/character.schema.yaml
+$id: https://shadowforgedmmo.com/schemas/characters/character.schema.yaml
 title: Character
 description: A non-player character blueprint
 type: object
@@ -34,37 +34,37 @@ properties:
     $ref: "boss-fight.schema.yaml"
   behavior:
     description: The root node of the AI behavior tree
-    $ref: "behavior.schema.yaml"
+    $ref: "behaviors/behavior.schema.yaml"
   stance:
     description: Stance configuration toward other characters
     $ref: "stances.schema.yaml"
   step_sound:
     description: Sound played on each footstep
-    $ref: "sound.schema.yaml"
+    $ref: "../sound.schema.yaml"
   speak_sound:
     description: Sound played when the character speaks
-    $ref: "sound.schema.yaml"
+    $ref: "../sound.schema.yaml"
   hurt_sound:
     description: Sound played when the character takes damage
-    $ref: "sound.schema.yaml"
+    $ref: "../sound.schema.yaml"
   hurt_sound_cooldown:
     description: Minimum time in seconds between hurt sound plays
     type: number
     minimum: 0.0
   death_sound:
     description: Sound played when the character dies
-    $ref: "sound.schema.yaml"
+    $ref: "../sound.schema.yaml"
   interactions:
     description: Interactions available when a player interacts with this character
     type: array
     items:
-      $ref: "interaction.schema.yaml"
+      $ref: "interactions/interaction.schema.yaml"
   loot:
     description: Loot table dropped when this character is killed
     type: object
   script:
     description: Script reference for custom logic
-    $ref: "script-reference.schema.yaml"
+    $ref: "../script-reference.schema.yaml"
   removal_delay:
     description: Time in seconds before the corpse is removed after death
     type: number

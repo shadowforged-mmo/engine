@@ -1,0 +1,19 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/characters/entity-character-model.schema.yaml
+title: Entity Character Model
+description: A vanilla Minecraft entity type used as the model
+type: object
+properties:
+  type:
+    type: string
+    const: entity
+  entity:
+    description: The Minecraft entity type reference
+    $ref: "../minecraft-reference.schema.yaml"
+  equipment:
+    description: Equipment worn on the model
+    $ref: "character-model-equipment.schema.yaml"
+required:
+  - type
+  - entity
+additionalProperties: false

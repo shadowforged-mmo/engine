@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://shadowforgedmmo.com/schemas/behaviors/face-target.schema.yaml
+$id: https://shadowforgedmmo.com/schemas/characters/behaviors/face-target.schema.yaml
 title: Face Target
 description: Instantly rotates to face the current target
 type: object

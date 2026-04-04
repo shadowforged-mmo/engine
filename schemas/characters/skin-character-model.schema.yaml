@@ -1,0 +1,19 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/characters/skin-character-model.schema.yaml
+title: Skin Character Model
+description: A player-skin-based humanoid model
+type: object
+properties:
+  type:
+    type: string
+    const: skin
+  skin:
+    description: The skin reference
+    $ref: "../skin-reference.schema.yaml"
+  equipment:
+    description: Equipment worn on the model
+    $ref: "character-model-equipment.schema.yaml"
+required:
+  - type
+  - skin
+additionalProperties: false

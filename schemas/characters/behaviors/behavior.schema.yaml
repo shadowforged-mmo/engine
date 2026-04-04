@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://shadowforgedmmo.com/schemas/behavior.schema.yaml
+$id: https://shadowforgedmmo.com/schemas/characters/behaviors/behavior.schema.yaml
 title: Behavior
 description: A behavior tree node for non-player character AI
 oneOf:
@@ -200,10 +200,10 @@ $defs:
         const: box_attack
       damage:
         description: Damage dealt to each target hit
-        $ref: "damage.schema.yaml"
+        $ref: "../../damage.schema.yaml"
       offset:
         description: Center of the attack box relative to the character in local space
-        $ref: "vector3.schema.yaml"
+        $ref: "../../vector3.schema.yaml"
       width:
         description: Width and depth of the attack box in blocks
         type: number
@@ -214,13 +214,13 @@ $defs:
         exclusiveMinimum: 0.0
       knockback:
         description: Velocity impulse applied to targets in local space
-        $ref: "vector3.schema.yaml"
+        $ref: "../../vector3.schema.yaml"
       hit_sound:
         description: Sound played when at least one target is hit
-        $ref: "sound.schema.yaml"
+        $ref: "../../sound.schema.yaml"
       miss_sound:
         description: Sound played when no targets are hit
-        $ref: "sound.schema.yaml"
+        $ref: "../../sound.schema.yaml"
     required:
       - type
       - damage
@@ -257,7 +257,7 @@ $defs:
         type: string
       offset:
         description: Offset from the character's position in local space
-        $ref: "vector3.schema.yaml"
+        $ref: "../../vector3.schema.yaml"
     required:
       - type
       - particle
@@ -272,10 +272,10 @@ $defs:
         const: emit_sound
       sound:
         description: The sound to play
-        $ref: "sound.schema.yaml"
+        $ref: "../../sound.schema.yaml"
       offset:
         description: Offset from the character's position in local space
-        $ref: "vector3.schema.yaml"
+        $ref: "../../vector3.schema.yaml"
     required:
       - type
       - sound
@@ -421,7 +421,7 @@ $defs:
         const: set_velocity
       velocity:
         description: Velocity vector in local space
-        $ref: "vector3.schema.yaml"
+        $ref: "../../vector3.schema.yaml"
     required:
       - type
       - velocity

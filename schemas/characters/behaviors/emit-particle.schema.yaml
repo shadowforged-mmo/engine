@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://shadowforgedmmo.com/schemas/behaviors/emit-particle.schema.yaml
+$id: https://shadowforgedmmo.com/schemas/characters/behaviors/emit-particle.schema.yaml
 title: Emit Particle
 description: Spawns a particle effect at the character's position
 type: object
@@ -12,7 +12,7 @@ properties:
     type: string
   offset:
     description: Offset from the character's position in local space
-    $ref: "../vector3.schema.yaml"
+    $ref: "../../vector3.schema.yaml"
 required:
   - type
   - particle

@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://shadowforgedmmo.com/schemas/behaviors/is-target-in-range.schema.yaml
+$id: https://shadowforgedmmo.com/schemas/characters/behaviors/is-target-in-range.schema.yaml
 title: Is Target In Range
 description: Succeeds if the target's distance is within [min_distance, max_distance]
 type: object

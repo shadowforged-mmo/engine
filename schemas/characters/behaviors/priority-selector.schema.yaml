@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://shadowforgedmmo.com/schemas/behaviors/priority-selector.schema.yaml
+$id: https://shadowforgedmmo.com/schemas/characters/behaviors/priority-selector.schema.yaml
 title: Priority Selector
 description: Each tick, evaluates children from the start and aborts the running child if a higher-priority one succeeds
 type: object
@@ -10,7 +10,7 @@ properties:
   children:
     type: array
     items:
-      $ref: "../behavior.schema.yaml"
+      $ref: "behavior.schema.yaml"
     minItems: 1
 required:
   - type

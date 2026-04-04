@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://shadowforgedmmo.com/schemas/zone.schema.yaml
+$id: https://shadowforgedmmo.com/schemas/zones/zone.schema.yaml
 title: Zone
 description: A zone within an instance
 type: object
@@ -16,30 +16,30 @@ properties:
     minimum: 1
   boundary:
     description: The boundary polygon of this zone
-    $ref: "polygon.schema.yaml"
+    $ref: "../polygon.schema.yaml"
   music:
     description: Background music track played in this zone
-    $ref: "music-reference.schema.yaml"
+    $ref: "../music-reference.schema.yaml"
   weather_cycle:
     description: Sequence of weather states that cycle in this zone
     type: array
     items:
-      $ref: "zones/weather-cycle.schema.yaml"
+      $ref: "weather-cycle.schema.yaml"
   transitions:
     description: Transitions to other instances within this zone
     type: array
     items:
-      $ref: "zones/transition.schema.yaml"
+      $ref: "transition.schema.yaml"
   characters:
     description: Character spawns within this zone
     type: array
     items:
-      $ref: "zones/character-spawns.schema.yaml"
+      $ref: "character-spawns.schema.yaml"
   loot_chests:
     description: Loot chest spawn points within this zone
     type: array
     items:
-      $ref: "zones/loot-chest.schema.yaml"
+      $ref: "loot-chest.schema.yaml"
 required:
   - name
   - type

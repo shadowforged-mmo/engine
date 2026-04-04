@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://shadowforgedmmo.com/schemas/behaviors/set-velocity.schema.yaml
+$id: https://shadowforgedmmo.com/schemas/characters/behaviors/set-velocity.schema.yaml
 title: Set Velocity
 description: Sets the character's velocity in local space
 type: object
@@ -9,7 +9,7 @@ properties:
     const: set_velocity
   velocity:
     description: Velocity vector in local space
-    $ref: "../vector3.schema.yaml"
+    $ref: "../../vector3.schema.yaml"
 required:
   - type
   - velocity
