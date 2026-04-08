@@ -13,7 +13,7 @@ COPY src src
 
 RUN ./gradlew shadowJar --no-daemon
 
-FROM eclipse-temurin:21-jre
+FROM alpine/java:21-jre
 
 RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 
