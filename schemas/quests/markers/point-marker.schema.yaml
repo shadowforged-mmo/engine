@@ -11,7 +11,7 @@ properties:
     description: The instance this marker is in
     $ref: "../../instance-reference.schema.yaml"
   point:
-    description: The (x, z) position of the marker
+    description: The [x, z] position of the marker
     $ref: "../../vector2.schema.yaml"
 required:
   - type
