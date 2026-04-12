@@ -9,5 +9,7 @@ class Namespaces {
         const val ITEM_MODELS = "item_models"
         const val MUSIC = "music"
         const val SOUNDS = "sounds"
+        const val ICONS = "icons"
+        const val TEXTURES = "textures"
     }
 }

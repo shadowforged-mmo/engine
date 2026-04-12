@@ -9,7 +9,7 @@ abstract class EquipmentItem(
     abstract fun instance(gems: List<Gem>): EquipmentItemInstance
 }
 
-abstract class EquipmentItemInstance(item: EquipmentItem, val gems: List<Gem>) : ItemInstance(item) {
+abstract class EquipmentItemInstance(val gems: List<Gem>) : ItemInstance() {
     override val quantity: Int
         get() = 1
 }

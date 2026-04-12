@@ -4,9 +4,13 @@ import kotlin.math.max
 import kotlin.math.min
 
 class Cooldown(private val durationMillis: Long) {
-    private var lastSetMillis = 0L
+    private var lastSetMillis = -1L
 
-    fun hasCooldown(timeMillis: Long) = timeMillis - lastSetMillis < durationMillis
+    fun hasCooldown(timeMillis: Long) = if (lastSetMillis == -1L) {
+        false
+    } else {
+        timeMillis - lastSetMillis < durationMillis
+    }
 
     fun set(timeMillis: Long) {
         lastSetMillis = timeMillis

@@ -30,6 +30,7 @@ const val ZONES = "zones"
 const val SKINS = "skins"
 const val MINECRAFT = "minecraft"
 const val MODELS = "models"
+const val ICONS = "icons"
 
 class Resources(
     val server: MinecraftServer,

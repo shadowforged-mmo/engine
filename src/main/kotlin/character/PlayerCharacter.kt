@@ -149,6 +149,7 @@ class PlayerCharacter(
         updateLevelDisplay()
         updateSidebar()
         initInventory()
+        initActionBarSkills()
         entity.setHeldItemSlot(8)
         enterZone()
     }
@@ -172,6 +173,7 @@ class PlayerCharacter(
         tickSkills()
         entity.sendActionBar(actionBar())
         updateZone()
+        updateActionBar()
     }
 
     private fun updateZone() {
@@ -403,21 +405,36 @@ class PlayerCharacter(
         skillCooldowns.values.removeIf { !it.hasCooldown(runtime.timeMillis) }
         skillExecutors.forEach(SkillExecutor::tick)
         skillExecutors.removeIf(SkillExecutor::completed)
-        updateHotbar()
     }
 
-    private fun updateHotbar() = (0..5).forEach(::updateHotbarSlot)
-
-    private fun updateHotbarSlot(slot: Int) {
-        entity.inventory.setItemStack(0, (playerClass.skills[0] as ActiveSkill).hotbarItemStack(this))
-        entity.inventory.setItemStack(1, (playerClass.skills[1] as ActiveSkill).hotbarItemStack(this))
-        val skill = hotbarSkill(slot)
-        if (skill == null) {
-            entity.inventory.setItemStack(slot, ItemStack.of(Material.BARRIER))
-            return
-        }
-        entity.inventory.setItemStack(slot, skill.hotbarItemStack(this))
+    private fun updateActionBar() {
+        (0..5).forEach(::updateActionBarSkill)
+         (6..7).forEach(::updateActionBarItem)
     }
+
+    private fun updateActionBarSkill(slot: Int) = entity.inventory.setItemStack(
+        slot,
+        hotbarSkill(slot)?.actionBarItemStack(this) ?: actionBarSkillEmptyItemStack()
+    )
+
+    private fun updateActionBarItem(slot: Int) =
+        entity.inventory.setItemStack(
+            slot,
+            getInventoryItemInstance(slot)?.itemStack(this) ?: actionBarConsumabableEmptyItemStack()
+        )
+
+    private fun actionBarSkillEmptyItemStack() = ItemStack.builder(Material.DIAMOND)
+        .itemModel("${Namespaces.TEXTURES}:action_bar_skill_empty")
+        .build()
+
+    private fun actionBarConsumabableEmptyItemStack() = ItemStack.builder(Material.DIAMOND)
+        .itemModel("${Namespaces.TEXTURES}:action_bar_item_empty")
+        .build()
+
+    private fun getInventoryItemInstance(slot: Int) = ItemInstance.fromItemStack(
+        entity.inventory.getItemStack(slot),
+        runtime.resources.itemRegistry
+    )
 
     fun cooldown(skill: ActiveSkill) = skillCooldowns[skill] ?: Cooldown(skill.cooldownMillis)
 
@@ -515,11 +532,21 @@ class PlayerCharacter(
         setInventoryItem(10, inventory.finger2)
         setInventoryItem(11, inventory.wrist)
         setInventoryItem(12, inventory.trinket)
+        inventory.actionBar.forEachIndexed { index, item -> setInventoryItem(6 + index, item) }
         inventory.bag.forEachIndexed { index, item -> setInventoryItem(13 + index, item) }
     }
 
     private fun setInventoryItem(slot: Int, itemInstance: ItemInstance?) {
         entity.inventory.setItemStack(slot, itemInstance?.itemStack(this) ?: ItemStack.AIR)
+    }
+
+    private fun initActionBarSkills() {
+        actionBarSkills.forEachIndexed { index, skill ->
+            entity.inventory.setItemStack(
+                index,
+                skill?.actionBarItemStack(this) ?: ItemStack.AIR
+            )
+        }
     }
 
     private fun sidebar(): Sidebar {

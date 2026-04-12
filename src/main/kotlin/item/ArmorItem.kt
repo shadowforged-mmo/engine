@@ -3,6 +3,7 @@ package com.shadowforgedmmo.engine.item
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.shadowforgedmmo.engine.character.PlayerCharacter
+import com.shadowforgedmmo.engine.icon.Icon
 import com.shadowforgedmmo.engine.model.ArmorModel
 import com.shadowforgedmmo.engine.model.ArmorModelDefinition
 import com.shadowforgedmmo.engine.model.BlockbenchItemModel
@@ -29,6 +30,7 @@ data class ArmorItemDefinition(
 ) : ItemDefinition() {
     override fun toItem(
         id: String,
+        iconRegistry: Registry<Icon>,
         blockbenchItemModelRegistry: Registry<BlockbenchItemModel>
     ) = ArmorItem(
         id,
@@ -40,7 +42,7 @@ data class ArmorItemDefinition(
     )
 }
 
-class ArmorItemInstance(item: ArmorItem, gems: List<Gem>) : EquipmentItemInstance(item, gems) {
+class ArmorItemInstance(override val item: ArmorItem, gems: List<Gem>) : EquipmentItemInstance(gems) {
     override val quantity
         get() = 1
 

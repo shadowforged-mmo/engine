@@ -1,9 +1,7 @@
 package com.shadowforgedmmo.engine.resource
 
-import com.fasterxml.jackson.databind.MapperFeature
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.shadowforgedmmo.engine.character.CharacterBlueprintDefinition
+import com.shadowforgedmmo.engine.icon.IconDefinition
 import com.shadowforgedmmo.engine.instance.InstanceDefinition
 import com.shadowforgedmmo.engine.item.ItemDefinition
 import com.shadowforgedmmo.engine.model.BlockbenchItemModelDefinition
@@ -37,6 +35,7 @@ data class Definitions(
     val musicTracks: Registry<MusicTrackDefinition>,
     val scripts: Registry<ScriptDefinition>,
     val skins: Registry<SkinDefinition>,
+    val icons: Registry<IconDefinition>,
     val blockbenchModels: Registry<BlockbenchModelDefinition>,
     val blockbenchItemModels: Registry<BlockbenchItemModelDefinition>,
     val scriptDir: File
@@ -56,6 +55,7 @@ class DefinitionLoader(private val root: File) {
         loadMusicTracks(),
         loadScripts(),
         loadSkins(),
+        loadIcons(),
         loadBlockbenchModels(),
         loadBlockbenchItemModels(),
         root.resolve(SCRIPTS)
@@ -114,6 +114,8 @@ class DefinitionLoader(private val root: File) {
             stats.durationSeconds
         }
     )
+
+    fun loadIcons() = loadResources(ICONS) { file -> IconDefinition(file) }
 
     private fun <T : Any> loadYamlResources(relativePath: String, classOfT: KClass<T>) =
         loadYamlResources(root.resolve(relativePath), classOfT)

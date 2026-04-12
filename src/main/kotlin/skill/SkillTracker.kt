@@ -58,14 +58,14 @@ class SkillTracker(private val pc: PlayerCharacter) {
     private fun updateHotbar() = (0..5).forEach(::updateHotbarSlot)
 
     private fun updateHotbarSlot(slot: Int) {
-        pc.entity.inventory.setItemStack(0, (pc.playerClass.skills[0] as ActiveSkill).hotbarItemStack(pc))
-        pc.entity.inventory.setItemStack(1, (pc.playerClass.skills[1] as ActiveSkill).hotbarItemStack(pc))
+        pc.entity.inventory.setItemStack(0, (pc.playerClass.skills[0] as ActiveSkill).actionBarItemStack(pc))
+        pc.entity.inventory.setItemStack(1, (pc.playerClass.skills[1] as ActiveSkill).actionBarItemStack(pc))
         val skill = hotbarSkill(slot)
         if (skill == null) {
             pc.entity.inventory.setItemStack(slot, ItemStack.of(Material.BARRIER))
             return
         }
-        pc.entity.inventory.setItemStack(slot, skill.hotbarItemStack(pc))
+        pc.entity.inventory.setItemStack(slot, skill.actionBarItemStack(pc))
     }
 
     fun cooldown(skill: ActiveSkill) = cooldowns[skill] ?: Cooldown(skill.cooldownMillis)

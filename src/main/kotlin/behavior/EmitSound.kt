@@ -3,6 +3,7 @@ package com.shadowforgedmmo.engine.behavior
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.shadowforgedmmo.engine.character.NonPlayerCharacter
 import com.shadowforgedmmo.engine.math.Vector3
+import com.shadowforgedmmo.engine.sound.SoundDefinition
 import net.kyori.adventure.sound.Sound
 
 class EmitSound(
@@ -23,9 +24,9 @@ class EmitSoundBlueprint(
 }
 
 data class EmitSoundDefinition(
-    @JsonProperty("sound") val sound: Sound,
+    @JsonProperty("sound") val sound: SoundDefinition,
     @JsonProperty("offset") val offset: Vector3? = null
 ) : BehaviorDefinition() {
     override fun toBlueprint() =
-        EmitSoundBlueprint(sound, offset ?: Vector3.ZERO)
+        EmitSoundBlueprint(sound.toSound(), offset ?: Vector3.ZERO)
 }

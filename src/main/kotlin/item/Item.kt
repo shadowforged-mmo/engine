@@ -6,11 +6,13 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.shadowforgedmmo.engine.behavior.PrioritySelectorDefinition
 import com.shadowforgedmmo.engine.character.PlayerCharacter
+import com.shadowforgedmmo.engine.icon.Icon
 import com.shadowforgedmmo.engine.model.BlockbenchItemModel
 import com.shadowforgedmmo.engine.resource.ITEMS
 import com.shadowforgedmmo.engine.resource.Registry
 import com.shadowforgedmmo.engine.resource.ResourceReference
 import com.shadowforgedmmo.engine.resource.ResourceReferenceDeserializer
+import net.kyori.adventure.text.Component
 import net.minestom.server.item.ItemStack
 import net.minestom.server.tag.Tag
 
@@ -22,9 +24,33 @@ abstract class Item(
     val id: String,
     val name: String,
     val quality: ItemQuality
-)
+) {
+    val nameComponent
+        get() = Component.text(name, quality.color)
+}
 
-abstract class ItemInstance(val item: Item) {
+abstract class ItemInstance {
+    companion object {
+        fun fromItemStack(itemStack: ItemStack, itemRegistry: Registry<Item>) =
+            when (val item = itemRegistry[itemStack.getTag(ITEM_ID_TAG)]) {
+                is EquipmentItem -> item.instance(getGems(itemStack, itemRegistry))
+                is ConsumableItem -> ConsumableItemInstance(item, itemStack.amount())
+                is Gem -> GemInstance(item, itemStack.amount())
+                is QuestItem -> QuestItemInstance(item, itemStack.amount())
+                else -> null
+            }
+
+        fun getGems(itemStack: ItemStack, itemRegistry: Registry<Item>) =
+            generateSequence(0) { it + 1 }
+                .takeWhile { itemStack.hasTag(gemTag(it)) }
+                .map { itemStack.getTag(gemTag(it)) }
+                .mapNotNull { gemId -> itemRegistry[gemId] as? Gem }
+                .toList()
+
+        fun gemTag(slot: Int) = Tag.String("gem_$slot")
+    }
+
+    abstract val item: Item
     abstract val quantity: Int
 
     abstract fun itemStack(pc: PlayerCharacter): ItemStack
@@ -46,11 +72,11 @@ abstract class ItemInstance(val item: Item) {
 sealed class ItemDefinition {
     abstract fun toItem(
         id: String,
+        iconRegistry: Registry<Icon>,
         blockbenchItemModelRegistry: Registry<BlockbenchItemModel>
     ): Item
 }
 
-// TODO: handle nulls correctly
 class ItemInstanceDefinition(
     @JsonProperty("item") val itemReference: ItemReference,
     @JsonProperty("quantity") val quantity: Int?,

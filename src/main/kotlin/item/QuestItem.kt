@@ -2,6 +2,7 @@ package com.shadowforgedmmo.engine.item
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.shadowforgedmmo.engine.character.PlayerCharacter
+import com.shadowforgedmmo.engine.icon.Icon
 import com.shadowforgedmmo.engine.model.BlockbenchItemModel
 import com.shadowforgedmmo.engine.resource.Registry
 import net.kyori.adventure.text.Component
@@ -21,11 +22,12 @@ class QuestItemDefinition(
 ) : ItemDefinition() {
     override fun toItem(
         id: String,
+        iconRegistry: Registry<Icon>,
         blockbenchItemModelRegistry: Registry<BlockbenchItemModel>
     ) = QuestItem(id, name, quality)
 }
 
-class QuestItemInstance(item: QuestItem, override val quantity: Int) : ItemInstance(item) {
+class QuestItemInstance(override val item: QuestItem, override val quantity: Int) : ItemInstance() {
     override fun itemStack(pc: PlayerCharacter) = ItemStack.builder(Material.DIAMOND)
         .set(ITEM_ID_TAG, item.id)
         .customName(

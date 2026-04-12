@@ -1,8 +1,8 @@
 package com.shadowforgedmmo.engine.item
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.shadowforgedmmo.engine.character.PlayerCharacter
+import com.shadowforgedmmo.engine.icon.Icon
 import com.shadowforgedmmo.engine.model.BlockbenchItemModel
 import com.shadowforgedmmo.engine.model.BlockbenchItemModelReference
 import com.shadowforgedmmo.engine.resource.Registry
@@ -36,13 +36,15 @@ data class WeaponDefinition(
 ) : ItemDefinition() {
     override fun toItem(
         id: String,
+        iconRegistry: Registry<Icon>,
         blockbenchItemModelRegistry: Registry<BlockbenchItemModel>
     ) = Weapon(id, name, quality, type, sockets, modelReference.resolve(blockbenchItemModelRegistry))
 }
 
-class WeaponInstance(item: Weapon, gems: List<Gem>) : EquipmentItemInstance(item, gems) {
+class WeaponInstance(override val item: Weapon, gems: List<Gem>) : EquipmentItemInstance(gems) {
     override fun itemStack(pc: PlayerCharacter) = ItemStack.builder(Material.IRON_SWORD)
         .set(ITEM_ID_TAG, item.id)
+        .itemModel("icons:bash")
         .customName(
             Component.text(item.name, item.quality.color).decoration(TextDecoration.ITALIC, false)
         )

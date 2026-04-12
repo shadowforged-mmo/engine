@@ -3,6 +3,7 @@ package com.shadowforgedmmo.engine.skill
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.shadowforgedmmo.engine.icon.Icon
 import com.shadowforgedmmo.engine.resource.Registry
 import com.shadowforgedmmo.engine.resource.ResourceReference
 import com.shadowforgedmmo.engine.resource.ResourceReferenceDeserializer
@@ -15,6 +16,7 @@ val SKILL_TAG = Tag.String("skill")
 abstract class Skill(
     val id: String,
     val name: String,
+    val icon: Icon,
     val description: String,
     val script: Script
 )
@@ -29,7 +31,11 @@ abstract class Skill(
     JsonSubTypes.Type(value = PassiveSkillDefinition::class, name = "passive"),
 )
 sealed class SkillDefinition {
-    abstract fun toSKill(id: String, scriptRegistry: Registry<Script>): Skill
+    abstract fun toSKill(
+        id: String,
+        iconRegistry: Registry<Icon>,
+        scriptRegistry: Registry<Script>
+    ): Skill
 }
 
 @JsonDeserialize(using = SkillReferenceDeserializer::class)

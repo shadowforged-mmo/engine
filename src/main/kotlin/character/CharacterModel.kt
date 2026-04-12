@@ -74,7 +74,7 @@ data class BlockbenchCharacterModelDefinition(
         blockbenchItemModelRegistry: Registry<BlockbenchItemModel>
     ) = BlockbenchCharacterModel(
         blockbenchModelReference.resolve(blockbenchModelRegistry),
-        scale = 1.0F
+        scale ?: 1.0F
     )
 }
 

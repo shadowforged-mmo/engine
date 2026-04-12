@@ -2,6 +2,8 @@ package com.shadowforgedmmo.engine.skill
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.shadowforgedmmo.engine.character.PlayerCharacter
+import com.shadowforgedmmo.engine.icon.Icon
+import com.shadowforgedmmo.engine.icon.IconReference
 import com.shadowforgedmmo.engine.resource.Registry
 import com.shadowforgedmmo.engine.script.Script
 import com.shadowforgedmmo.engine.script.ScriptReference
@@ -17,14 +19,21 @@ import kotlin.math.max
 class ActiveSkill(
     id: String,
     name: String,
+    icon: Icon,
     description: String,
     val manaCost: Int,
     val cooldownMillis: Long,
     script: Script
-) : Skill(id, name, description, script) {
-    fun hotbarItemStack(pc: PlayerCharacter) = ItemStack.builder(Material.DIAMOND)
+) : Skill(id, name, icon, description, script) {
+    fun actionBarItemStack(pc: PlayerCharacter) = ItemStack.builder(Material.DIAMOND)
         .set(SKILL_TAG, id)
         .customName(Component.text(name, NamedTextColor.GREEN))
+        .let {
+            icon.apply(
+                it,
+                (pc.cooldown(this).remainingMillis(pc.runtime.timeMillis) / cooldownMillis.toDouble())
+            )
+        }
         .amount(
             max(
                 1,
@@ -40,15 +49,20 @@ class ActiveSkill(
 
 data class ActiveSkillDefinition(
     @JsonProperty("name") val name: String,
-    @JsonProperty("icon") val icon: String, // TODO
+    @JsonProperty("icon") val iconReference: IconReference,
     @JsonProperty("description") val description: String,
     @JsonProperty("mana_cost") val manaCost: Int,
     @JsonProperty("cooldown") val cooldownSeconds: Double,
     @JsonProperty("script") val scriptReference: ScriptReference
 ) : SkillDefinition() {
-    override fun toSKill(id: String, scriptRegistry: Registry<Script>) = ActiveSkill(
+    override fun toSKill(
+        id: String,
+        iconRegistry: Registry<Icon>,
+        scriptRegistry: Registry<Script>
+    ) = ActiveSkill(
         id,
         name,
+        iconReference.resolve(iconRegistry),
         description,
         manaCost,
         secondsToMillis(cooldownSeconds),

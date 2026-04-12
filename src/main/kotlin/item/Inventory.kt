@@ -14,6 +14,7 @@ class Inventory(
     val finger2: AccessoryInstance?,
     val wrist: AccessoryInstance?,
     val trinket: AccessoryInstance?,
+    val actionBar: Array<ItemInstance?>,
     val bag: Array<ItemInstance?>
 )
 
@@ -41,6 +42,7 @@ class InventoryDefinition(
         finger2?.toItemInstance(itemRegistry) as? AccessoryInstance,
         wrist?.toItemInstance(itemRegistry) as? AccessoryInstance,
         trinket?.toItemInstance(itemRegistry) as? AccessoryInstance,
+        actionBar.map { it?.toItemInstance(itemRegistry) }.toTypedArray(),
         bag.map { it?.toItemInstance(itemRegistry) }.toTypedArray()
     )
 }

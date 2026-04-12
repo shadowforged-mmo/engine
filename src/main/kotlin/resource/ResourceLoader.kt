@@ -1,6 +1,11 @@
 package com.shadowforgedmmo.engine.resource
 
+import com.shadowforgedmmo.engine.icon.IconAsset
+import com.shadowforgedmmo.engine.item.ConsumableItemDefinition
 import com.shadowforgedmmo.engine.runtime.createRuntimeEnvironment
+import com.shadowforgedmmo.engine.skill.ActiveSkill
+import com.shadowforgedmmo.engine.skill.ActiveSkillDefinition
+import com.shadowforgedmmo.engine.skill.SkillDefinition
 import com.shadowforgedmmo.engine.sound.SoundAsset
 import net.minestom.server.MinecraftServer
 
@@ -22,13 +27,16 @@ class ResourceLoader(private val definitionLoader: DefinitionLoader) {
         val blockbenchModelRegistry = definitions.blockbenchModels.mapValues { (id, blockbenchModelDefinition) ->
             blockbenchModelDefinition.toBlockbenchModel(id)
         }
+        val iconRegistry = definitions.icons.mapValues { (id, iconDefinition) ->
+            iconDefinition.toIcon(id)
+        }
         var customModelData = 0
         val blockbenchItemModelRegistry =
             definitions.blockbenchItemModels.mapValues { (id, blockbenchItemModelDefinition) ->
                 blockbenchItemModelDefinition.toBlockbenchItemModel(id, customModelData++)
             }
         val itemRegistry = definitions.items.mapValues { (id, itemDefinition) ->
-            itemDefinition.toItem(id, blockbenchItemModelRegistry)
+            itemDefinition.toItem(id, iconRegistry, blockbenchItemModelRegistry)
         }
         val scriptRegistry = definitions.scripts.mapValues { (id, scriptDefinition) ->
             scriptDefinition.toScript(id)
@@ -48,7 +56,7 @@ class ResourceLoader(private val definitionLoader: DefinitionLoader) {
             )
         }
         val skillRegistry = definitions.skills.mapValues { (id, skillDefinition) ->
-            skillDefinition.toSKill(id, scriptRegistry)
+            skillDefinition.toSKill(id, iconRegistry, scriptRegistry)
         }
         val playerClassRegistry = definitions.classes.mapValues { (id, playerClassDefinition) ->
             playerClassDefinition.toPlayerClass(id, skillRegistry)
@@ -94,13 +102,29 @@ class ResourceLoader(private val definitionLoader: DefinitionLoader) {
         val soundAssets = definitionLoader.loadSounds().mapValues { (id, file) ->
             SoundAsset(id, file)
         }
-        // TODO: consolidate some of this logic with loadAll()
+//        val iconAssets = definitionLoader.loadIcons().mapValues { (id, iconDefinition) ->
+//            iconDefinition.toIconAsset()
+//        }
+        val iconAssets = definitionLoader.loadIcons().mapValues { (id, iconDefinition) ->
+            iconDefinition.toIconAsset(id)
+        }
+        val skillDefinitions = definitionLoader.loadSkills()
+        val activeSkills = skillDefinitions.values.filterIsInstance<ActiveSkillDefinition>()
+        val activeSkillIcons = activeSkills.map(ActiveSkillDefinition::iconReference)
+        val itemDefinitions = definitionLoader.loadItems()
+        val consumableItems = itemDefinitions.values.filterIsInstance<ConsumableItemDefinition>()
+        val consumableItemIcons = consumableItems.map(ConsumableItemDefinition::iconReference)
+        val iconAssetsWithCooldowns = (activeSkillIcons + consumableItemIcons)
+            .map { it.resolve(iconAssets) }
+            .toSet()
         return ResourcePackResources(
             config,
             blockbenchModels,
             blockbenchItemModelAssets,
             musicTrackAssets,
-            soundAssets
+            soundAssets,
+            iconAssets,
+            iconAssetsWithCooldowns
         )
     }
 }
