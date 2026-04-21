@@ -6,8 +6,7 @@ type: object
 properties:
   default:
     description: Default stance toward characters not in any specific list
-    type: string
-    enum: [FRIENDLY, NEUTRAL, HOSTILE]
+    $ref: "stance.schema.yaml"
   friendly:
     description: Character references this character is friendly toward
     type: array

@@ -4,8 +4,8 @@ title: Item Quality
 description: The quality tier of an item
 type: string
 enum:
-  - COMMON
-  - UNCOMMON
-  - RARE
-  - EPIC
-  - LEGENDARY
+  - common
+  - uncommon
+  - rare
+  - epic
+  - legendary

@@ -4,4 +4,4 @@ title: Weapon Type
 description: The type of a weapon
 type: string
 enum:
-  - SWORD
+  - sword

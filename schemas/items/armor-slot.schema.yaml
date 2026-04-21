@@ -4,7 +4,7 @@ title: Armor Slot
 description: An equipment slot for armor
 type: string
 enum:
-  - FEET
-  - LEGS
-  - CHEST
-  - HEAD
+  - feet
+  - legs
+  - chest
+  - head
