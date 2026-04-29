@@ -1,10 +1,11 @@
 package com.shadowforgedmmo.engine.pack
 
 import com.shadowforgedmmo.engine.icon.IconAsset
+import com.shadowforgedmmo.engine.model.BlockbenchItemModel
 import com.shadowforgedmmo.engine.model.BlockbenchItemModelAsset
 import com.shadowforgedmmo.engine.model.BlockbenchModel
 import com.shadowforgedmmo.engine.resource.ResourcePackResources
-import com.shadowforgedmmo.engine.util.loadJsonResource
+import com.shadowforgedmmo.engine.util.readJsonResource
 import net.kyori.adventure.key.Key
 import net.minestom.server.item.Material
 import team.unnamed.creative.ResourcePack
@@ -35,7 +36,7 @@ class PackBuilder(private val resources: ResourcePackResources) {
 
     fun build() {
         writePackMeta()
-        writeBasePack()
+        writeBaseTextures()
         writeEngineModels()
         writeEngineSoundAssets()
         writeModels()
@@ -51,14 +52,10 @@ class PackBuilder(private val resources: ResourcePackResources) {
         pack.packMeta(46, "${resources.config.name} resource pack")
     }
 
-    private fun writeBasePack() {
-        writeBaseTextures()
-    }
-
     private fun writeBaseTextures() {
         listOf("action_bar_item_empty", "action_bar_skill_empty").forEach { id ->
             writeTexture(
-                Namespaces.TEXTURES,
+                Namespaces.ENGINE_TEXTURES,
                 id,
                 Writable.resource(javaClass.classLoader, "textures/$id.png")
             )
@@ -92,46 +89,7 @@ class PackBuilder(private val resources: ResourcePackResources) {
         ModelWriter.resource(Namespaces.MODELS).write(pack, models)
     }
 
-    private fun writeItemModels() {
-        // TODO
-    }
-
-    private fun writeBlockbenchItemModel(
-        blockbenchItemModelAsset: BlockbenchItemModelAsset,
-        overrides: MutableList<ItemOverride>
-    ) {
-//        pack.model(
-//            Model.model()
-//                .key(key)
-//                .display(display)
-//                .textures(textures)
-//                .elements(elements)
-//                .build()
-//        )
-//        model.textures.forEach(pack::texture)
-//        overrides += ItemOverride.of(
-//            key,
-//            ItemPredicate.customModelData(itemModelAsset.customModelData)
-//        )
-    }
-
-    private fun writeItemOverrides(
-        material: Material,
-        overrides: List<ItemOverride>
-    ) {
-        pack.model(
-            Model.model()
-                .key(material.key())
-                .parent(Key.key(Namespaces.MINECRAFT, "item/handheld"))
-                .textures(
-                    ModelTextures.builder()
-                        .layers(ModelTexture.ofKey(material.key()))
-                        .build()
-                )
-                .overrides(overrides)
-                .build()
-        )
-    }
+    private fun writeItemModels() = resources.blockbenchItemModelAssets.values.forEach { it.write(pack) }
 
     private fun writeMusic() {
         resources.musicTrackAssets.values.forEach { songAsset ->
@@ -165,7 +123,7 @@ class PackBuilder(private val resources: ResourcePackResources) {
     }
 
     private fun disableMinecraftMusic() {
-        val minecraftMusic = loadJsonResource(
+        val minecraftMusic = readJsonResource(
             "data/minecraft_music.json",
             Array<String>::class
         )

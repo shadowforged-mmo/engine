@@ -8,14 +8,14 @@ import com.shadowforgedmmo.engine.minecraft.MinecraftReference
 import com.shadowforgedmmo.engine.model.*
 import com.shadowforgedmmo.engine.resource.MINECRAFT
 import com.shadowforgedmmo.engine.resource.Registry
-import com.shadowforgedmmo.engine.util.loadJsonResource
+import com.shadowforgedmmo.engine.util.readJsonResource
 import net.kyori.adventure.key.Key
 import net.minestom.server.entity.Entity
 import net.minestom.server.entity.EntityCreature
 import net.minestom.server.entity.EntityType
 import team.unnamed.hephaestus.minestom.ModelEntity
 
-val hitboxEntityTypes = loadJsonResource(
+val hitboxEntityTypes = readJsonResource(
     "data/hitbox_entity_types.json",
     Array<String>::class
 ).map { EntityType.fromKey(it) ?: error("Missing entity type $it") }
@@ -162,8 +162,8 @@ class CharacterModelEquipment(
     val head: ArmorModel? = null
 ) {
     fun apply(entity: EntityCreature) {
-        mainHand?.let { entity.itemInMainHand = it.itemStack }
-        offHand?.let { entity.itemInOffHand = it.itemStack }
+        mainHand?.let { entity.itemInMainHand = TODO() }
+        offHand?.let { entity.itemInOffHand = TODO() }
         feet?.let { entity.boots = it.itemStack }
         legs?.let { entity.leggings = it.itemStack }
         chest?.let { entity.chestplate = it.itemStack }

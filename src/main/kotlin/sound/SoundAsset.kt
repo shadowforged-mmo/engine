@@ -20,6 +20,4 @@ class SoundAssetDeserializer : ResourceReferenceDeserializer<SoundAssetReference
     ::SoundAssetReference
 )
 
-fun deserializeSoundAsset(id: String, file: File) = SoundAsset(id, file)
-
 private fun soundKey(id: String) = Key.key(Namespaces.SOUNDS, id)

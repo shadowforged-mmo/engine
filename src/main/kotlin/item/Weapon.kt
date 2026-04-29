@@ -42,9 +42,9 @@ data class WeaponDefinition(
 }
 
 class WeaponInstance(override val item: Weapon, gems: List<Gem>) : EquipmentItemInstance(gems) {
-    override fun itemStack(pc: PlayerCharacter) = ItemStack.builder(Material.IRON_SWORD)
+    override fun itemStack(pc: PlayerCharacter) = ItemStack.builder(Material.WOODEN_AXE)
         .set(ITEM_ID_TAG, item.id)
-        .itemModel("icons:bash")
+        .let(item.model::apply)
         .customName(
             Component.text(item.name, item.quality.color).decoration(TextDecoration.ITALIC, false)
         )

@@ -13,7 +13,7 @@ import com.shadowforgedmmo.engine.quest.QuestDefinition
 import com.shadowforgedmmo.engine.script.ScriptDefinition
 import com.shadowforgedmmo.engine.skill.SkillDefinition
 import com.shadowforgedmmo.engine.time.secondsToDuration
-import com.shadowforgedmmo.engine.util.readYaml
+import com.shadowforgedmmo.engine.util.readJson
 import com.shadowforgedmmo.engine.world.WorldDefinition
 import com.shadowforgedmmo.engine.zone.ZoneDefinition
 import org.gagravarr.ogg.audio.OggAudioStatistics
@@ -101,11 +101,9 @@ class DefinitionLoader(private val root: File) {
         loadResources(MODELS) { file -> BlockbenchModelDefinition(read(file)) }
     }
 
-    fun loadBlockbenchItemModels() = with(BBModelReader.blockbench()) {
-        loadResources(ITEM_MODELS) { file -> BlockbenchItemModelDefinition(read(file)) }
-    }
+    fun loadBlockbenchItemModels() = loadResources(ITEM_MODELS, ::BlockbenchItemModelDefinition)
 
-    fun loadSounds() = loadResources(SOUNDS) { file -> file }
+    fun loadSounds() = loadResources(SOUNDS) { file -> file } // TODO: improve type
 
     private fun computeDuration(file: File) = secondsToDuration(
         VorbisFile(file).use { vorbisFile ->
@@ -121,7 +119,7 @@ class DefinitionLoader(private val root: File) {
         loadYamlResources(root.resolve(relativePath), classOfT)
 
     private fun <T : Any> loadYamlResources(dir: File, classOfT: KClass<T>): Registry<T> =
-        loadResources(dir) { file -> readYaml(file, classOfT) }
+        loadResources(dir) { file -> readJson(file, classOfT) }
 
     private fun <T> loadResources(relativePath: String, loader: (File) -> T) =
         loadResources(root.resolve(relativePath), loader)
@@ -148,7 +146,7 @@ class DefinitionLoader(private val root: File) {
         loadYamlResource(root.resolve("$relativePath.yaml"), classOfT)
 
     private fun <T : Any> loadYamlResource(file: File, classOfT: KClass<T>): T =
-        loadResource(file) { file -> readYaml(file, classOfT) }
+        loadResource(file) { file -> readJson(file, classOfT) }
 
     private fun <T> loadResource(file: File, loader: (File) -> T) = loader(file)
 

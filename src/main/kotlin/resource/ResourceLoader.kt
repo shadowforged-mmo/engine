@@ -30,10 +30,9 @@ class ResourceLoader(private val definitionLoader: DefinitionLoader) {
         val iconRegistry = definitions.icons.mapValues { (id, iconDefinition) ->
             iconDefinition.toIcon(id)
         }
-        var customModelData = 0
         val blockbenchItemModelRegistry =
             definitions.blockbenchItemModels.mapValues { (id, blockbenchItemModelDefinition) ->
-                blockbenchItemModelDefinition.toBlockbenchItemModel(id, customModelData++)
+                blockbenchItemModelDefinition.toBlockbenchItemModel(id)
             }
         val itemRegistry = definitions.items.mapValues { (id, itemDefinition) ->
             itemDefinition.toItem(id, iconRegistry, blockbenchItemModelRegistry)
@@ -93,9 +92,10 @@ class ResourceLoader(private val definitionLoader: DefinitionLoader) {
         val blockbenchModels = definitionLoader.loadBlockbenchModels().mapValues { (id, modelDefinition) ->
             modelDefinition.toBlockbenchModel(id)
         }
-        val blockbenchItemModelAssets = definitionLoader.loadBlockbenchItemModels().mapValues { (id, itemDefinition) ->
-            itemDefinition.toBlockbenchItemModelAsset(id)
-        }
+        val blockbenchItemModelAssets =
+            definitionLoader.loadBlockbenchItemModels().mapValues { (id, itemModelDefinition) ->
+                itemModelDefinition.toBlockbenchItemModelAsset(id)
+            }
         val musicTrackAssets = definitionLoader.loadMusicTracks().mapValues { (id, trackDefinition) ->
             trackDefinition.toMusicTrackAsset(id)
         }

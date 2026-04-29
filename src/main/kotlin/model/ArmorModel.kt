@@ -3,9 +3,9 @@ package com.shadowforgedmmo.engine.model
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.shadowforgedmmo.engine.resource.Registry
 import net.minestom.server.item.ItemStack
+import net.minestom.server.item.Material
 import net.minestom.server.item.armor.TrimMaterial
 import net.minestom.server.item.armor.TrimPattern
 
@@ -53,7 +53,9 @@ class ArmorTrimDefinition(
 
 class BlockbenchArmorModel(val model: BlockbenchItemModel) : ArmorModel() {
     override val itemStack
-        get() = model.itemStack
+        get() = ItemStack.builder(Material.DIAMOND)
+            .let(model::apply)
+            .build()
 }
 
 data class BlockbenchArmorModelDefinition(

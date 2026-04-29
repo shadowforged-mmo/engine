@@ -16,7 +16,6 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.minestom)
     implementation(libs.guava)
-    implementation(libs.gson)
     implementation(libs.jackson.core)
     implementation(libs.jackson.databind)
     implementation(libs.jackson.dataformat.yaml)

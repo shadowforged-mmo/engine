@@ -12,14 +12,14 @@ private fun cooldownIndex(cooldownPercent: Double) = (cooldownPercent * 16.0).to
 
 class Icon(val id: String) {
     // TODO: make sure this works for nested directories
-    fun apply(builder: ItemStack.Builder) = builder.itemModel("${Namespaces.ICONS}:$id")
+    fun apply(itemStack: ItemStack.Builder) = itemStack.itemModel("${Namespaces.ICONS}:$id")
 
-    fun apply(builder: ItemStack.Builder, cooldownPercent: Double): ItemStack.Builder {
+    fun apply(itemStack: ItemStack.Builder, cooldownPercent: Double): ItemStack.Builder {
         val cooldownIndex = cooldownIndex(cooldownPercent)
         return if (cooldownIndex == 0) {
-            apply(builder)
+            apply(itemStack)
         } else {
-            builder.itemModel("${Namespaces.ICONS}:$id-${cooldownIndex}")
+            itemStack.itemModel("${Namespaces.ICONS}:$id-${cooldownIndex}")
         }
     }
 }

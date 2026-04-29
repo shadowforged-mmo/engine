@@ -25,7 +25,7 @@ import com.shadowforgedmmo.engine.skill.SkillExecutor
 import com.shadowforgedmmo.engine.skill.SkillReference
 import com.shadowforgedmmo.engine.time.Cooldown
 import com.shadowforgedmmo.engine.time.secondsToTicks
-import com.shadowforgedmmo.engine.util.loadJsonResource
+import com.shadowforgedmmo.engine.util.readJsonResource
 import com.shadowforgedmmo.engine.util.schedulerManager
 import com.shadowforgedmmo.engine.util.toMinestom
 import com.shadowforgedmmo.engine.zone.Zone
@@ -57,7 +57,7 @@ import java.time.Duration
 import kotlin.math.roundToInt
 import com.shadowforgedmmo.engine.script.PlayerCharacter as ScriptPlayerCharacter
 
-val experiencePointsPerLevel = loadJsonResource(
+val experiencePointsPerLevel = readJsonResource(
     "data/experience_points_per_level.json",
     Array<Int>::class
 ).toList() + listOf(Integer.MAX_VALUE)
@@ -424,11 +424,11 @@ class PlayerCharacter(
         )
 
     private fun actionBarSkillEmptyItemStack() = ItemStack.builder(Material.DIAMOND)
-        .itemModel("${Namespaces.TEXTURES}:action_bar_skill_empty")
+        .itemModel("${Namespaces.ENGINE_TEXTURES}:action_bar_skill_empty")
         .build()
 
     private fun actionBarConsumabableEmptyItemStack() = ItemStack.builder(Material.DIAMOND)
-        .itemModel("${Namespaces.TEXTURES}:action_bar_item_empty")
+        .itemModel("${Namespaces.ENGINE_TEXTURES}:action_bar_item_empty")
         .build()
 
     private fun getInventoryItemInstance(slot: Int) = ItemInstance.fromItemStack(
