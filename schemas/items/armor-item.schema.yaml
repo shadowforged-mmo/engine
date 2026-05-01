@@ -12,17 +12,17 @@ properties:
     type: string
   quality:
     description: The quality tier of the armor
-    $ref: "item-quality.schema.yaml"
+    $ref: item-quality.schema.yaml
   slot:
     description: The equipment slot this armor occupies
-    $ref: "armor-slot.schema.yaml"
+    $ref: armor-slot.schema.yaml
   sockets:
     description: Number of gem sockets
     type: integer
     minimum: 0
   model:
     description: The armor model used to render this piece
-    $ref: "../armor-model.schema.yaml"
+    $ref: ../armor-model.schema.yaml
 required:
   - type
   - name

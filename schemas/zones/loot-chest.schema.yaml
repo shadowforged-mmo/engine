@@ -6,7 +6,7 @@ type: object
 properties:
   position:
     description: The position of the loot chest
-    $ref: "../position.schema.yaml"
+    $ref: ../position.schema.yaml
 required:
   - position
 additionalProperties: false

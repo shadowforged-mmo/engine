@@ -9,10 +9,10 @@ properties:
     const: emit_sound
   sound:
     description: The sound to play
-    $ref: "../../sound.schema.yaml"
+    $ref: ../../sound.schema.yaml
   offset:
     description: Offset from the character's position in local space
-    $ref: "../../vector3.schema.yaml"
+    $ref: ../../vector3.schema.yaml
 required:
   - type
   - sound

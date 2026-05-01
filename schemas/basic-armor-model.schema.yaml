@@ -9,10 +9,10 @@ properties:
     const: basic
   material:
     description: The armor material
-    $ref: "armor-material.schema.yaml"
+    $ref: armor-material.schema.yaml
   trim:
     description: The armor trim applied to the piece
-    $ref: "armor-trim.schema.yaml"
+    $ref: armor-trim.schema.yaml
 required:
   - type
   - material

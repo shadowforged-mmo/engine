@@ -3,6 +3,6 @@ $id: https://shadowforgedmmo.com/schemas/characters/character-model.schema.yaml
 title: Character Model
 description: The visual model used to render a character
 oneOf:
-  - $ref: "blockbench-character-model.schema.yaml"
-  - $ref: "skin-character-model.schema.yaml"
-  - $ref: "entity-character-model.schema.yaml"
+  - $ref: blockbench-character-model.schema.yaml
+  - $ref: skin-character-model.schema.yaml
+  - $ref: entity-character-model.schema.yaml

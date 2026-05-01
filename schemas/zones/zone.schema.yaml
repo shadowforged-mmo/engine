@@ -9,37 +9,37 @@ properties:
     type: string
   type:
     description: The type of the zone
-    $ref: "zone-type.schema.yaml"
+    $ref: zone-type.schema.yaml
   level:
     description: The level of the zone
     type: integer
     minimum: 1
   boundary:
     description: The boundary polygon of this zone
-    $ref: "../polygon.schema.yaml"
+    $ref: ../polygon.schema.yaml
   music:
     description: Background music track played in this zone
-    $ref: "../music-reference.schema.yaml"
+    $ref: ../music-reference.schema.yaml
   weather_cycle:
     description: Sequence of weather states that cycle in this zone
     type: array
     items:
-      $ref: "weather-cycle.schema.yaml"
+      $ref: weather-cycle.schema.yaml
   transitions:
     description: Transitions to other instances within this zone
     type: array
     items:
-      $ref: "transition.schema.yaml"
+      $ref: transition.schema.yaml
   characters:
     description: Character spawns within this zone
     type: array
     items:
-      $ref: "character-spawns.schema.yaml"
+      $ref: character-spawns.schema.yaml
   loot_chests:
     description: Loot chest spawn points within this zone
     type: array
     items:
-      $ref: "loot-chest.schema.yaml"
+      $ref: loot-chest.schema.yaml
 required:
   - name
   - type

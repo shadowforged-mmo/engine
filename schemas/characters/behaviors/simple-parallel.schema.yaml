@@ -8,9 +8,9 @@ properties:
     type: string
     const: simple_parallel
   primary:
-    $ref: "behavior.schema.yaml"
+    $ref: behavior.schema.yaml
   secondary:
-    $ref: "behavior.schema.yaml"
+    $ref: behavior.schema.yaml
 required:
   - type
   - primary

@@ -12,7 +12,7 @@ properties:
     type: string
   quality:
     description: The quality tier of the gem
-    $ref: "item-quality.schema.yaml"
+    $ref: item-quality.schema.yaml
 required:
   - type
   - name

@@ -8,17 +8,17 @@ properties:
     description: References to completed quests
     type: array
     items:
-      $ref: "quest-reference.schema.yaml"
+      $ref: quest-reference.schema.yaml
   tracked:
     description: References to currently tracked quests
     type: array
     items:
-      $ref: "quest-reference.schema.yaml"
+      $ref: quest-reference.schema.yaml
   objectives:
     description: Progress for each active quest's objectives
     type: array
     items:
-      $ref: "quest-objective-progress.schema.yaml"
+      $ref: quest-objective-progress.schema.yaml
 required:
   - completed
   - tracked

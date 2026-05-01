@@ -10,7 +10,7 @@ properties:
     exclusiveMinimum: 0.0
   music:
     description: Music track played during the boss fight
-    $ref: "../music-reference.schema.yaml"
+    $ref: ../music-reference.schema.yaml
 required:
   - radius
   - music

@@ -9,10 +9,10 @@ properties:
     const: entity
   entity:
     description: The Minecraft entity type reference
-    $ref: "../minecraft-reference.schema.yaml"
+    $ref: ../minecraft-reference.schema.yaml
   equipment:
     description: Equipment worn on the model
-    $ref: "character-model-equipment.schema.yaml"
+    $ref: character-model-equipment.schema.yaml
 required:
   - type
   - entity

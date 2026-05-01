@@ -9,10 +9,10 @@ properties:
     const: polygon
   instance:
     description: The instance this marker is in
-    $ref: "../../instance-reference.schema.yaml"
+    $ref: ../../instance-reference.schema.yaml
   boundary:
     description: The polygon boundary of the marker area
-    $ref: "../../polygon.schema.yaml"
+    $ref: ../../polygon.schema.yaml
 required:
   - type
   - instance

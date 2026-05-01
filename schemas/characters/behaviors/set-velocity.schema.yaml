@@ -9,7 +9,7 @@ properties:
     const: set_velocity
   velocity:
     description: Velocity vector in local space
-    $ref: "../../vector3.schema.yaml"
+    $ref: ../../vector3.schema.yaml
 required:
   - type
   - velocity

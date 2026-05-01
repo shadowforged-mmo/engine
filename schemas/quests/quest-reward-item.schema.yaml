@@ -6,7 +6,7 @@ type: object
 properties:
   item:
     description: The item to award
-    $ref: "../item-reference.schema.yaml"
+    $ref: ../item-reference.schema.yaml
   quantity:
     description: Number of items to award
     type: integer
@@ -16,7 +16,7 @@ properties:
     description: If specified, only players of these classes receive this reward
     type: array
     items:
-      $ref: "../class-reference.schema.yaml"
+      $ref: ../class-reference.schema.yaml
 required:
   - item
 additionalProperties: false

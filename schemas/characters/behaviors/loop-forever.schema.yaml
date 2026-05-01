@@ -8,7 +8,7 @@ properties:
     type: string
     const: loop_forever
   child:
-    $ref: "behavior.schema.yaml"
+    $ref: behavior.schema.yaml
 required:
   - type
   - child

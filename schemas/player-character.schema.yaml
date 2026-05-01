@@ -6,16 +6,16 @@ type: object
 properties:
   class:
     description: The player's class
-    $ref: "class-reference.schema.yaml"
+    $ref: class-reference.schema.yaml
   instance:
     description: The instance the player is in
-    $ref: "instance-reference.schema.yaml"
+    $ref: instance-reference.schema.yaml
   position:
     description: The player's position
-    $ref: "position.schema.yaml"
+    $ref: position.schema.yaml
   zone:
     description: The zone the player is in
-    $ref: "zone-reference.schema.yaml"
+    $ref: zone-reference.schema.yaml
   max_health:
     description: The player's maximum health
     type: integer
@@ -34,17 +34,17 @@ properties:
     minimum: 0
   quests:
     description: The player's quest progress
-    $ref: "quest-progress.schema.yaml"
+    $ref: quest-progress.schema.yaml
   action_bar_skills:
     description: Skills assigned to the action bar slots
     type: array
     items:
       oneOf:
-        - $ref: "skill-reference.schema.yaml"
+        - $ref: skill-reference.schema.yaml
         - type: "null"
   inventory:
     description: The player's inventory
-    $ref: "inventory.schema.yaml"
+    $ref: inventory.schema.yaml
 required:
   - class
   - instance

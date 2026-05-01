@@ -18,5 +18,5 @@ properties:
     description: Items awarded
     type: array
     items:
-      $ref: "quest-reward-item.schema.yaml"
+      $ref: quest-reward-item.schema.yaml
 additionalProperties: false

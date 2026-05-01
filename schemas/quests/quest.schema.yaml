@@ -15,15 +15,15 @@ properties:
     description: Quests that must be completed before this quest can be started
     type: array
     items:
-      $ref: "../quest-reference.schema.yaml"
+      $ref: ../quest-reference.schema.yaml
   objectives:
     description: Objectives that must be completed to finish the quest
     type: array
     items:
-      $ref: "objectives/objective.schema.yaml"
+      $ref: objectives/objective.schema.yaml
   rewards:
     description: Rewards granted upon quest completion
-    $ref: "quest-rewards.schema.yaml"
+    $ref: quest-rewards.schema.yaml
 required:
   - name
   - level

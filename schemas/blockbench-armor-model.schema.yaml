@@ -9,7 +9,7 @@ properties:
     const: blockbench
   model:
     description: The Blockbench item model reference
-    $ref: "item-model-reference.schema.yaml"
+    $ref: item-model-reference.schema.yaml
 required:
   - type
   - model

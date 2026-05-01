@@ -6,7 +6,7 @@ type: object
 properties:
   item:
     description: The item reference
-    $ref: "item-reference.schema.yaml"
+    $ref: item-reference.schema.yaml
   quantity:
     description: Stack size
     type: integer
@@ -16,7 +16,7 @@ properties:
     description: Gems socketed into this item
     type: array
     items:
-      $ref: "item-reference.schema.yaml"
+      $ref: item-reference.schema.yaml
 required:
   - item
 additionalProperties: false

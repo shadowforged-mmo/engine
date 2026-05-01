@@ -4,5 +4,5 @@ title: Polygon
 description: A polygon defined by an ordered list of 2D vertices
 type: array
 items:
-  $ref: "vector2.schema.yaml"
+  $ref: vector2.schema.yaml
 minItems: 3

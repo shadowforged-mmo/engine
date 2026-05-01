@@ -6,12 +6,12 @@ type: object
 properties:
   world:
     description: The world this instance uses
-    $ref: "../world-reference.schema.yaml"
+    $ref: ../world-reference.schema.yaml
   zones:
     description: Zones contained in this instance
     type: array
     items:
-      $ref: "../zone-reference.schema.yaml"
+      $ref: ../zone-reference.schema.yaml
 required:
   - world
   - zones

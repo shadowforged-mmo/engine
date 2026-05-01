@@ -15,7 +15,7 @@ properties:
     type: string
   script:
     description: Script that implements the skill logic
-    $ref: "../script-reference.schema.yaml"
+    $ref: ../script-reference.schema.yaml
 required:
   - type
   - name

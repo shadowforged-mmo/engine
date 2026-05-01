@@ -12,10 +12,10 @@ properties:
     type: string
   quality:
     description: The quality tier of the accessory
-    $ref: "item-quality.schema.yaml"
+    $ref: item-quality.schema.yaml
   slot:
     description: The accessory slot this item occupies
-    $ref: "accessory-slot.schema.yaml"
+    $ref: accessory-slot.schema.yaml
   sockets:
     description: Number of gem sockets
     type: integer

@@ -6,7 +6,7 @@ type: object
 properties:
   default:
     description: Default stance toward characters not in any specific list
-    $ref: "stance.schema.yaml"
+    $ref: stance.schema.yaml
   friendly:
     description: Character references this character is friendly toward
     type: array

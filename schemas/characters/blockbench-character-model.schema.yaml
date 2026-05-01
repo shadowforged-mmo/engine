@@ -14,7 +14,7 @@ properties:
     default: 1.0
   model:
     description: The Blockbench model reference
-    $ref: "../model-reference.schema.yaml"
+    $ref: ../model-reference.schema.yaml
 required:
   - type
   - model

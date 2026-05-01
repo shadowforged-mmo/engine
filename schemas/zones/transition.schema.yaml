@@ -6,16 +6,16 @@ type: object
 properties:
   position:
     description: The position of the transition trigger volume
-    $ref: "../position.schema.yaml"
+    $ref: ../position.schema.yaml
   size:
     description: The size of the transition trigger volume
-    $ref: "../vector3.schema.yaml"
+    $ref: ../vector3.schema.yaml
   to_instance:
     description: The destination instance
-    $ref: "../instance-reference.schema.yaml"
+    $ref: ../instance-reference.schema.yaml
   to_position:
     description: The destination position in the destination instance
-    $ref: "../position.schema.yaml"
+    $ref: ../position.schema.yaml
 required:
   - position
   - size

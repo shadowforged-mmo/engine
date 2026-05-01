@@ -6,20 +6,20 @@ type: object
 properties:
   main_hand:
     description: Item model held in the main hand
-    $ref: "../item-model-reference.schema.yaml"
+    $ref: ../item-model-reference.schema.yaml
   off_hand:
     description: Item model held in the off hand
-    $ref: "../item-model-reference.schema.yaml"
+    $ref: ../item-model-reference.schema.yaml
   feet:
     description: Armor model worn on the feet slot
-    $ref: "../armor-model.schema.yaml"
+    $ref: ../armor-model.schema.yaml
   legs:
     description: Armor model worn on the legs slot
-    $ref: "../armor-model.schema.yaml"
+    $ref: ../armor-model.schema.yaml
   chest:
     description: Armor model worn on the chest slot
-    $ref: "../armor-model.schema.yaml"
+    $ref: ../armor-model.schema.yaml
   head:
     description: Armor model worn on the head slot
-    $ref: "../armor-model.schema.yaml"
+    $ref: ../armor-model.schema.yaml
 additionalProperties: false

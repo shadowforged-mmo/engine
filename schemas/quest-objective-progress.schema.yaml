@@ -6,7 +6,7 @@ type: object
 properties:
   quest:
     description: The quest reference
-    $ref: "quest-reference.schema.yaml"
+    $ref: quest-reference.schema.yaml
   progress:
     description: Progress count for each objective in order
     type: array

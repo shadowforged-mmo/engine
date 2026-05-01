@@ -3,5 +3,5 @@ $id: https://shadowforgedmmo.com/schemas/quests/objectives/objective.schema.yaml
 title: Quest Objective
 description: A quest objective, discriminated by type
 oneOf:
-  - $ref: "slay-character-objective.schema.yaml"
-  - $ref: "collect-item-objective.schema.yaml"
+  - $ref: slay-character-objective.schema.yaml
+  - $ref: collect-item-objective.schema.yaml

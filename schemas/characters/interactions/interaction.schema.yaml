@@ -3,5 +3,5 @@ $id: https://shadowforgedmmo.com/schemas/characters/interactions/interaction.sch
 title: Interaction
 description: An interaction option shown when a player interacts with a character
 oneOf:
-  - $ref: "start-quest-interaction.schema.yaml"
-  - $ref: "turn-in-quest-interaction.schema.yaml"
+  - $ref: start-quest-interaction.schema.yaml
+  - $ref: turn-in-quest-interaction.schema.yaml

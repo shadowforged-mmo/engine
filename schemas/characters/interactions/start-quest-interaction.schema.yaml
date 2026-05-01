@@ -9,7 +9,7 @@ properties:
     const: start_quest
   quest:
     description: The quest to start
-    $ref: "../../quest-reference.schema.yaml"
+    $ref: ../../quest-reference.schema.yaml
   dialogue:
     description: Lines of dialogue shown before the quest is started; supports MiniMessage formatting
     type: array

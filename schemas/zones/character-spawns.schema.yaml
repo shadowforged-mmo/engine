@@ -6,12 +6,12 @@ type: object
 properties:
   character:
     description: The character to spawn
-    $ref: "../character-reference.schema.yaml"
+    $ref: ../character-reference.schema.yaml
   positions:
     description: Positions where the character spawns
     type: array
     items:
-      $ref: "../position.schema.yaml"
+      $ref: ../position.schema.yaml
 required:
   - character
   - positions

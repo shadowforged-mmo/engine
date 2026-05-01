@@ -11,7 +11,7 @@ properties:
     description: Skills available to this class
     type: array
     items:
-      $ref: "../skill-reference.schema.yaml"
+      $ref: ../skill-reference.schema.yaml
 required:
   - name
   - skills

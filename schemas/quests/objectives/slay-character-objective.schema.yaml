@@ -16,10 +16,10 @@ properties:
     description: Map markers showing where to find targets
     type: array
     items:
-      $ref: "../markers/marker.schema.yaml"
+      $ref: ../markers/marker.schema.yaml
   character:
     description: The character to slay
-    $ref: "../../character-reference.schema.yaml"
+    $ref: ../../character-reference.schema.yaml
 required:
   - type
   - markers

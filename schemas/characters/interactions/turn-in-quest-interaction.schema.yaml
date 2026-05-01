@@ -9,7 +9,7 @@ properties:
     const: turn_in_quest
   quest:
     description: The quest to complete
-    $ref: "../../quest-reference.schema.yaml"
+    $ref: ../../quest-reference.schema.yaml
   dialogue:
     description: Lines of dialogue shown when turning in the quest; supports MiniMessage formatting
     type: array

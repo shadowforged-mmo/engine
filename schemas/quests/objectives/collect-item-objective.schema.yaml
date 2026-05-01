@@ -15,10 +15,10 @@ properties:
     description: Map markers showing where to find items
     type: array
     items:
-      $ref: "../markers/marker.schema.yaml"
+      $ref: ../markers/marker.schema.yaml
   item:
     description: The item to collect
-    $ref: "../../item-reference.schema.yaml"
+    $ref: ../../item-reference.schema.yaml
 required:
   - type
   - goal

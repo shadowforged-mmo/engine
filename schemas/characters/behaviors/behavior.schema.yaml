@@ -3,30 +3,30 @@ $id: https://shadowforgedmmo.com/schemas/characters/behaviors/behavior.schema.ya
 title: Behavior
 description: A behavior tree node for non-player character AI
 oneOf:
-  - $ref: "#/$defs/Sequence"
-  - $ref: "#/$defs/Selector"
-  - $ref: "#/$defs/PrioritySelector"
-  - $ref: "#/$defs/RandomSelector"
-  - $ref: "#/$defs/SimpleParallel"
-  - $ref: "#/$defs/Inverter"
-  - $ref: "#/$defs/Loop"
-  - $ref: "#/$defs/LoopForever"
-  - $ref: "#/$defs/WithCooldown"
-  - $ref: "#/$defs/BoxAttack"
-  - $ref: "#/$defs/CallMethod"
-  - $ref: "#/$defs/EmitParticle"
-  - $ref: "#/$defs/EmitSound"
-  - $ref: "#/$defs/FaceTarget"
-  - $ref: "#/$defs/FollowPath"
-  - $ref: "#/$defs/FollowTarget"
-  - $ref: "#/$defs/GoToRandomPosition"
-  - $ref: "#/$defs/HasTarget"
-  - $ref: "#/$defs/IsTargetInRange"
-  - $ref: "#/$defs/LookAtTarget"
-  - $ref: "#/$defs/PlayAnimation"
-  - $ref: "#/$defs/SetVelocity"
-  - $ref: "#/$defs/Wait"
-  - $ref: "#/$defs/WasDamaged"
+  - $ref: #/$defs/Sequence
+  - $ref: #/$defs/Selector
+  - $ref: #/$defs/PrioritySelector
+  - $ref: #/$defs/RandomSelector
+  - $ref: #/$defs/SimpleParallel
+  - $ref: #/$defs/Inverter
+  - $ref: #/$defs/Loop
+  - $ref: #/$defs/LoopForever
+  - $ref: #/$defs/WithCooldown
+  - $ref: #/$defs/BoxAttack
+  - $ref: #/$defs/CallMethod
+  - $ref: #/$defs/EmitParticle
+  - $ref: #/$defs/EmitSound
+  - $ref: #/$defs/FaceTarget
+  - $ref: #/$defs/FollowPath
+  - $ref: #/$defs/FollowTarget
+  - $ref: #/$defs/GoToRandomPosition
+  - $ref: #/$defs/HasTarget
+  - $ref: #/$defs/IsTargetInRange
+  - $ref: #/$defs/LookAtTarget
+  - $ref: #/$defs/PlayAnimation
+  - $ref: #/$defs/SetVelocity
+  - $ref: #/$defs/Wait
+  - $ref: #/$defs/WasDamaged
 $defs:
   # Composites
   Sequence:
@@ -40,7 +40,7 @@ $defs:
       children:
         type: array
         items:
-          $ref: "#"
+          $ref: #
         minItems: 1
     required:
       - type
@@ -57,7 +57,7 @@ $defs:
       children:
         type: array
         items:
-          $ref: "#"
+          $ref: #
         minItems: 1
     required:
       - type
@@ -74,7 +74,7 @@ $defs:
       children:
         type: array
         items:
-          $ref: "#"
+          $ref: #
         minItems: 1
     required:
       - type
@@ -98,7 +98,7 @@ $defs:
       children:
         type: array
         items:
-          $ref: "#"
+          $ref: #
         minItems: 1
     required:
       - type
@@ -114,9 +114,9 @@ $defs:
         type: string
         const: simple_parallel
       primary:
-        $ref: "#"
+        $ref: #
       secondary:
-        $ref: "#"
+        $ref: #
     required:
       - type
       - primary
@@ -132,7 +132,7 @@ $defs:
         type: string
         const: inverter
       child:
-        $ref: "#"
+        $ref: #
     required:
       - type
       - child
@@ -146,7 +146,7 @@ $defs:
         type: string
         const: loop
       child:
-        $ref: "#"
+        $ref: #
       count:
         description: Number of times to repeat the child
         type: integer
@@ -165,7 +165,7 @@ $defs:
         type: string
         const: loop_forever
       child:
-        $ref: "#"
+        $ref: #
     required:
       - type
       - child
@@ -179,7 +179,7 @@ $defs:
         type: string
         const: with_cooldown
       child:
-        $ref: "#"
+        $ref: #
       cooldown:
         description: Cooldown duration in milliseconds
         type: integer
@@ -200,10 +200,10 @@ $defs:
         const: box_attack
       damage:
         description: Damage dealt to each target hit
-        $ref: "../../damage.schema.yaml"
+        $ref: ../../damage.schema.yaml
       offset:
         description: Center of the attack box relative to the character in local space
-        $ref: "../../vector3.schema.yaml"
+        $ref: ../../vector3.schema.yaml
       width:
         description: Width and depth of the attack box in blocks
         type: number
@@ -214,13 +214,13 @@ $defs:
         exclusiveMinimum: 0.0
       knockback:
         description: Velocity impulse applied to targets in local space
-        $ref: "../../vector3.schema.yaml"
+        $ref: ../../vector3.schema.yaml
       hit_sound:
         description: Sound played when at least one target is hit
-        $ref: "../../sound.schema.yaml"
+        $ref: ../../sound.schema.yaml
       miss_sound:
         description: Sound played when no targets are hit
-        $ref: "../../sound.schema.yaml"
+        $ref: ../../sound.schema.yaml
     required:
       - type
       - damage
@@ -257,7 +257,7 @@ $defs:
         type: string
       offset:
         description: Offset from the character's position in local space
-        $ref: "../../vector3.schema.yaml"
+        $ref: ../../vector3.schema.yaml
     required:
       - type
       - particle
@@ -272,10 +272,10 @@ $defs:
         const: emit_sound
       sound:
         description: The sound to play
-        $ref: "../../sound.schema.yaml"
+        $ref: ../../sound.schema.yaml
       offset:
         description: Offset from the character's position in local space
-        $ref: "../../vector3.schema.yaml"
+        $ref: ../../vector3.schema.yaml
     required:
       - type
       - sound
@@ -421,7 +421,7 @@ $defs:
         const: set_velocity
       velocity:
         description: Velocity vector in local space
-        $ref: "../../vector3.schema.yaml"
+        $ref: ../../vector3.schema.yaml
     required:
       - type
       - velocity

@@ -12,7 +12,7 @@ properties:
     type: string
   offset:
     description: Offset from the character's position in local space
-    $ref: "../../vector3.schema.yaml"
+    $ref: ../../vector3.schema.yaml
 required:
   - type
   - particle

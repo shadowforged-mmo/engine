@@ -3,5 +3,5 @@ $id: https://shadowforgedmmo.com/schemas/skills/skill.schema.yaml
 title: Skill
 description: A player skill
 oneOf:
-  - $ref: "active-skill.schema.yaml"
-  - $ref: "passive-skill.schema.yaml"
+  - $ref: active-skill.schema.yaml
+  - $ref: passive-skill.schema.yaml

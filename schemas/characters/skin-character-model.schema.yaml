@@ -9,10 +9,10 @@ properties:
     const: skin
   skin:
     description: The skin reference
-    $ref: "../skin-reference.schema.yaml"
+    $ref: ../skin-reference.schema.yaml
   equipment:
     description: Equipment worn on the model
-    $ref: "character-model-equipment.schema.yaml"
+    $ref: character-model-equipment.schema.yaml
 required:
   - type
   - skin

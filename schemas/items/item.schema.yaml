@@ -3,9 +3,9 @@ $id: https://shadowforgedmmo.com/schemas/items/item.schema.yaml
 title: Item
 description: An item definition, discriminated by type
 oneOf:
-  - $ref: "weapon.schema.yaml"
-  - $ref: "armor-item.schema.yaml"
-  - $ref: "consumable-item.schema.yaml"
-  - $ref: "gem.schema.yaml"
-  - $ref: "accessory.schema.yaml"
-  - $ref: "quest-item.schema.yaml"
+  - $ref: weapon.schema.yaml
+  - $ref: armor-item.schema.yaml
+  - $ref: consumable-item.schema.yaml
+  - $ref: gem.schema.yaml
+  - $ref: accessory.schema.yaml
+  - $ref: quest-item.schema.yaml

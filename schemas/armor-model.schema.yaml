@@ -3,5 +3,5 @@ $id: https://shadowforgedmmo.com/schemas/armor-model.schema.yaml
 title: Armor Model
 description: An armor model, either a standard material with trim or a custom Blockbench model
 oneOf:
-  - $ref: "basic-armor-model.schema.yaml"
-  - $ref: "blockbench-armor-model.schema.yaml"
+  - $ref: basic-armor-model.schema.yaml
+  - $ref: blockbench-armor-model.schema.yaml

@@ -12,21 +12,21 @@ properties:
     type: string
   quality:
     description: The quality tier of the weapon
-    $ref: "item-quality.schema.yaml"
+    $ref: item-quality.schema.yaml
   level:
     description: The required level to equip this weapon
     type: integer
     minimum: 1
   weapon_type:
     description: The type of weapon
-    $ref: "weapon-type.schema.yaml"
+    $ref: weapon-type.schema.yaml
   sockets:
     description: Number of gem sockets
     type: integer
     minimum: 0
   model:
     description: The Blockbench item model used to render this weapon
-    $ref: "../item-model-reference.schema.yaml"
+    $ref: ../item-model-reference.schema.yaml
   attack_speed:
     description: Attack speed in attacks per second
     type: number
