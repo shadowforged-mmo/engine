@@ -10,18 +10,20 @@ import net.minestom.server.item.ItemStack
 class Socketable(
     id: String,
     name: String,
-    quality: ItemQuality
+    quality: ItemQuality,
+    val bonuses: Bonuses
 ) : Item(id, name, quality)
 
 class SocketableDefinition(
     @JsonProperty("name") val name: String,
-    @JsonProperty("quality") val quality: ItemQuality
+    @JsonProperty("quality") val quality: ItemQuality,
+    @JsonProperty("bonuses") val bonuses: Bonuses?
 ) : ItemDefinition() {
     override fun toItem(
         id: String,
         iconRegistry: Registry<Icon>,
         blockbenchItemModelRegistry: Registry<BlockbenchItemModel>
-    ) = Socketable(id, name, quality)
+    ) = Socketable(id, name, quality, bonuses ?: Bonuses())
 }
 
 class SocketableInstance(override val item: Socketable, override val quantity: Int) : ItemInstance() {

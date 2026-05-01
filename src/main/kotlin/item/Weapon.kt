@@ -36,7 +36,7 @@ data class WeaponDefinition(
     @JsonProperty("physical_damage") val physicalDamage: Double,
     @JsonProperty("water_damage") val waterDamage: Double,
     @JsonProperty("lightning_damage") val lightningDamage: Double,
-    @JsonProperty("bonuses") val bonuses: Bonuses = Bonuses(),
+    @JsonProperty("bonuses") val bonuses: Bonuses?,
     @JsonProperty("flavor_text") val flavorText: String? = null,
     @JsonProperty("sell_price") val sellPrice: Int? = null
 ) : ItemDefinition() {
@@ -51,7 +51,7 @@ data class WeaponDefinition(
         type,
         sockets,
         modelReference.resolve(blockbenchItemModelRegistry),
-        bonuses,
+        bonuses ?: Bonuses(),
         flavorText,
         sellPrice
     )

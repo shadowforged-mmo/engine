@@ -27,7 +27,7 @@ data class ArmorItemDefinition(
     @JsonProperty("slot") val slot: ArmorSlot,
     @JsonProperty("sockets") val sockets: Int,
     @JsonProperty("model") val modelDefinition: ArmorModelDefinition,
-    @JsonProperty("bonuses") val bonuses: Bonuses = Bonuses()
+    @JsonProperty("bonuses") val bonuses: Bonuses?
 ) : ItemDefinition() {
     override fun toItem(
         id: String,
@@ -40,7 +40,7 @@ data class ArmorItemDefinition(
         slot,
         sockets,
         modelDefinition.toArmorModel(blockbenchItemModelRegistry),
-        bonuses
+        bonuses ?: Bonuses()
     )
 }
 

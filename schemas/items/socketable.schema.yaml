@@ -13,6 +13,9 @@ properties:
   quality:
     description: The quality tier of the socketable
     $ref: item-quality.schema.yaml
+  bonuses:
+    description: Stat bonuses granted while this socketable is socketed into equipment
+    $ref: bonuses.schema.yaml
 required:
   - type
   - name

@@ -28,7 +28,7 @@ data class AccessoryDefinition(
     @JsonProperty("icon") val iconReference: IconReference,
     @JsonProperty("slot") val slot: AccessorySlot,
     @JsonProperty("sockets") val sockets: Int,
-    @JsonProperty("bonuses") val bonuses: Bonuses = Bonuses()
+    @JsonProperty("bonuses") val bonuses: Bonuses?
 ) : ItemDefinition() {
     override fun toItem(
         id: String,
@@ -41,7 +41,7 @@ data class AccessoryDefinition(
         iconReference.resolve(iconRegistry),
         slot,
         sockets,
-        bonuses
+        bonuses ?: Bonuses()
     )
 }
 
