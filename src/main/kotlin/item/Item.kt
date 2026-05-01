@@ -33,21 +33,21 @@ abstract class ItemInstance {
     companion object {
         fun fromItemStack(itemStack: ItemStack, itemRegistry: Registry<Item>) =
             when (val item = itemRegistry[itemStack.getTag(ITEM_ID_TAG)]) {
-                is EquipmentItem -> item.instance(getGems(itemStack, itemRegistry))
+                is EquipmentItem -> item.instance(getSocketables(itemStack, itemRegistry))
                 is ConsumableItem -> ConsumableItemInstance(item, itemStack.amount())
-                is Gem -> GemInstance(item, itemStack.amount())
+                is Socketable -> SocketableInstance(item, itemStack.amount())
                 is QuestItem -> QuestItemInstance(item, itemStack.amount())
                 else -> null
             }
 
-        fun getGems(itemStack: ItemStack, itemRegistry: Registry<Item>) =
+        fun getSocketables(itemStack: ItemStack, itemRegistry: Registry<Item>) =
             generateSequence(0) { it + 1 }
-                .takeWhile { itemStack.hasTag(gemTag(it)) }
-                .map { itemStack.getTag(gemTag(it)) }
-                .mapNotNull { gemId -> itemRegistry[gemId] as? Gem }
+                .takeWhile { itemStack.hasTag(socketableTag(it)) }
+                .map { itemStack.getTag(socketableTag(it)) }
+                .mapNotNull { socketableId -> itemRegistry[socketableId] as? Socketable }
                 .toList()
 
-        fun gemTag(slot: Int) = Tag.String("gem_$slot")
+        fun socketableTag(slot: Int) = Tag.String("socketable_$slot")
     }
 
     abstract val item: Item
@@ -65,7 +65,7 @@ abstract class ItemInstance {
     JsonSubTypes.Type(value = PrioritySelectorDefinition::class, name = "accessory"),
     JsonSubTypes.Type(value = ArmorItemDefinition::class, name = "armor"),
     JsonSubTypes.Type(value = ConsumableItemDefinition::class, name = "consumable"),
-    JsonSubTypes.Type(value = GemDefinition::class, name = "gem"),
+    JsonSubTypes.Type(value = SocketableDefinition::class, name = "socketable"),
     JsonSubTypes.Type(value = QuestItemDefinition::class, name = "quest"),
     JsonSubTypes.Type(value = WeaponDefinition::class, name = "weapon")
 )
@@ -80,11 +80,11 @@ sealed class ItemDefinition {
 class ItemInstanceDefinition(
     @JsonProperty("item") val itemReference: ItemReference,
     @JsonProperty("quantity") val quantity: Int?,
-    @JsonProperty("gems") val gems: List<ItemReference>?
+    @JsonProperty("socketables") val socketables: List<ItemReference>?
 ) {
     fun toItemInstance(itemRegistry: Registry<Item>) = when (val item = itemReference.resolve(itemRegistry)) {
         is EquipmentItem -> item.instance(
-            gems?.map { it.resolve(itemRegistry) as? Gem ?: error("${it.id} is not a gem") } ?: emptyList()
+            socketables?.map { it.resolve(itemRegistry) as? Socketable ?: error("${it.id} is not a socketable") } ?: emptyList()
         )
 
         is ConsumableItem -> ConsumableItemInstance(item, quantity ?: 1)

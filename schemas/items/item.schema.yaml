@@ -6,6 +6,6 @@ oneOf:
   - $ref: weapon.schema.yaml
   - $ref: armor-item.schema.yaml
   - $ref: consumable-item.schema.yaml
-  - $ref: gem.schema.yaml
+  - $ref: socketable.schema.yaml
   - $ref: accessory.schema.yaml
   - $ref: quest-item.schema.yaml

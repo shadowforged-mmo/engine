@@ -17,7 +17,7 @@ properties:
     description: The equipment slot this armor occupies
     $ref: armor-slot.schema.yaml
   sockets:
-    description: Number of gem sockets
+    description: Number of socketable slots
     type: integer
     minimum: 0
   model:

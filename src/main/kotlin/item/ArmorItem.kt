@@ -18,7 +18,7 @@ class ArmorItem(
     sockets: Int,
     val model: ArmorModel
 ) : EquipmentItem(id, name, quality, sockets) {
-    override fun instance(gems: List<Gem>) = ArmorItemInstance(this, gems)
+    override fun instance(socketables: List<Socketable>) = ArmorItemInstance(this, socketables)
 }
 
 data class ArmorItemDefinition(
@@ -42,7 +42,7 @@ data class ArmorItemDefinition(
     )
 }
 
-class ArmorItemInstance(override val item: ArmorItem, gems: List<Gem>) : EquipmentItemInstance(gems) {
+class ArmorItemInstance(override val item: ArmorItem, socketables: List<Socketable>) : EquipmentItemInstance(socketables) {
     override val quantity
         get() = 1
 

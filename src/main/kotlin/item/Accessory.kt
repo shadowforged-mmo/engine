@@ -18,7 +18,7 @@ class Accessory(
     val slot: AccessorySlot,
     sockets: Int
 ) : EquipmentItem(id, name, quality, sockets) {
-    override fun instance(gems: List<Gem>) = AccessoryInstance(this, gems)
+    override fun instance(socketables: List<Socketable>) = AccessoryInstance(this, socketables)
 }
 
 data class AccessoryDefinition(
@@ -44,8 +44,8 @@ data class AccessoryDefinition(
 
 class AccessoryInstance(
     override val item: Accessory,
-    gems: List<Gem>
-) : EquipmentItemInstance(gems) {
+    socketables: List<Socketable>
+) : EquipmentItemInstance(socketables) {
     override val quantity
         get() = 1
 

@@ -19,7 +19,7 @@ class Weapon(
     sockets: Int,
     val model: BlockbenchItemModel
 ) : EquipmentItem(id, name, quality, sockets) {
-    override fun instance(gems: List<Gem>) = WeaponInstance(this, gems)
+    override fun instance(socketables: List<Socketable>) = WeaponInstance(this, socketables)
 }
 
 data class WeaponDefinition(
@@ -41,7 +41,7 @@ data class WeaponDefinition(
     ) = Weapon(id, name, quality, type, sockets, modelReference.resolve(blockbenchItemModelRegistry))
 }
 
-class WeaponInstance(override val item: Weapon, gems: List<Gem>) : EquipmentItemInstance(gems) {
+class WeaponInstance(override val item: Weapon, socketables: List<Socketable>) : EquipmentItemInstance(socketables) {
     override fun itemStack(pc: PlayerCharacter) = ItemStack.builder(Material.WOODEN_AXE)
         .set(ITEM_ID_TAG, item.id)
         .let(item.model::apply)

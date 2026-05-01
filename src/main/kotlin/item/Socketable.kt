@@ -7,13 +7,13 @@ import com.shadowforgedmmo.engine.model.BlockbenchItemModel
 import com.shadowforgedmmo.engine.resource.Registry
 import net.minestom.server.item.ItemStack
 
-class Gem(
+class Socketable(
     id: String,
     name: String,
     quality: ItemQuality
 ) : Item(id, name, quality)
 
-class GemDefinition(
+class SocketableDefinition(
     @JsonProperty("name") val name: String,
     @JsonProperty("quality") val quality: ItemQuality
 ) : ItemDefinition() {
@@ -21,10 +21,10 @@ class GemDefinition(
         id: String,
         iconRegistry: Registry<Icon>,
         blockbenchItemModelRegistry: Registry<BlockbenchItemModel>
-    ) = Gem(id, name, quality)
+    ) = Socketable(id, name, quality)
 }
 
-class GemInstance(override val item: Gem, override val quantity: Int) : ItemInstance() {
+class SocketableInstance(override val item: Socketable, override val quantity: Int) : ItemInstance() {
     override fun itemStack(pc: PlayerCharacter) = ItemStack.builder(TODO())
         .build()
 }

@@ -6,10 +6,10 @@ abstract class EquipmentItem(
     quality: ItemQuality,
     val sockets: Int
 ) : Item(id, name, quality) {
-    abstract fun instance(gems: List<Gem>): EquipmentItemInstance
+    abstract fun instance(socketables: List<Socketable>): EquipmentItemInstance
 }
 
-abstract class EquipmentItemInstance(val gems: List<Gem>) : ItemInstance() {
+abstract class EquipmentItemInstance(val socketables: List<Socketable>) : ItemInstance() {
     override val quantity: Int
         get() = 1
 }

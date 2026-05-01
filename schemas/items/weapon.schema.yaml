@@ -21,7 +21,7 @@ properties:
     description: The type of weapon
     $ref: weapon-type.schema.yaml
   sockets:
-    description: Number of gem sockets
+    description: Number of socketable slots
     type: integer
     minimum: 0
   model:

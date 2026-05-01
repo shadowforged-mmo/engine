@@ -1,0 +1,20 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/items/socketable.schema.yaml
+title: Socketable
+description: A socketable item that can be inserted into equipment
+type: object
+properties:
+  type:
+    type: string
+    const: socketable
+  name:
+    description: The display name of the socketable
+    type: string
+  quality:
+    description: The quality tier of the socketable
+    $ref: item-quality.schema.yaml
+required:
+  - type
+  - name
+  - quality
+additionalProperties: false

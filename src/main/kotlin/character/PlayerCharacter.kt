@@ -620,10 +620,10 @@ class PlayerCharacter(
         val itemId = itemStack.getTag(ITEM_ID_TAG) ?: return null
         val itemRegistry = runtime.resources.itemRegistry
         val equipment = itemRegistry[itemId] as EquipmentItem
-        val gems = (0..<equipment.sockets).mapNotNull {
-            itemStack.getTag(socketTag(it))?.let(itemRegistry::getValue) as? Gem
+        val socketables = (0..<equipment.sockets).mapNotNull {
+            itemStack.getTag(socketTag(it))?.let(itemRegistry::getValue) as? Socketable
         }
-        return equipment.instance(gems)
+        return equipment.instance(socketables)
     }
 
     fun tryUseConsumable(slot: Int) {
