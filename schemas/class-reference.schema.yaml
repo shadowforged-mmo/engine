@@ -3,4 +3,4 @@ $id: https://shadowforgedmmo.com/schemas/class-reference.schema.yaml
 title: Class Reference
 description: A reference to a class resource
 type: string
-pattern: "^classes:[a-z0-9_]+(\.[a-z0-9_]+)*$"
+pattern: ^classes:[a-z0-9_]+(\.[a-z0-9_]+)*$

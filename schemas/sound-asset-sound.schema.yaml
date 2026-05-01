@@ -10,7 +10,7 @@ properties:
   name:
     description: The sound asset reference
     type: string
-    pattern: "^sounds:[a-z0-9_/]+$"
+    pattern: ^sounds:[a-z0-9_/]+$
   source:
     description: The sound source category
     type: string

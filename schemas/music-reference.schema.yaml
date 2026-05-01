@@ -3,4 +3,4 @@ $id: https://shadowforgedmmo.com/schemas/music-reference.schema.yaml
 title: Music Reference
 description: A reference to a music track resource
 type: string
-pattern: "^music:[a-z0-9_]+(\.[a-z0-9_]+)*$"
+pattern: ^music:[a-z0-9_]+(\.[a-z0-9_]+)*$

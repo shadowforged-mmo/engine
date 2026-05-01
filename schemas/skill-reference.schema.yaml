@@ -3,4 +3,4 @@ $id: https://shadowforgedmmo.com/schemas/skill-reference.schema.yaml
 title: Skill Reference
 description: A reference to a skill resource
 type: string
-pattern: "^skills:[a-z0-9_]+(\.[a-z0-9_]+)*$"
+pattern: ^skills:[a-z0-9_]+(\.[a-z0-9_]+)*$
