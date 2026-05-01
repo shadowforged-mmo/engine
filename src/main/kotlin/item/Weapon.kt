@@ -18,10 +18,10 @@ class Weapon(
     val type: WeaponType,
     sockets: Int,
     val model: BlockbenchItemModel,
-    val bonuses: Bonuses,
+    bonuses: Bonuses,
     val flavorText: String?,
     val sellPrice: Int?
-) : EquipmentItem(id, name, quality, sockets) {
+) : EquipmentItem(id, name, quality, sockets, bonuses) {
     override fun instance(socketables: List<Socketable>) = WeaponInstance(this, socketables)
 }
 

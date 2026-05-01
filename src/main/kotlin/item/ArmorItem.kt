@@ -16,8 +16,8 @@ class ArmorItem(
     val slot: ArmorSlot,
     sockets: Int,
     val model: ArmorModel,
-    val bonuses: Bonuses
-) : EquipmentItem(id, name, quality, sockets) {
+    bonuses: Bonuses
+) : EquipmentItem(id, name, quality, sockets, bonuses) {
     override fun instance(socketables: List<Socketable>) = ArmorItemInstance(this, socketables)
 }
 
@@ -27,7 +27,7 @@ data class ArmorItemDefinition(
     @JsonProperty("slot") val slot: ArmorSlot,
     @JsonProperty("sockets") val sockets: Int,
     @JsonProperty("model") val modelDefinition: ArmorModelDefinition,
-    @JsonProperty("bonuses") val bonuses: Bonuses
+    @JsonProperty("bonuses") val bonuses: Bonuses = Bonuses()
 ) : ItemDefinition() {
     override fun toItem(
         id: String,

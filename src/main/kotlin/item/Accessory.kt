@@ -16,8 +16,9 @@ class Accessory(
     quality: ItemQuality,
     val icon: Icon,
     val slot: AccessorySlot,
-    sockets: Int
-) : EquipmentItem(id, name, quality, sockets) {
+    sockets: Int,
+    bonuses: Bonuses
+) : EquipmentItem(id, name, quality, sockets, bonuses) {
     override fun instance(socketables: List<Socketable>) = AccessoryInstance(this, socketables)
 }
 
@@ -26,7 +27,8 @@ data class AccessoryDefinition(
     @JsonProperty("quality") val quality: ItemQuality,
     @JsonProperty("icon") val iconReference: IconReference,
     @JsonProperty("slot") val slot: AccessorySlot,
-    @JsonProperty("sockets") val sockets: Int
+    @JsonProperty("sockets") val sockets: Int,
+    @JsonProperty("bonuses") val bonuses: Bonuses = Bonuses()
 ) : ItemDefinition() {
     override fun toItem(
         id: String,
@@ -38,7 +40,8 @@ data class AccessoryDefinition(
         quality,
         iconReference.resolve(iconRegistry),
         slot,
-        sockets
+        sockets,
+        bonuses
     )
 }
 

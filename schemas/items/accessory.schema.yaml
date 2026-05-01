@@ -20,6 +20,9 @@ properties:
     description: Number of socketable slots
     type: integer
     minimum: 0
+  bonuses:
+    description: Stat bonuses granted while this accessory is equipped
+    $ref: bonuses.schema.yaml
 required:
   - type
   - name

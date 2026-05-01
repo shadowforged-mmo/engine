@@ -4,7 +4,8 @@ abstract class EquipmentItem(
     id: String,
     name: String,
     quality: ItemQuality,
-    val sockets: Int
+    val sockets: Int,
+    val bonuses: Bonuses
 ) : Item(id, name, quality) {
     abstract fun instance(socketables: List<Socketable>): EquipmentItemInstance
 }
