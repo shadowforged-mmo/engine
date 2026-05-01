@@ -1,7 +1,6 @@
 package com.shadowforgedmmo.engine.item
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.shadowforgedmmo.engine.character.PlayerCharacter
 import com.shadowforgedmmo.engine.icon.Icon
 import com.shadowforgedmmo.engine.model.ArmorModel
@@ -16,7 +15,8 @@ class ArmorItem(
     quality: ItemQuality,
     val slot: ArmorSlot,
     sockets: Int,
-    val model: ArmorModel
+    val model: ArmorModel,
+    val bonuses: Bonuses
 ) : EquipmentItem(id, name, quality, sockets) {
     override fun instance(socketables: List<Socketable>) = ArmorItemInstance(this, socketables)
 }
@@ -26,7 +26,8 @@ data class ArmorItemDefinition(
     @JsonProperty("quality") val quality: ItemQuality,
     @JsonProperty("slot") val slot: ArmorSlot,
     @JsonProperty("sockets") val sockets: Int,
-    @JsonProperty("model") val modelDefinition: ArmorModelDefinition
+    @JsonProperty("model") val modelDefinition: ArmorModelDefinition,
+    @JsonProperty("bonuses") val bonuses: Bonuses
 ) : ItemDefinition() {
     override fun toItem(
         id: String,
@@ -38,7 +39,8 @@ data class ArmorItemDefinition(
         quality,
         slot,
         sockets,
-        modelDefinition.toArmorModel(blockbenchItemModelRegistry)
+        modelDefinition.toArmorModel(blockbenchItemModelRegistry),
+        bonuses
     )
 }
 

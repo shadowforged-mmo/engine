@@ -23,6 +23,9 @@ properties:
   model:
     description: The armor model used to render this piece
     $ref: ../armor-model.schema.yaml
+  bonuses:
+    description: Stat bonuses granted while this armor piece is equipped
+    $ref: bonuses.schema.yaml
 required:
   - type
   - name

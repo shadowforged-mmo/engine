@@ -67,6 +67,16 @@ properties:
     description: Lightning damage per hit
     type: number
     minimum: 0.0
+  bonuses:
+    description: Stat bonuses granted while this weapon is equipped
+    $ref: bonuses.schema.yaml
+  flavor_text:
+    description: Lore text shown in the item tooltip
+    type: string
+  sell_price:
+    description: Gold received when selling this weapon to a vendor
+    type: integer
+    minimum: 0
 required:
   - type
   - name

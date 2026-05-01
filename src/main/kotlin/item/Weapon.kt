@@ -17,7 +17,10 @@ class Weapon(
     quality: ItemQuality,
     val type: WeaponType,
     sockets: Int,
-    val model: BlockbenchItemModel
+    val model: BlockbenchItemModel,
+    val bonuses: Bonuses,
+    val flavorText: String?,
+    val sellPrice: Int?
 ) : EquipmentItem(id, name, quality, sockets) {
     override fun instance(socketables: List<Socketable>) = WeaponInstance(this, socketables)
 }
@@ -32,13 +35,26 @@ data class WeaponDefinition(
     @JsonProperty("attack_speed") val attackSpeed: Double,
     @JsonProperty("physical_damage") val physicalDamage: Double,
     @JsonProperty("water_damage") val waterDamage: Double,
-    @JsonProperty("lightning_damage") val lightningDamage: Double
+    @JsonProperty("lightning_damage") val lightningDamage: Double,
+    @JsonProperty("bonuses") val bonuses: Bonuses = Bonuses(),
+    @JsonProperty("flavor_text") val flavorText: String? = null,
+    @JsonProperty("sell_price") val sellPrice: Int? = null
 ) : ItemDefinition() {
     override fun toItem(
         id: String,
         iconRegistry: Registry<Icon>,
         blockbenchItemModelRegistry: Registry<BlockbenchItemModel>
-    ) = Weapon(id, name, quality, type, sockets, modelReference.resolve(blockbenchItemModelRegistry))
+    ) = Weapon(
+        id,
+        name,
+        quality,
+        type,
+        sockets,
+        modelReference.resolve(blockbenchItemModelRegistry),
+        bonuses,
+        flavorText,
+        sellPrice
+    )
 }
 
 class WeaponInstance(override val item: Weapon, socketables: List<Socketable>) : EquipmentItemInstance(socketables) {

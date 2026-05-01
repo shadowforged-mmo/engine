@@ -42,12 +42,10 @@ abstract class ItemInstance {
 
         fun getSocketables(itemStack: ItemStack, itemRegistry: Registry<Item>) =
             generateSequence(0) { it + 1 }
-                .takeWhile { itemStack.hasTag(socketableTag(it)) }
-                .map { itemStack.getTag(socketableTag(it)) }
+                .takeWhile { itemStack.hasTag(socketTag(it)) }
+                .map { itemStack.getTag(socketTag(it)) }
                 .mapNotNull { socketableId -> itemRegistry[socketableId] as? Socketable }
                 .toList()
-
-        fun socketableTag(slot: Int) = Tag.String("socketable_$slot")
     }
 
     abstract val item: Item

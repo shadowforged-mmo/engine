@@ -1,0 +1,31 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/items/bonuses.schema.yaml
+title: Bonuses
+description: Stat bonuses granted by an equipped item
+type: object
+properties:
+  strength:
+    description: Increases strength
+    type: integer
+    minimum: 0
+  dexterity:
+    description: Increases dexterity
+    type: integer
+    minimum: 0
+  intelligence:
+    description: Increases intelligence
+    type: integer
+    minimum: 0
+  vitality:
+    description: Increases vitality
+    type: integer
+    minimum: 0
+  health:
+    description: Increases maximum health
+    type: integer
+    minimum: 0
+  mana:
+    description: Increases maximum mana
+    type: integer
+    minimum: 0
+additionalProperties: false
