@@ -14,18 +14,18 @@ properties:
     description: The quality tier of the weapon
     $ref: item-quality.schema.yaml
   level:
-    description: The required level to equip this weapon
+    description: The item's level
+    type: integer
+    minimum: 1
+  required_level:
+    description: The minimum level required to equip this weapon
     type: integer
     minimum: 1
   weapon_type:
     description: The type of weapon
     $ref: weapon-type.schema.yaml
-  sockets:
-    description: Number of socketable slots
-    type: integer
-    minimum: 0
   model:
-    description: The Blockbench item model used to render this weapon
+    description: The item model used to render this weapon
     $ref: ../item-model-reference.schema.yaml
   attack_speed:
     description: Attack speed in attacks per second
@@ -67,6 +67,11 @@ properties:
     description: Lightning damage per hit
     type: number
     minimum: 0.0
+  sockets:
+    description: Number of socketable slots
+    type: integer
+    minimum: 0
+    default: 0
   bonuses:
     description: Stat bonuses granted while this weapon is equipped
     $ref: bonuses.schema.yaml
@@ -82,8 +87,8 @@ required:
   - name
   - quality
   - level
+  - required_level
   - weapon_type
-  - sockets
-  - model
   - attack_speed
+  - model
 additionalProperties: false

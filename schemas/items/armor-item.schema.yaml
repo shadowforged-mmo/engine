@@ -13,6 +13,10 @@ properties:
   quality:
     description: The quality tier of the armor
     $ref: item-quality.schema.yaml
+  level:
+    description: The item's level
+    type: integer
+    minimum: 1
   slot:
     description: The equipment slot this armor occupies
     $ref: armor-slot.schema.yaml
@@ -26,11 +30,17 @@ properties:
   bonuses:
     description: Stat bonuses granted while this armor piece is equipped
     $ref: bonuses.schema.yaml
+  required_level:
+    description: The minimum level required to equip this armor
+    type: integer
+    minimum: 1
 required:
   - type
   - name
   - quality
+  - level
   - slot
   - sockets
   - model
+  - required_level
 additionalProperties: false

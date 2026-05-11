@@ -4,4 +4,10 @@ title: Weapon Type
 description: The type of a weapon
 type: string
 enum:
+  - one_handed_axe
+  - dagger
+  - one_handed_mace
+  - polearm
+  - staff
   - sword
+  - wand

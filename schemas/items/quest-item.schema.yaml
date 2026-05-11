@@ -13,8 +13,13 @@ properties:
   quality:
     description: The quality tier of the quest item
     $ref: item-quality.schema.yaml
+  level:
+    description: The item's level
+    type: integer
+    minimum: 1
 required:
   - type
   - name
   - quality
+  - level
 additionalProperties: false

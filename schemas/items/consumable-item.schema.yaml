@@ -13,8 +13,26 @@ properties:
   quality:
     description: The quality tier of the consumable
     $ref: item-quality.schema.yaml
+  level:
+    description: The item's level
+    type: integer
+    minimum: 1
+  use:
+    description: Tooltip text describing what the consumable does when used
+    type: string
+  sell_price:
+    description: Gold received when selling this consumable to a vendor
+    type: integer
+    minimum: 0
+  required_level:
+    description: The minimum level required to use this consumable
+    type: integer
+    minimum: 1
 required:
   - type
   - name
   - quality
+  - level
+  - use
+  - required_level
 additionalProperties: false

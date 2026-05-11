@@ -13,6 +13,10 @@ properties:
   quality:
     description: The quality tier of the accessory
     $ref: item-quality.schema.yaml
+  level:
+    description: The item's level
+    type: integer
+    minimum: 1
   slot:
     description: The accessory slot this item occupies
     $ref: accessory-slot.schema.yaml
@@ -23,10 +27,16 @@ properties:
   bonuses:
     description: Stat bonuses granted while this accessory is equipped
     $ref: bonuses.schema.yaml
+  required_level:
+    description: The minimum level required to equip this accessory
+    type: integer
+    minimum: 1
 required:
   - type
   - name
   - quality
+  - level
   - slot
   - sockets
+  - required_level
 additionalProperties: false
