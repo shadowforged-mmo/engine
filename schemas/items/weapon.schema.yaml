@@ -31,42 +31,9 @@ properties:
     description: Attack speed in attacks per second
     type: number
     exclusiveMinimum: 0.0
-  physical_damage:
-    description: Physical damage per hit
-    type: number
-    minimum: 0.0
-  arcane_damage:
-    description: Arcane damage per hit
-    type: number
-    minimum: 0.0
-  fire_damage:
-    description: Fire damage per hit
-    type: number
-    minimum: 0.0
-  frost_damage:
-    description: Frost damage per hit
-    type: number
-    minimum: 0.0
-  nature_damage:
-    description: Nature damage per hit
-    type: number
-    minimum: 0.0
-  shadow_damage:
-    description: Shadow damage per hit
-    type: number
-    minimum: 0.0
-  holy_damage:
-    description: Holy damage per hit
-    type: number
-    minimum: 0.0
-  water_damage:
-    description: Water damage per hit
-    type: number
-    minimum: 0.0
-  lightning_damage:
-    description: Lightning damage per hit
-    type: number
-    minimum: 0.0
+  damage:
+    description: Damage dealt by this weapon
+    $ref: weapon-damage.schema.yaml
   sockets:
     description: Number of socketable slots
     type: integer

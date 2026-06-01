@@ -1,0 +1,28 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://shadowforgedmmo.com/schemas/items/armor.schema.yaml
+title: Armor
+description: Armor by damage type
+type: object
+properties:
+  physical:
+    type: number
+    minimum: 0.0
+  arcane:
+    type: number
+    minimum: 0.0
+  fire:
+    type: number
+    minimum: 0.0
+  frost:
+    type: number
+    minimum: 0.0
+  nature:
+    type: number
+    minimum: 0.0
+  shadow:
+    type: number
+    minimum: 0.0
+  holy:
+    type: number
+    minimum: 0.0
+additionalProperties: false

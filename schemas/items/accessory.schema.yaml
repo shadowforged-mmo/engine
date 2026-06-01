@@ -31,6 +31,13 @@ properties:
     description: The minimum level required to equip this accessory
     type: integer
     minimum: 1
+  flavor_text:
+    description: Lore text shown in the item tooltip
+    type: string
+  sell_price:
+    description: Gold received when selling this accessory to a vendor
+    type: integer
+    minimum: 0
 required:
   - type
   - name

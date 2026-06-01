@@ -27,6 +27,9 @@ properties:
   model:
     description: The armor model used to render this piece
     $ref: ../armor-model.schema.yaml
+  armor:
+    description: Armor provided by this armor item
+    $ref: armor.schema.yaml
   bonuses:
     description: Stat bonuses granted while this armor piece is equipped
     $ref: bonuses.schema.yaml
@@ -34,6 +37,13 @@ properties:
     description: The minimum level required to equip this armor
     type: integer
     minimum: 1
+  flavor_text:
+    description: Lore text shown in the item tooltip
+    type: string
+  sell_price:
+    description: Gold received when selling this armor to a vendor
+    type: integer
+    minimum: 0
 required:
   - type
   - name

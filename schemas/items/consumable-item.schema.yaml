@@ -28,6 +28,9 @@ properties:
     description: The minimum level required to use this consumable
     type: integer
     minimum: 1
+  flavor_text:
+    description: Lore text shown in the item tooltip
+    type: string
 required:
   - type
   - name
