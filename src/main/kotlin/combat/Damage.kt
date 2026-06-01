@@ -26,12 +26,12 @@ class DamageDeserializer : JsonDeserializer<Damage>() {
     }
 }
 
-enum class DamageType {
-    PHYSICAL,
-    ARCANE,
-    FIRE,
-    FROST,
-    NATURE,
-    SHADOW,
-    HOLY
+enum class DamageType(val text: String) {
+    PHYSICAL("Physical"),
+    ARCANE("Arcane"),
+    FIRE("Fire"),
+    FROST("Frost"),
+    NATURE("Nature"),
+    SHADOW("Shadow"),
+    HOLY("Holy")
 }
