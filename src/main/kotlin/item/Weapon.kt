@@ -1,13 +1,12 @@
 package com.shadowforgedmmo.engine.item
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.shadowforgedmmo.engine.character.PlayerCharacter
 import com.shadowforgedmmo.engine.icon.Icon
 import com.shadowforgedmmo.engine.model.BlockbenchItemModel
 import com.shadowforgedmmo.engine.model.BlockbenchItemModelReference
 import com.shadowforgedmmo.engine.resource.Registry
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.TextDecoration
+import net.kyori.adventure.text.format.NamedTextColor
 import net.minestom.server.item.ItemStack
 import net.minestom.server.item.Material
 
@@ -15,28 +14,31 @@ class Weapon(
     id: String,
     name: String,
     quality: ItemQuality,
+    level: Int,
+    flavorText: String?,
+    sellPrice: Int?,
+    requiredLevel: Int?,
     val type: WeaponType,
-    sockets: Int,
     val model: BlockbenchItemModel,
+    val attackSpeed: Double,
+    val damage: WeaponDamage,
+    sockets: Int,
     bonuses: Bonuses,
-    val flavorText: String?,
-    val sellPrice: Int?
-) : EquipmentItem(id, name, quality, sockets, bonuses) {
-    override fun instance(socketables: List<Socketable>) = WeaponInstance(this, socketables)
+) : EquipmentItem(id, name, quality, level, flavorText, sellPrice, sockets, bonuses, requiredLevel) {
+    override fun instance(socketables: Array<Socketable?>) = WeaponInstance(this, socketables)
 }
 
 data class WeaponDefinition(
     @JsonProperty("name") val name: String,
     @JsonProperty("quality") val quality: ItemQuality,
     @JsonProperty("level") val level: Int,
+    @JsonProperty("required_level") val requiredLevel: Int,
     @JsonProperty("weapon_type") val type: WeaponType,
-    @JsonProperty("sockets") val sockets: Int,
     @JsonProperty("model") val modelReference: BlockbenchItemModelReference,
     @JsonProperty("attack_speed") val attackSpeed: Double,
-    @JsonProperty("physical_damage") val physicalDamage: Double,
-    @JsonProperty("water_damage") val waterDamage: Double,
-    @JsonProperty("lightning_damage") val lightningDamage: Double,
-    @JsonProperty("bonuses") val bonuses: Bonuses?,
+    @JsonProperty("damage") val damage: WeaponDamage? = null,
+    @JsonProperty("sockets") val sockets: Int?,
+    @JsonProperty("bonuses") val bonuses: BonusesDefinition?,
     @JsonProperty("flavor_text") val flavorText: String? = null,
     @JsonProperty("sell_price") val sellPrice: Int? = null
 ) : ItemDefinition() {
@@ -48,25 +50,35 @@ data class WeaponDefinition(
         id,
         name,
         quality,
-        type,
-        sockets,
-        modelReference.resolve(blockbenchItemModelRegistry),
-        bonuses ?: Bonuses(),
+        level,
         flavorText,
-        sellPrice
+        sellPrice,
+        requiredLevel,
+        type,
+        modelReference.resolve(blockbenchItemModelRegistry),
+        attackSpeed,
+        damage ?: WeaponDamage(),
+        sockets ?: 0,
+        bonuses?.toBonuses() ?: Bonuses(),
     )
 }
 
-class WeaponInstance(override val item: Weapon, socketables: List<Socketable>) : EquipmentItemInstance(socketables) {
-    override fun itemStack(pc: PlayerCharacter) = ItemStack.builder(Material.WOODEN_AXE)
-        .set(ITEM_ID_TAG, item.id)
-        .let(item.model::apply)
-        .customName(
-            Component.text(item.name, item.quality.color).decoration(TextDecoration.ITALIC, false)
-        )
-        .build()
+class WeaponInstance(override val item: Weapon, socketables: Array<Socketable?>) : EquipmentItemInstance(socketables) {
+    override fun baseBuilder() = ItemStack.builder(Material.WOODEN_AXE).let(item.model::apply)
+
+    override fun typeComponent() = Component.text(item.type.text, NamedTextColor.GRAY)
+
+    override fun preBonusLore() =
+        listOf(loreLine("${item.attackSpeed} Attack Speed", NamedTextColor.WHITE)) +
+                item.damage.components()
 }
 
-enum class WeaponType {
-    SWORD
+enum class WeaponType(val text: String) {
+    ONE_HANDED_AXE("Axe"),
+    DAGGER("Dagger"),
+    ONE_HANDED_MACE("Mace"),
+    POLEARM("Polearm"),
+    STAFF("Staff"),
+    SWORD("Sword"),
+    WAND("Wand")
 }

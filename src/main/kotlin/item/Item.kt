@@ -23,7 +23,10 @@ fun socketTag(slot: Int) = Tag.String("socket_$slot")
 abstract class Item(
     val id: String,
     val name: String,
-    val quality: ItemQuality
+    val quality: ItemQuality,
+    val level: Int,
+    val flavorText: String?,
+    val sellPrice: Int?
 ) {
     val nameComponent
         get() = Component.text(name, quality.color)
@@ -44,8 +47,9 @@ abstract class ItemInstance {
             generateSequence(0) { it + 1 }
                 .takeWhile { itemStack.hasTag(socketTag(it)) }
                 .map { itemStack.getTag(socketTag(it)) }
-                .mapNotNull { socketableId -> itemRegistry[socketableId] as? Socketable }
+                .map { socketableId -> itemRegistry[socketableId] as? Socketable }
                 .toList()
+                .toTypedArray()
     }
 
     abstract val item: Item
@@ -78,11 +82,13 @@ sealed class ItemDefinition {
 class ItemInstanceDefinition(
     @JsonProperty("item") val itemReference: ItemReference,
     @JsonProperty("quantity") val quantity: Int?,
-    @JsonProperty("socketables") val socketables: List<ItemReference>?
+    @JsonProperty("socketables") val socketables: List<ItemReference?>?
 ) {
     fun toItemInstance(itemRegistry: Registry<Item>) = when (val item = itemReference.resolve(itemRegistry)) {
         is EquipmentItem -> item.instance(
-            socketables?.map { it.resolve(itemRegistry) as? Socketable ?: error("${it.id} is not a socketable") } ?: emptyList()
+            Array(item.sockets) { i ->
+                socketables?.getOrNull(i)?.let { it.resolve(itemRegistry) as? Socketable }
+            }
         )
 
         is ConsumableItem -> ConsumableItemInstance(item, quantity ?: 1)

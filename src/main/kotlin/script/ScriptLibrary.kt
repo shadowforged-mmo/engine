@@ -20,6 +20,7 @@ import com.shadowforgedmmo.engine.character.Character as EngineCharacter
 import com.shadowforgedmmo.engine.character.NonPlayerCharacter as EngineNonPlayerCharacter
 import com.shadowforgedmmo.engine.character.PlayerCharacter as EnginePlayerCharacter
 import com.shadowforgedmmo.engine.instance.Instance as EngineInstance
+import com.shadowforgedmmo.engine.item.ConsumableUse as EngineConsumableUse
 import com.shadowforgedmmo.engine.skill.SkillExecutor as EngineSkillExecutor
 import net.minestom.server.timer.Task as EngineTask
 
@@ -35,6 +36,7 @@ fun scriptLibraryModule(runtime: Runtime): PyModule {
         NonPlayerCharacter::class,
         SkillExecutor::class,
         SkillStatus::class,
+        ConsumableHandler::class,
         Damage::class,
         DamageType::class,
         Sound::class
@@ -211,6 +213,13 @@ open class SkillExecutor(private val handle: EngineSkillExecutor) {
     open fun init() = Unit
 
     open fun tick() = Unit
+}
+
+open class ConsumableHandler(private val handle: EngineConsumableUse) {
+    val user
+        get() = handle.user.handle
+
+    open fun use() = Unit
 }
 
 class CharacterRaycastHit(val character: Character, val point: Vector)

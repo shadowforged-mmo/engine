@@ -1,11 +1,8 @@
 package com.shadowforgedmmo.engine.resource
 
-import com.shadowforgedmmo.engine.icon.IconAsset
 import com.shadowforgedmmo.engine.item.ConsumableItemDefinition
 import com.shadowforgedmmo.engine.runtime.createRuntimeEnvironment
-import com.shadowforgedmmo.engine.skill.ActiveSkill
 import com.shadowforgedmmo.engine.skill.ActiveSkillDefinition
-import com.shadowforgedmmo.engine.skill.SkillDefinition
 import com.shadowforgedmmo.engine.sound.SoundAsset
 import net.minestom.server.MinecraftServer
 
@@ -51,7 +48,8 @@ class ResourceLoader(private val definitionLoader: DefinitionLoader) {
                 blockbenchItemModelRegistry,
                 questRegistry,
                 musicTrackRegistry,
-                scriptRegistry
+                scriptRegistry,
+                itemRegistry
             )
         }
         val skillRegistry = definitions.skills.mapValues { (id, skillDefinition) ->
