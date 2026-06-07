@@ -10,7 +10,6 @@ import com.shadowforgedmmo.engine.skill.SkillStatus
 import com.shadowforgedmmo.engine.time.millisToSeconds
 import com.shadowforgedmmo.engine.time.secondsToDuration
 import com.shadowforgedmmo.engine.util.schedulerManager
-import net.minestom.server.particle.Particle
 import org.python.core.Py
 import org.python.core.PyBoolean
 import org.python.core.PyModule
@@ -22,7 +21,8 @@ import com.shadowforgedmmo.engine.character.PlayerCharacter as EnginePlayerChara
 import com.shadowforgedmmo.engine.instance.Instance as EngineInstance
 import com.shadowforgedmmo.engine.item.ConsumableUse as EngineConsumableUse
 import com.shadowforgedmmo.engine.skill.SkillExecutor as EngineSkillExecutor
-import net.minestom.server.timer.Task as EngineTask
+import net.minestom.server.particle.Particle as MinestomParticle
+import net.minestom.server.timer.Task as MinestomTask
 
 const val SCRIPT_LIBRARY_MODULE_NAME = "shadowforged_engine"
 
@@ -39,7 +39,8 @@ fun scriptLibraryModule(runtime: Runtime): PyModule {
         ConsumableHandler::class,
         Damage::class,
         DamageType::class,
-        Sound::class
+        Sound::class,
+        Particle::class
     ).associate { it.simpleName to Py.java2py(it.java) }
 
     val functions = mapOf(
@@ -143,13 +144,17 @@ class Instance(val handle: EngineInstance) {
         ScriptToEngine.sound(sound)
     )
 
-    fun spawn_particle(position: Point, particle: String) = handle.spawnParticle(
+    fun spawn_particle(position: Point, particle: Particle) = handle.spawnParticle(
         ScriptToEngine.vector3(position),
-        Particle.fromKey(particle) ?: throw IllegalArgumentException()
+        MinestomParticle.fromKey(particle.type) ?: throw IllegalArgumentException(),
+        longDistance = particle.long_distance,
+        offset = ScriptToEngine.vector3(particle.offset),
+        maxSpeed = particle.max_speed,
+        count = particle.count
     )
 }
 
-class Task(private val handle: EngineTask) {
+class Task(private val handle: MinestomTask) {
     fun cancel() = handle.cancel()
 }
 
@@ -159,6 +164,16 @@ data class Damage(val damage: Map<DamageType, Int>) {
 
 data class Sound(val name: String, val volume: Float, val pitch: Float) {
     constructor(name: String) : this(name, 1.0F, 1.0F)
+}
+
+data class Particle(
+    val type: String,
+    val long_distance: Boolean,
+    val offset: Vector,
+    val max_speed: Double,
+    val count: Int
+) {
+    constructor(type: String) : this(type, false, Vector.ZERO, 1.0, 1)
 }
 
 open class GameObject(private val handle: EngineGameObject) {

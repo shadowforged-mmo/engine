@@ -173,6 +173,15 @@ class Sound:
     pitch: float = 1.0
 
 
+@dataclass
+class Particle:
+    type: str
+    long_distance: bool = False
+    offset: Vector = Vector.ZERO
+    max_speed: float = 1.0
+    count: int = 1
+
+
 class Instance:
     def spawn_character(self, position: Position, character: str) -> NonPlayerCharacter:
         """Spawns a character at the given position.
@@ -264,6 +273,17 @@ class Instance:
         """
         ...
 
+    def spawn_particle(self, position: Point, particle: Particle) -> None:
+        """Spawns particles at the given position.
+
+        Args:
+            position (Position): The position to spawn the particles.
+            particle (Particle): The particle to spawn.
+
+        Examples:
+            >>> instance.spawn_particle(position, Particle('minecraft:explosion'))
+        """
+        ...
 
 
 class GameObject:
