@@ -390,6 +390,10 @@ class SkillExecutor:
         """The time since the skill began executing in seconds."""
         ...
 
+    def complete(self) -> None:
+        """Marks the skill as completed, ending its execution."""
+        ...
+
     def tick(self) -> None:
         """Overridable method that is called every game tick."""
         ...
