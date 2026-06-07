@@ -48,8 +48,7 @@ class ResourceLoader(private val definitionLoader: DefinitionLoader) {
                 blockbenchItemModelRegistry,
                 questRegistry,
                 musicTrackRegistry,
-                scriptRegistry,
-                itemRegistry
+                scriptRegistry
             )
         }
         val skillRegistry = definitions.skills.mapValues { (id, skillDefinition) ->
