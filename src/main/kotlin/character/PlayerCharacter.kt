@@ -174,7 +174,6 @@ class PlayerCharacter(
         super.despawn()
         val def = toDefinition()
         val uuid = entity.uuid
-        Thread { runCatching { runtime.controlPlaneClient.savePlayerCharacterDefinition(uuid, def) }.onFailure { it.printStackTrace() } }.start()
     }
 
     // Snapshots only the scalar fields and position from current state.
