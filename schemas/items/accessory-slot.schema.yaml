@@ -4,7 +4,6 @@ title: Accessory Slot
 description: An equipment slot for accessories
 type: string
 enum:
-  - finger_1
-  - finger_2
+  - finger
   - wrist
   - trinket
