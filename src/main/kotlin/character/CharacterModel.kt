@@ -7,6 +7,8 @@ import com.shadowforgedmmo.engine.entity.EntityHuman
 import com.shadowforgedmmo.engine.minecraft.MinecraftReference
 import com.shadowforgedmmo.engine.model.*
 import com.shadowforgedmmo.engine.resource.MINECRAFT
+import net.minestom.server.item.ItemStack
+import net.minestom.server.item.Material
 import com.shadowforgedmmo.engine.resource.Registry
 import com.shadowforgedmmo.engine.util.readJsonResource
 import net.kyori.adventure.key.Key
@@ -162,12 +164,12 @@ class CharacterModelEquipment(
     val head: ArmorModel? = null
 ) {
     fun apply(entity: EntityCreature) {
-        mainHand?.let { entity.itemInMainHand = TODO() }
-        offHand?.let { entity.itemInOffHand = TODO() }
-        feet?.let { entity.boots = it.itemStack }
-        legs?.let { entity.leggings = it.itemStack }
-        chest?.let { entity.chestplate = it.itemStack }
-        head?.let { entity.helmet = it.itemStack }
+        mainHand?.let { entity.itemInMainHand = ItemStack.builder(Material.DIAMOND).let(it::apply).build() }
+        offHand?.let { entity.itemInOffHand = ItemStack.builder(Material.DIAMOND).let(it::apply).build() }
+        feet?.let { entity.boots = it.baseBuilder(ArmorPiece.BOOTS).build() }
+        legs?.let { entity.leggings = it.baseBuilder(ArmorPiece.LEGGINGS).build() }
+        chest?.let { entity.chestplate = it.baseBuilder(ArmorPiece.CHESTPLATE).build() }
+        head?.let { entity.helmet = it.baseBuilder(ArmorPiece.HELMET).build() }
     }
 }
 

@@ -75,19 +75,27 @@ class PlayerCharacter(
     maxMana: Int,
     mana: Int,
     val playerClass: PlayerClass,
-    questProgress: QuestProgress,
+    private val questProgress: QuestProgress,
     private val inventory: Inventory,
     private val actionBarSkills: Array<ActiveSkill?>,
-    zone: Zone
+    zone: Zone,
+    // TODO: remove
+    level: Int,
+    experiencePoints: Int,
+    gold: Long,
+    private val originalDefinition: PlayerCharacterDefinition
 ) : Character(spawner, instance, runtime) {
     override val name
         get() = entity.username
 
-    override var level = 1 // TODO INITIALIZE USING DATA
+    // TODO: compute from exp
+    override var level = 1
         private set
 
-    var experiencePoints = 0 // TODO INITIALIZE USING DATA
+    var experiencePoints = experiencePoints
         private set
+
+    var gold = gold
 
     override var maxHealth = maxHealth
         set(value) {
@@ -142,7 +150,6 @@ class PlayerCharacter(
     private var musicReplayTask: Task? = null
 
     override fun spawn() {
-        // entityTeleporting = true
         super.spawn()
         addEventListeners()
         updateExperienceBar()
@@ -165,8 +172,24 @@ class PlayerCharacter(
 
     override fun despawn() {
         super.despawn()
-        // TODO: save data
+        val def = toDefinition()
+        val uuid = entity.uuid
+        Thread { runCatching { runtime.controlPlaneClient.savePlayerCharacterDefinition(uuid, def) }.onFailure { it.printStackTrace() } }.start()
     }
+
+    // Snapshots only the scalar fields and position from current state.
+    // Inventory and quest progress reuse the originally loaded definitions — round-tripping
+    // those requires reverse serializers for ItemReference/QuestReference; tracked separately.
+    fun toDefinition() = originalDefinition.copy(
+        position = position,
+        maxHealth = maxHealth,
+        health = health,
+        maxMana = maxMana,
+        mana = mana,
+        level = level,
+        experiencePoints = experiencePoints,
+        gold = gold
+    )
 
     override fun tick() {
         super.tick()
@@ -620,14 +643,25 @@ class PlayerCharacter(
         val itemId = itemStack.getTag(ITEM_ID_TAG) ?: return null
         val itemRegistry = runtime.resources.itemRegistry
         val equipment = itemRegistry[itemId] as EquipmentItem
-        val socketables = (0..<equipment.sockets).mapNotNull {
+        val socketables = (0..<equipment.sockets).map {
             itemStack.getTag(socketTag(it))?.let(itemRegistry::getValue) as? Socketable
-        }
+        }.toTypedArray()
         return equipment.instance(socketables)
     }
 
     fun tryUseConsumable(slot: Int) {
-
+        val itemStack = entity.inventory.getItemStack(slot)
+        val instance = ItemInstance.fromItemStack(itemStack, runtime.resources.itemRegistry) as? ConsumableItemInstance ?: return
+        val consumable = instance.item
+        if (consumable.requiredLevel != null && level < consumable.requiredLevel) {
+            entity.sendMessage(Component.text("Requires level ${consumable.requiredLevel}.", NamedTextColor.RED))
+            return
+        }
+        ConsumableUse(this, consumable).use()
+        val remaining = itemStack.amount() - 1
+        val newStack = if (remaining > 0) itemStack.withAmount(remaining) else ItemStack.AIR
+        entity.inventory.setItemStack(slot, newStack)
+        updateActionBar()
     }
 
     fun setMusicTrack(musicTrack: MusicTrack?) {
@@ -645,7 +679,7 @@ class PlayerCharacter(
     }
 }
 
-class PlayerCharacterDefinition(
+data class PlayerCharacterDefinition(
     @JsonProperty("class") val playerClassReference: PlayerClassReference,
     @JsonProperty("instance") val instanceReference: InstanceReference,
     @JsonProperty("position") val position: Position,
@@ -654,6 +688,9 @@ class PlayerCharacterDefinition(
     @JsonProperty("health") val health: Int,
     @JsonProperty("max_mana") val maxMana: Int,
     @JsonProperty("mana") val mana: Int,
+    @JsonProperty("level") val level: Int = 1,
+    @JsonProperty("experience_points") val experiencePoints: Int = 0,
+    @JsonProperty("gold") val gold: Long = 0,
     @JsonProperty("quests") val questProgress: QuestProgressDefinition,
     @JsonProperty("action_bar_skills") val actionBarSkills: List<SkillReference?>,
     @JsonProperty("inventory") val inventory: InventoryDefinition
@@ -673,7 +710,11 @@ class PlayerCharacterDefinition(
                 questProgress.toQuestProgress(questRegistry),
                 inventory.toInventory(itemRegistry),
                 actionBarSkills.map { it?.resolve(skillRegistry) as? ActiveSkill }.toTypedArray(),
-                zoneReference.resolve(zoneRegistry)
+                zoneReference.resolve(zoneRegistry),
+                level,
+                experiencePoints,
+                gold,
+                this@PlayerCharacterDefinition
             )
         }
 }
